@@ -3,6 +3,13 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Material">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/GreenActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="GreenActionBar"
+        parent="android:Widget.Material.ActionBar">
+        <item name="android:background">#4CAF50</item>
     </style>
 
 </resources>
