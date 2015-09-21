@@ -12,7 +12,7 @@ import android.widget.TextView;
 /**
  * Created by henriknilson on 18/09/15.
  */
-public class Home extends Activity {
+public class HomeActivity extends Activity {
 
     Button logout;
 
