@@ -2,26 +2,30 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hihats.electricity" >
 
-    <application
-    android:name="ParseApplication"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name" >
-    <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-    <activity android:name=".LogInAndSignUpActivity" >
-    </activity>
-    <activity android:name=".HomeActivity" >
-    </activity>
-</application>
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".ParseApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LogInAndSignUpActivity" >
+        </activity>
+        <activity android:name=".HomeActivity" >
+        </activity>
+        <activity
+            android:name=".TabActivity"
+            android:label="@string/title_activity_tab" >
+        </activity>
+    </application>
 
 </manifest>
