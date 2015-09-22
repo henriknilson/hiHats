@@ -3,6 +3,7 @@ package hihats.electricity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,7 +18,7 @@ import com.parse.SignUpCallback;
 /**
  * Created by henriknilson on 18/09/15.
  */
-public class LogInAndSignUpActivity extends Activity {
+public class LogInAndSignUpActivity extends AppCompatActivity {
 
     Button loginbutton;
     Button signup;

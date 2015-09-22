@@ -4,6 +4,7 @@ import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 /**
  * Created by henriknilson on 18/09/15.
  */
-public class HomeActivity extends Activity {
+public class HomeActivity extends AppCompatActivity {
 
     Button logout;
 
