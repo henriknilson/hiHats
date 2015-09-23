@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <android.widget.Toolbar
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -12,7 +12,7 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
-        android:scrollbars="horizontal"
+        android:scrollbars="none"
         android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,20 +25,24 @@
         android:layout_centerHorizontal="true"
         android:text="@string/Welcome"
         android:paddingTop="50dp"
-        android:textSize="25sp" />
+        android:textSize="28sp"
+        android:layout_below="@+id/tabLayout"
+        style="@style/Base.Theme.GreenEco" />
 
     <TextView
         android:id="@+id/txtuser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtwelcome"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        style="@style/Base.Theme.GreenEco" />
 
     <Button
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/LogoutBtn" />
+        android:text="@string/LogoutBtn"
+        android:background="@color/my_primary" />
 
 </RelativeLayout>

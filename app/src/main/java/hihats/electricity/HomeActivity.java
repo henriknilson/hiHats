@@ -62,8 +62,8 @@ public class HomeActivity extends AppCompatActivity {
     private void setupTablayout(){
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_section1)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_section2)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_section3)));
     }
 }
