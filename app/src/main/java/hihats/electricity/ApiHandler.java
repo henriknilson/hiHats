@@ -23,24 +23,35 @@ public class ApiHandler {
      * @return The most recent location for said bus as an Android Location object.
      */
     public static String getCurrentLocationForBus(String busId) {
-        String response = "";
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 1);
         String key = prepareKey();
-        try {
-            HttpURLConnection connection = establishConnection(url, key);
-            if (conectionWasSuccessful(connection)) {
-                response = readStreamFromConnection(connection);
-            } else {
-                System.out.print("Fail");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String response = getResponseFromHttp(url, key);
+        //TODO Parse JSON object to correct data.
         return response;
     }
 
     /*
-    Work Methods
+    Main call method
+     */
+
+    private static String getResponseFromHttp(String url, String key) {
+        String response = "";
+        try {
+            HttpURLConnection connection = establishConnection(url, key);
+            if (connectionWasSuccessful(connection)) {
+                response = readStreamFromConnection(connection);
+            } else {
+                System.out.print("Connection error!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //TODO Return JSON object instead of String.
+        return response;
+    }
+
+    /*
+    Help methods
      */
 
     private static String prepareUrl(String busId, String sensorId, String resourceId, int time) {
@@ -69,7 +80,7 @@ public class ApiHandler {
         connection.setRequestProperty("Authorization", key);
         return connection;
     }
-    private static boolean conectionWasSuccessful(HttpURLConnection connection) throws IOException{
+    private static boolean connectionWasSuccessful(HttpURLConnection connection) throws IOException{
         int responseCode = connection.getResponseCode();
         return responseCode == 200;
     }
