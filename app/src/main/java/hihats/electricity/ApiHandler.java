@@ -22,9 +22,9 @@ public class ApiHandler {
      * @param busId The bus you want to check location for.
      * @return The most recent location for said bus as an Android Location object.
      */
-    public static String getCurrentLocationForBus(String busId) {
+    public static String getMostRecentLocationForBus(String busId) {
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 1);
-        String key = prepareKey();
+        String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
         String response = getResponseFromHttp(url, key);
         //TODO Parse JSON object to correct data.
         return response;
@@ -62,15 +62,6 @@ public class ApiHandler {
         } else {
             return  "https://ece01.ericsson.net:4443/ecity?dgw=" + busId + "&resourceSpec=" + resourceId + "&t1=" + t1 + "&t2=" + t2;
         }
-    }
-    private static String prepareKey() {
-        // TODO use Base64 algorithm in Android
-        /*
-        String userNamePass = "grp45:FZ3EcuLYcj";
-        String base64Encoded = Base64.encodeToString(userNamePass.getBytes(),Base64.NO_WRAP);
-        return "Basic " + base64Encoded;
-        */
-        return "Basic Z3JwNDU6RlozRWN1TFljag==";
     }
     private static HttpURLConnection establishConnection(String url, String key) throws IOException{
         HttpURLConnection connection;
