@@ -20,12 +20,11 @@ public class ApiHandler {
     /**
      * Returns the last known location for a certain bus.
      * @param busId The bus you want to check location for.
-     * @param time How far back to look in the data to find the most recent one, in seconds.
      * @return The most recent location for said bus as an Android Location object.
      */
-    public static String getCurrentLocationForBus(String busId, int time) {
+    public static String getCurrentLocationForBus(String busId) {
         String response = "";
-        String url = prepareUrl(busId, null, "Ericsson$RMC_Value", time);
+        String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 1);
         String key = prepareKey();
         try {
             HttpURLConnection connection = establishConnection(url, key);
