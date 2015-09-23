@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="ElectriCity" parent="Theme.AppCompat">
+    <style name="Base.Theme.GreenEco" parent="Theme.AppCompat">
 
         <item name="colorPrimary">@color/my_primary</item>
 
@@ -23,7 +23,7 @@
        Base application theme, dependent on API level. This theme is replaced
        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
    -->
-    <style name="AppBaseTheme" parent="ElectriCity">
+    <style name="AppBaseTheme" parent="Base.Theme.GreenEco">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
