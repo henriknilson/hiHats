@@ -6,10 +6,4 @@
 /build
 /captures
 /.idea/
-
-<<<<<<< HEAD
-*.iml
-=======
-*.iml
->>>>>>> 84caaa38dcc5d6e0dedb788241db4df38f04d870
 *.iml
