@@ -3,7 +3,7 @@ package hihats.electricity.api;
 /**
  * Created by fredrikkindstrom on 24/09/15.
  */
-public class ApiDataObject {
+class ApiDataObject {
 
     private String resourceSpec;
     private String timestamp;

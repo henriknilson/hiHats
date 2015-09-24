@@ -15,7 +15,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by frellAn on 2015-09-22.
  */
-public class ApiHttpHandler {
+class ApiHttpHandler {
 
     /*
     Get methods
@@ -26,13 +26,12 @@ public class ApiHttpHandler {
      * @param busId The bus you want to check location for.
      * @return The most recent location for said bus as an Android Location object.
      */
-    public static String getMostRecentLocationForBus(String busId) throws AccessErrorException {
+    protected static ApiDataObject getMostRecentLocationForBus(String busId) throws AccessErrorException {
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 5000);
         String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
         ApiDataObject data = getResponseFromHttp(url, key);
-        System.out.println(data.toString());
-        if (data.getResourceSpec() != null && data.getResourceSpec().equals("RMC_Value")) {
-            return data.getValue();
+        if (data.getResourceSpec() != null) {
+            return data;
         } else {
             throw new AccessErrorException();
         }
@@ -50,7 +49,7 @@ public class ApiHttpHandler {
             } else {
                 throw new AccessErrorException();
             }
-        } catch (IOException|AccessErrorException e) {
+        } catch (IOException | AccessErrorException e) {
             return null;
         }
     }
