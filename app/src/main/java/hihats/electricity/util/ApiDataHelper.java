@@ -1,6 +1,10 @@
-package hihats.electricity.net;
+package hihats.electricity.util;
 
 import android.location.Location;
+
+import hihats.electricity.net.AccessErrorException;
+import hihats.electricity.net.ApiDataObject;
+import hihats.electricity.net.ApiHttpHandler;
 
 /**
  * This class converts the data obtained by the backend class
