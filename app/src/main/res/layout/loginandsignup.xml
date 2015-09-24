@@ -17,7 +17,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/LogInTitle"
-            android:textColor="@color/my_primary_text" />
+            android:textColor="@color/my_primary_text"
+            android:background="@color/my_primary"/>
 
         <TextView
             android:id="@+id/txtusername"
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtusername"
             android:inputType="text"
-            style="@android:style/Theme.Material" />
+            android:textColor="@color/my_primary"/>
 
         <TextView
             android:id="@+id/txtpassword"
@@ -47,7 +48,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtpassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/my_primary"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
