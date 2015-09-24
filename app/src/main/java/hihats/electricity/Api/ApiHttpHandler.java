@@ -29,9 +29,10 @@ public class ApiHttpHandler {
     public static String getMostRecentLocationForBus(String busId) {
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 5000);
         String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
-        ApiDataObject fromHttp = getResponseFromHttp(url, key);
-        if (fromHttp.getResourceSpec().equals("Ericsson$RMC_Value")) {
-            String value = fromHttp.getValue();
+        ApiDataObject data = getResponseFromHttp(url, key);
+        System.out.println(data.toString());
+        if (data.getResourceSpec().equals("RMC_Value")) {
+            return data.getValue();
         }
         return null;
     }
