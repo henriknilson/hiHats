@@ -23,8 +23,7 @@ public class MainActivity extends Activity {
                 startActivity(intent);
                 finish();
             } else {
-                Intent intent = new Intent(MainActivity.this,
-                        LogInAndSignUpActivity.class);
+                Intent intent = new Intent(MainActivity.this, LogInAndSignUpActivity.class);
                 startActivity(intent);
                 finish();
             }
