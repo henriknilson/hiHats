@@ -43,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
         // Locate Button in home.xml
         logout = (Button) findViewById(R.id.logout);
 
+        // Store shit
+
         // Logout Button Click Listener
         logout.setOnClickListener(new OnClickListener() {
 

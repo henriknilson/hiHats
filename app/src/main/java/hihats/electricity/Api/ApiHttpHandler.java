@@ -47,7 +47,7 @@ class ApiHttpHandler {
     Main call method
      */
 
-    private static ApiDataObject getResponseFromHttp(String url, String key) {
+    private static ApiDataObject getResponseFromHttp(String url, String key) throws AccessErrorException{
         try {
             HttpURLConnection connection = establishConnection(url, key);
             if (connectionWasSuccessful(connection)) {
@@ -55,8 +55,8 @@ class ApiHttpHandler {
             } else {
                 throw new AccessErrorException();
             }
-        } catch (IOException | AccessErrorException e) {
-            return null;
+        } catch (IOException e) {
+            throw new AccessErrorException();
         }
     }
 
@@ -73,7 +73,7 @@ class ApiHttpHandler {
             return "https://ece01.ericsson.net:4443/ecity?dgw=" + busId + "&resourceSpec=" + resourceId + "&t1=" + t1 + "&t2=" + t2;
         }
     }
-    private static HttpURLConnection establishConnection(String url, String key) throws IOException{
+    private static HttpURLConnection establishConnection(String url, String key) throws IOException {
         HttpURLConnection connection;
         URL requestURL = new URL(url);
         connection = (HttpsURLConnection)requestURL.openConnection();
@@ -81,11 +81,11 @@ class ApiHttpHandler {
         connection.setRequestProperty("Authorization", key);
         return connection;
     }
-    private static boolean connectionWasSuccessful(HttpURLConnection connection) throws IOException{
+    private static boolean connectionWasSuccessful(HttpURLConnection connection) throws IOException {
         int responseCode = connection.getResponseCode();
         return responseCode == 200;
     }
-    private static ApiDataObject getDataObjectFromStream(HttpURLConnection connection) throws IOException{
+    private static ApiDataObject getDataObjectFromStream(HttpURLConnection connection) throws IOException {
         InputStream stream = connection.getInputStream();
         InputStreamReader streamReader = new InputStreamReader(stream);
         Reader reader = new BufferedReader(streamReader);
