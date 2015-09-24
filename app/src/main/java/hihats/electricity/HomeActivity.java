@@ -34,13 +34,13 @@ public class HomeActivity extends AppCompatActivity {
         // Convert currentUser into String
         String struser = currentUser.getUsername().toString();
 
-        // Locate TextView in welcome.xml
+        // Locate TextView in home.xml
         TextView txtuser = (TextView) findViewById(R.id.txtuser);
 
         // Set the currentUser String into TextView
         txtuser.setText("You are logged in as " + struser);
 
-        // Locate Button in welcome.xml
+        // Locate Button in home.xml
         logout = (Button) findViewById(R.id.logout);
 
         // Logout Button Click Listener
