@@ -1,4 +1,4 @@
-package hihats.electricity.api;
+package hihats.electricity.net;
 
 /**
  * Created by fredrikkindstrom on 24/09/15.
