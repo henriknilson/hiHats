@@ -1,11 +1,15 @@
 package hihats.electricity;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -23,31 +27,31 @@ public class ApiHandler {
      * @return The most recent location for said bus as an Android Location object.
      */
     public static String getMostRecentLocationForBus(String busId) {
-        String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 1);
+        String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 5000);
         String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
-        String response = getResponseFromHttp(url, key);
-        //TODO Parse JSON object to correct data.
-        return response;
+        ApiDataObject fromHttp = getResponseFromHttp(url, key);
+        if (fromHttp.getResourceSpec().equals("Ericsson$RMC_Value")) {
+            String value = fromHttp.getValue();
+        }
+        return null;
     }
 
     /*
     Main call method
      */
 
-    private static String getResponseFromHttp(String url, String key) {
-        String response = "";
+    private static ApiDataObject getResponseFromHttp(String url, String key) {
         try {
             HttpURLConnection connection = establishConnection(url, key);
             if (connectionWasSuccessful(connection)) {
-                response = readStreamFromConnection(connection);
+                return getDataObjectFromStream(connection);
             } else {
                 System.out.print("Connection error!");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO Return JSON object instead of String.
-        return response;
+        return null;
     }
 
     /*
@@ -56,11 +60,11 @@ public class ApiHandler {
 
     private static String prepareUrl(String busId, String sensorId, String resourceId, int time) {
         long t2 = System.currentTimeMillis();
-        long t1 = t2 - (time * 1000);
+        long t1 = t2 - time;
         if (sensorId != null) {
             return "https://ece01.ericsson.net:4443/ecity?dgw=" + busId + "&sensorSpec=" + sensorId + "&t1=" + t1 + "&t2=" + t2;
         } else {
-            return  "https://ece01.ericsson.net:4443/ecity?dgw=" + busId + "&resourceSpec=" + resourceId + "&t1=" + t1 + "&t2=" + t2;
+            return "https://ece01.ericsson.net:4443/ecity?dgw=" + busId + "&resourceSpec=" + resourceId + "&t1=" + t1 + "&t2=" + t2;
         }
     }
     private static HttpURLConnection establishConnection(String url, String key) throws IOException{
@@ -75,16 +79,17 @@ public class ApiHandler {
         int responseCode = connection.getResponseCode();
         return responseCode == 200;
     }
-    private static String readStreamFromConnection(HttpURLConnection connection) throws IOException{
+    private static ApiDataObject getDataObjectFromStream(HttpURLConnection connection) throws IOException{
         InputStream stream = connection.getInputStream();
         InputStreamReader streamReader = new InputStreamReader(stream);
-        BufferedReader bufferedReader = new BufferedReader(streamReader);
-        String line;
-        String result = "";
-        while((line = bufferedReader.readLine()) != null) {
-            result += line;
-        }
-        stream.close();
-        return result;
+        Reader reader = new BufferedReader(streamReader);
+        Gson gson = new Gson();
+        ApiDataObject[] data = gson.fromJson(reader, ApiDataObject[].class);
+        return data[0];
     }
+
+    /*
+    POJO classes
+     */
+
 }
