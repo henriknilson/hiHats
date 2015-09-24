@@ -16,7 +16,7 @@ import android.util.Log;
 public class GeolocationHandler implements LocationListener {
 
     private Context mContext;
-    private LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+    private LocationManager locationManager;
     private Location currentLocation = null;
 
     private static final String LOG_TAG = "geolocation";
@@ -26,6 +26,7 @@ public class GeolocationHandler implements LocationListener {
 
     public GeolocationHandler(Context mContext) {
         this.mContext = mContext;
+        this.locationManager = (LocationManager)mContext.getSystemService(Context.LOCATION_SERVICE);
     }
 
     /**
