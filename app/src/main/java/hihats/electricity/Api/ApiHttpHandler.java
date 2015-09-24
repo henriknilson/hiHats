@@ -26,15 +26,16 @@ public class ApiHttpHandler {
      * @param busId The bus you want to check location for.
      * @return The most recent location for said bus as an Android Location object.
      */
-    public static String getMostRecentLocationForBus(String busId) {
+    public static String getMostRecentLocationForBus(String busId) throws AccessErrorException {
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 5000);
         String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
         ApiDataObject data = getResponseFromHttp(url, key);
         System.out.println(data.toString());
-        if (data.getResourceSpec().equals("RMC_Value")) {
+        if (data.getResourceSpec() != null && data.getResourceSpec().equals("RMC_Value")) {
             return data.getValue();
+        } else {
+            throw new AccessErrorException();
         }
-        return null;
     }
 
     /*
@@ -47,12 +48,11 @@ public class ApiHttpHandler {
             if (connectionWasSuccessful(connection)) {
                 return getDataObjectFromStream(connection);
             } else {
-                System.out.print("Connection error!");
+                throw new AccessErrorException();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException|AccessErrorException e) {
+            return null;
         }
-        return null;
     }
 
     /*
