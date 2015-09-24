@@ -3,7 +3,7 @@ package hihats.electricity.net;
 /**
  * Created by fredrikkindstrom on 24/09/15.
  */
-class ApiDataObject {
+public class ApiDataObject {
 
     private String resourceSpec;
     private String timestamp;

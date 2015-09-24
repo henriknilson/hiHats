@@ -2,10 +2,8 @@ package hihats.electricity.activity;
 
 import com.parse.ParseUser;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,7 +16,7 @@ import hihats.electricity.R;
 /**
  * Created by henriknilson on 18/09/15.
  */
-public class HomeActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     Button logout;
@@ -26,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home);
+        setContentView(R.layout.main_activity);
         setupToolbar();
         setupTablayout();
 
@@ -36,13 +34,13 @@ public class HomeActivity extends AppCompatActivity {
         // Convert currentUser into String
         String struser = currentUser.getUsername().toString();
 
-        // Locate TextView in home.xml
+        // Locate TextView in main_activity.xmlivity.xml
         TextView txtuser = (TextView) findViewById(R.id.txtuser);
 
         // Set the currentUser String into TextView
         txtuser.setText("You are logged in as " + struser);
 
-        // Locate Button in home.xml
+        // Locate Button in main_activity_activity.xml
         logout = (Button) findViewById(R.id.logout);
 
         // Store shit

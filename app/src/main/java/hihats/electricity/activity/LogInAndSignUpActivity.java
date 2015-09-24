@@ -32,7 +32,7 @@ public class LogInAndSignUpActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from main.xml
-        setContentView(R.layout.loginandsignup);
+        setContentView(R.layout.loginandsignup_activity);
         // Locate EditTexts in main.xml
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -54,10 +54,10 @@ public class LogInAndSignUpActivity extends AppCompatActivity {
                         new LogInCallback() {
                             public void done(ParseUser user, ParseException e) {
                                 if (user != null) {
-                                    // If user exist and authenticated, send user to HomeActivity.class
+                                    // If user exist and authenticated, send user to MainActivity.class
                                     Intent intent = new Intent(
                                             LogInAndSignUpActivity.this,
-                                            HomeActivity.class);
+                                            MainActivity.class);
                                     startActivity(intent);
                                     Toast.makeText(getApplicationContext(),
                                             "Successfully Logged in",

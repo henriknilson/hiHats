@@ -16,7 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
  * This is the backend class for all api http calls.
  * It sends ApiDataObjects that the class above ApiDataHelper then parses to more useful formats.
  */
-class ApiHttpHandler {
+public class ApiHttpHandler {
 
     private static String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
 
@@ -24,7 +24,7 @@ class ApiHttpHandler {
     Get methods
      */
 
-    static ApiDataObject getMostRecentLocationForBus(String busId) throws AccessErrorException {
+    public static ApiDataObject getMostRecentLocationForBus(String busId) throws AccessErrorException {
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 5000);
         ApiDataObject data = getResponseFromHttp(url, key);
         if (data != null) {
@@ -33,7 +33,7 @@ class ApiHttpHandler {
             throw new AccessErrorException();
         }
     }
-    static ApiDataObject getTotalDistanceForBus(String busId) throws AccessErrorException {
+    public static ApiDataObject getTotalDistanceForBus(String busId) throws AccessErrorException {
         String url = prepareUrl(busId, null, "Ericsson$Total_Vehicle_Distance_Value", 10000);
         ApiDataObject data = getResponseFromHttp(url, key);
         if (data != null) {
