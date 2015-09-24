@@ -21,9 +21,17 @@
         </activity>
         <activity android:name=".activity.MainActivity" >
         </activity>
+
+        <!-- Acke key
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBJpwwLhQ62GvCgO5A47QcIqMHVl-KrkGM"/>
+            android:value="AIzaSyBJpwwLhQ62GvCgO5A47QcIqMHVl-KrkGM" />
+        -->
+        <!-- Hank key -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCP_uQniGvaB0DYYw7NP7kgfqvTS1b-a6I" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
