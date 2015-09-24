@@ -13,9 +13,12 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by frellAn on 2015-09-22.
+ * This is the backend class for all api http calls.
+ * It sends ApiDataObjects that the class above ApiDataHelper then parses to more useful formats.
  */
 class ApiHttpHandler {
+
+    private static String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
 
     /*
     Get methods
@@ -23,9 +26,17 @@ class ApiHttpHandler {
 
     static ApiDataObject getMostRecentLocationForBus(String busId) throws AccessErrorException {
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 5000);
-        String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
         ApiDataObject data = getResponseFromHttp(url, key);
-        if (data.getResourceSpec() != null) {
+        if (data != null) {
+            return data;
+        } else {
+            throw new AccessErrorException();
+        }
+    }
+    static ApiDataObject getTotalDistanceForBus(String busId) throws AccessErrorException {
+        String url = prepareUrl(busId, null, "Ericsson$Total_Vehicle_Distance_Value", 10000);
+        ApiDataObject data = getResponseFromHttp(url, key);
+        if (data != null) {
             return data;
         } else {
             throw new AccessErrorException();
