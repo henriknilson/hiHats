@@ -1,7 +1,6 @@
 package hihats.electricity.api;
 
 import android.location.Location;
-
 import java.util.Date;
 
 /**
