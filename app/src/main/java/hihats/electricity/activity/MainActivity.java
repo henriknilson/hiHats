@@ -1,5 +1,13 @@
 package hihats.electricity.activity;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
 import android.os.Bundle;
@@ -20,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     Button logout;
+    Button changeMapView;
+
+    //Map Variables
+    boolean mShowMap;
+    GoogleMap mMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         setupToolbar();
         setupTablayout();
+        mShowMap = initMap();
+        setupMap();
 
         // Retrieve current user from Parse.com
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -42,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Locate Button in main_activity_activity.xml
         logout = (Button) findViewById(R.id.logout);
+        changeMapView = (Button) findViewById(R.id.changeMapView);
 
         // Store shit
 
@@ -54,6 +70,41 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        changeMapView.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+            // Change map style
+                if(mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL){
+                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }else
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            }
+        });
+    }
+
+    private boolean initMap() {
+        if(mMap == null){
+            MapFragment mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            mMap = mapFrag.getMap();
+        }
+        return mMap != null;
+    }
+
+    private void setupMap() {
+
+        //temp. latlng
+        LatLng latlng = new LatLng(57.68857167,11.97830168);
+
+        if(mShowMap){
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng,15);
+            mMap.moveCamera(update);
+            mMap.addMarker(new MarkerOptions()
+                    .position(latlng)
+                    .title("You are here!")
+            );
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
     }
 
     private void setupToolbar(){
