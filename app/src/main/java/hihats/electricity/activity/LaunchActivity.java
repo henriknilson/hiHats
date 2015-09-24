@@ -7,8 +7,9 @@ import com.parse.*;
 public class LaunchActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
-        Parse.enableLocalDatastore(this);
         super.onCreate(savedInstanceState);
+
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this, "w5w8u7YeyDApblFiC9XPn509REPNdFIv1SleClrR", "IxqGzyFnJUENwSpNl4vRajZaW9gPPgPdK3cArFse");
 
         ParseUser.enableAutomaticUser();
