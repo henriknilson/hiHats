@@ -87,9 +87,4 @@ public class ApiHttpHandler {
         ApiDataObject[] data = gson.fromJson(reader, ApiDataObject[].class);
         return data[0];
     }
-
-    /*
-    POJO classes
-     */
-
 }

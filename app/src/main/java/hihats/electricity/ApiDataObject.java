@@ -1,7 +1,5 @@
 package hihats.electricity;
 
-import java.util.Date;
-
 /**
  * Created by fredrikkindstrom on 24/09/15.
  */
