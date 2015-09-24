@@ -4,7 +4,10 @@ import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,13 +18,15 @@ import android.widget.TextView;
  */
 public class HomeActivity extends AppCompatActivity {
 
+    TabLayout tabLayout;
     Button logout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Get the view from singleitemview.xml
         setContentView(R.layout.home);
+        setupToolbar();
+        setupTablayout();
 
         // Retrieve current user from Parse.com
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -47,5 +52,18 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void setupToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    private void setupTablayout(){
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_section1)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_section2)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.title_section3)));
     }
 }

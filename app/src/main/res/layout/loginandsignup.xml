@@ -10,21 +10,24 @@
         android:id="@+id/txtusername"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Username" />
+        android:text="@string/Username"
+        android:textColor="@android:color/black" />
 
     <EditText
         android:id="@+id/username"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtusername"
-        android:inputType="text" />
+        android:inputType="text"
+        style="@android:style/Theme.Material" />
 
     <TextView
         android:id="@+id/txtpassword"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/username"
-        android:text="@string/Password" />
+        android:text="@string/Password"
+        android:textColor="@android:color/black" />
 
     <EditText
         android:id="@+id/password"
@@ -38,13 +41,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/password"
-        android:text="@string/LoginBtn" />
+        android:text="@string/LoginBtn"
+        android:background="@color/my_primary" />
 
     <Button
         android:id="@+id/signup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="@string/SignupBtn"
+        android:background="@color/my_primary"
         android:layout_below="@+id/login"
-        android:text="@string/SignupBtn" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
 
 </RelativeLayout>
