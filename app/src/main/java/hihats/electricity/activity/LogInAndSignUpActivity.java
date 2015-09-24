@@ -1,6 +1,5 @@
-package hihats.electricity;
+package hihats.electricity.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +13,8 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import hihats.electricity.R;
 
 /**
  * Created by henriknilson on 18/09/15.

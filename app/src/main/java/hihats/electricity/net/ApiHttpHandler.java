@@ -1,4 +1,4 @@
-package hihats.electricity.api;
+package hihats.electricity.net;
 
 import com.google.gson.Gson;
 

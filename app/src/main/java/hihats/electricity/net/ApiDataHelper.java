@@ -1,4 +1,4 @@
-package hihats.electricity.api;
+package hihats.electricity.net;
 
 import android.location.Location;
 

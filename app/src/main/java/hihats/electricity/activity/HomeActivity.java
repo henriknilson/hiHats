@@ -1,4 +1,4 @@
-package hihats.electricity;
+package hihats.electricity.activity;
 
 import com.parse.ParseUser;
 
@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import hihats.electricity.R;
 
 /**
  * Created by henriknilson on 18/09/15.
