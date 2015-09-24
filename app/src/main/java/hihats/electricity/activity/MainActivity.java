@@ -5,7 +5,9 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
 import android.os.Bundle;
@@ -78,10 +80,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupMap() {
+
+        //temp. latlng
+        LatLng latlng = new LatLng(57.68857167,11.97830168);
+
         if(mShowMap){
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(57.68857167,11.97830168
-            ),15);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng,15);
             mMap.moveCamera(update);
+            mMap.addMarker(new MarkerOptions()
+                    .position(latlng)
+                    .title("You are here!")
+                    .anchor(.5f,.5f)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.common_ic_googleplayservices))
+            );
         }
     }
 
