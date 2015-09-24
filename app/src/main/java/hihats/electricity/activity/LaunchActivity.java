@@ -30,7 +30,7 @@ public class LaunchActivity extends Activity {
             // If user is logged in, get username
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (currentUser != null) {
-                Intent intent = new Intent(LaunchActivity.this, HomeActivity.class);
+                Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
