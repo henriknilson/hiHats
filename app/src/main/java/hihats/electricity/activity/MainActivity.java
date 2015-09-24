@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     Button logout;
+    Button changeMapView;
 
     //Map Variables
     boolean mShowMap;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Locate Button in main_activity_activity.xml
         logout = (Button) findViewById(R.id.logout);
+        changeMapView = (Button) findViewById(R.id.changeMapView);
 
         // Store shit
 
@@ -66,6 +68,17 @@ public class MainActivity extends AppCompatActivity {
                 // Logout current user
                 ParseUser.logOut();
                 finish();
+            }
+        });
+
+        changeMapView.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View arg0) {
+            // Change map style
+                if(mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL){
+                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                }else
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             }
         });
     }
@@ -89,9 +102,8 @@ public class MainActivity extends AppCompatActivity {
             mMap.addMarker(new MarkerOptions()
                     .position(latlng)
                     .title("You are here!")
-                    .anchor(.5f,.5f)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.common_ic_googleplayservices))
             );
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
     }
 
