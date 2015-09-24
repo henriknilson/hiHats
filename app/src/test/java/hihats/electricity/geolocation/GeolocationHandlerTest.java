@@ -64,7 +64,7 @@ public class GeolocationHandlerTest extends TestCase {
 
     @Test
     public void testIsTravelling() throws Exception {
-        assertFalse(geolocationHandler1.isTravelling());
+        assertTrue(geolocationHandler1.isTravelling());
         assertFalse(geolocationHandler2.isTravelling());
         assertTrue(geolocationHandler3.isTravelling());
         assertFalse(geolocationHandler4.isTravelling());

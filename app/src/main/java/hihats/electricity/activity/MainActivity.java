@@ -8,17 +8,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
+
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.concurrent.Callable;
+
 import hihats.electricity.R;
+import hihats.electricity.geolocation.GeolocationHandler;
+import hihats.electricity.geolocation.GeolocationHandler.GeolocationCallback;
 
 /**
  * Created by henriknilson on 18/09/15.
@@ -41,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
         setupTablayout();
         mShowMap = initMap();
         setupMap();
+
+        GeolocationHandler geolocationHandler = new GeolocationHandler(this);
+
+        geolocationHandler.getLocation(new GeolocationCallback() {
+            @Override
+            public void call(Location location) {
+                Log.i("MainActivity", "Latitude: " + Double.toString(location.getLatitude()));
+            }
+        });
 
         // Retrieve current user from Parse.com
         ParseUser currentUser = ParseUser.getCurrentUser();
