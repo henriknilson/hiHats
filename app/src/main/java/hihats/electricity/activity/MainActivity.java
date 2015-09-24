@@ -1,11 +1,9 @@
 package hihats.electricity.activity;
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
@@ -50,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
         // Convert currentUser into String
         String struser = currentUser.getUsername().toString();
 
-        // Locate TextView in main_activity.xmlivity.xml
+        // Locate TextView in main_activity.xml
         TextView txtuser = (TextView) findViewById(R.id.txtuser);
 
         // Set the currentUser String into TextView
         txtuser.setText("You are logged in as " + struser);
 
-        // Locate Button in main_activity_activity.xml
+        // Locate Button in main_activity.xml
         logout = (Button) findViewById(R.id.logout);
         changeMapView = (Button) findViewById(R.id.changeMapView);
 
