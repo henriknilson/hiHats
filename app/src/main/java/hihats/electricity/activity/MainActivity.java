@@ -1,5 +1,11 @@
 package hihats.electricity.activity;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseUser;
 
 import android.os.Bundle;
@@ -21,12 +27,19 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     Button logout;
 
+    //Map Variables
+    boolean mShowMap;
+    GoogleMap mMap;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         setupToolbar();
         setupTablayout();
+
+        mShowMap = initMap();
+        setupMap();
 
         // Retrieve current user from Parse.com
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -54,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private boolean initMap() {
+        if(mMap == null){
+            MapFragment mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            mMap = mapFrag.getMap();
+        }
+        return mMap != null;
+    }
+
+    private void setupMap() {
+        if(mShowMap){
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(57.68857167,11.97830168
+            ),15);
+            mMap.moveCamera(update);
+        }
     }
 
     private void setupToolbar(){
