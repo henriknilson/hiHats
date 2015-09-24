@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseUser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View arg0) {
                 // Logout current user
                 ParseUser.logOut();
+                Intent intent = new Intent(MainActivity.this, LogInAndSignUpActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
