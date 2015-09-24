@@ -53,7 +53,7 @@ public class LogInAndSignUpActivity extends AppCompatActivity {
                         new LogInCallback() {
                             public void done(ParseUser user, ParseException e) {
                                 if (user != null) {
-                                    // If user exist and authenticated, send user to Welcome.class
+                                    // If user exist and authenticated, send user to HomeActivity.class
                                     Intent intent = new Intent(
                                             LogInAndSignUpActivity.this,
                                             HomeActivity.class);
