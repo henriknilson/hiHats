@@ -41,8 +41,23 @@
         android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
         android:text="@string/LogoutBtn"
         android:background="@color/my_primary" />
+
+    <Button
+        android:id="@+id/changeMapView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="@string/common_google_play_services_enable_button"
+        android:background="@color/my_primary" />
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="770dp"
+        android:layout_alignParentBottom="true"
+        class="com.google.android.gms.maps.MapFragment" />
 
 </RelativeLayout>
