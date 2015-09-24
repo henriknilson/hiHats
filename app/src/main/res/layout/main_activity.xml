@@ -48,7 +48,7 @@
     <fragment
         android:id="@+id/map"
         android:layout_width="fill_parent"
-        android:layout_height="750dp"
+        android:layout_height="770dp"
         android:layout_alignParentBottom="true"
         class="com.google.android.gms.maps.MapFragment" />
 

@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         setupToolbar();
         setupTablayout();
-
         mShowMap = initMap();
         setupMap();
 
