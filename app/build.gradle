@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "hihats.electricity"
@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
     compile 'com.parse.bolts:bolts-android:1.2.0'
     compile 'com.parse:parse-android:1.10.2'
+    compile 'com.google.code.gson:gson:2.3.1'
 }
