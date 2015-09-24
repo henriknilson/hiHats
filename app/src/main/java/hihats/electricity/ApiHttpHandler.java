@@ -15,7 +15,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by frellAn on 2015-09-22.
  */
-public class ApiHandler {
+public class ApiHttpHandler {
 
     /*
     Get methods
