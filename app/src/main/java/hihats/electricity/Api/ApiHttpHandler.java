@@ -21,12 +21,7 @@ class ApiHttpHandler {
     Get methods
      */
 
-    /**
-     * Returns the last known location for a certain bus.
-     * @param busId The bus you want to check location for.
-     * @return The most recent location for said bus as an Android Location object.
-     */
-    protected static ApiDataObject getMostRecentLocationForBus(String busId) throws AccessErrorException {
+    static ApiDataObject getMostRecentLocationForBus(String busId) throws AccessErrorException {
         String url = prepareUrl(busId, null, "Ericsson$RMC_Value", 5000);
         String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
         ApiDataObject data = getResponseFromHttp(url, key);

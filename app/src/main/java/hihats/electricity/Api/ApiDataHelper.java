@@ -9,6 +9,11 @@ import java.util.Date;
  */
 public class ApiDataHelper {
 
+    /**
+     * Returns the last known location for a certain bus.
+     * @param busId The bus you want to get current location for.
+     * @return The most recent location for said bus as an Android Location object.
+     */
     public static Location getMostRecentLocationForBus(String busId) throws AccessErrorException {
         ApiDataObject rawData = ApiHttpHandler.getMostRecentLocationForBus(busId);
         String data = rawData.getValue();
