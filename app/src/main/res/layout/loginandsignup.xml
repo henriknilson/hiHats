@@ -5,77 +5,94 @@
     android:orientation="vertical"
     android:padding="10dip"
     android:background="@drawable/background" >
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="5dp"
         android:background="@color/my_primary_text">
 
-        <TextView
-            android:id="@+id/txtlogintitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/LogInTitle"
-            android:textColor="@color/my_primary_text"
-            android:background="@color/my_primary"/>
-
-        <TextView
-            android:id="@+id/txtusername"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Username"
-            android:textColor="@color/my_text_label" />
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txtusername"
-            android:inputType="text"
-            android:textColor="@color/my_primary"/>
-
-        <TextView
-            android:id="@+id/txtpassword"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/username"
-            android:text="@string/Password"
-            android:textColor="@color/my_text_label" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txtpassword"
-            android:inputType="textPassword"
-            android:textColor="@color/my_primary"/>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_below="@+id/password">
+            android:layout_width="fill_parent"
+            android:layout_height="70dp"
+            android:orientation="vertical"
+            android:background="@color/my_primary" >
 
-            <Button
-                android:id="@+id/login"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/txtlogintitle"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/LoginBtn"
-                android:background="@color/my_primary"
-                android:layout_gravity="left"
-                android:layout_weight="0.5"
-                android:layout_margin="5dp"/>
+                android:text="@string/LogInTitle"
+                android:textColor="@color/my_primary_text"
+                android:padding="5dp"
+                android:layout_marginTop="40dp"/>
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/signup"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:background="@color/my_primary_text">
+
+            <TextView
+                android:id="@+id/txtusername"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/SignupBtn"
-                android:background="@color/my_primary"
-                android:layout_marginTop="16dp"
-                android:layout_weight="0.5"
-                android:layout_gravity="right"
-                android:layout_margin="5dp"/>
+                android:text="@string/Username"
+                android:textColor="@color/my_text_label" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtusername"
+                android:inputType="text"
+                android:textColor="@color/my_primary"/>
+
+            <TextView
+                android:id="@+id/txtpassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/username"
+                android:text="@string/Password"
+                android:textColor="@color/my_text_label" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtpassword"
+                android:inputType="textPassword"
+                android:textColor="@color/my_primary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_below="@+id/password">
+
+                <Button
+                    android:id="@+id/login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/LoginBtn"
+                    android:background="@color/my_primary"
+                    android:layout_gravity="left"
+                    android:layout_weight="0.5"
+                    android:layout_margin="5dp"/>
+
+                <Button
+                    android:id="@+id/signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/SignupBtn"
+                    android:background="@color/my_primary"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="right"
+                    android:layout_margin="5dp"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
