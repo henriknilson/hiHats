@@ -11,11 +11,11 @@
         android:text="@string/common_google_play_services_enable_button"
         android:background="@color/my_primary" />
 
-    <fragment
-        android:id="@+id/map"
-        android:layout_width="fill_parent"
-        android:layout_height="770dp"
-        android:layout_alignParentBottom="true"
-        class="com.google.android.gms.maps.MapFragment" />
+    <!--<fragment-->
+        <!--android:id="@+id/map"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="770dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--class="com.google.android.gms.maps.MapFragment" />-->
 
 </FrameLayout>
