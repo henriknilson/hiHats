@@ -22,8 +22,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.concurrent.Callable;
+import java.util.ArrayList;
 
 import hihats.electricity.R;
+import hihats.electricity.model.BusStop;
 
 /**
  * Created by henriknilson on 18/09/15.
@@ -34,9 +36,13 @@ public class MainActivity extends AppCompatActivity {
     Button logout;
     Button changeMapView;
 
+    BusStop svenHultin;
+    BusStop chalmersPlatsen;
+
     //Map Variables
     boolean mShowMap;
     GoogleMap mMap;
+    ArrayList<BusStop> busStops;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
         //temp. latlng
         LatLng latlng = new LatLng(57.68857167,11.97830168);
 
+        svenHultin = new BusStop(57.685825, 11.977261, "Sven Hultins Gata");
+        chalmersPlatsen = new BusStop(57.689312, 11.973452, "Chalmersplatsen");
+
+        busStops = new ArrayList<>();
+        busStops.add(svenHultin);
+        busStops.add(chalmersPlatsen);
+
         if(mShowMap){
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng,15);
             mMap.moveCamera(update);
@@ -110,6 +123,12 @@ public class MainActivity extends AppCompatActivity {
                     .title("You are here!")
             );
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            for(int i = 0; i < busStops.size(); i++){
+                mMap.addMarker(new MarkerOptions()
+                        .position(busStops.get(i).getLatLng())
+                        .title(busStops.get(i).getName())
+                );
+            }
         }
     }
 
