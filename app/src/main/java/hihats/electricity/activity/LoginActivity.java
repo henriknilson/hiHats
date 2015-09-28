@@ -19,7 +19,7 @@ import hihats.electricity.R;
 /**
  * Created by henriknilson on 18/09/15.
  */
-public class LogInAndSignUpActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     Button loginbutton;
     Button signup;
@@ -32,7 +32,7 @@ public class LogInAndSignUpActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the view from main.xml
-        setContentView(R.layout.loginandsignup_activity);
+        setContentView(R.layout.activity_login);
         // Locate EditTexts in main.xml
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -56,7 +56,7 @@ public class LogInAndSignUpActivity extends AppCompatActivity {
                                 if (user != null) {
                                     // If user exist and authenticated, send user to MainActivity.class
                                     Intent intent = new Intent(
-                                            LogInAndSignUpActivity.this,
+                                            LoginActivity.this,
                                             MainActivity.class);
                                     startActivity(intent);
                                     Toast.makeText(getApplicationContext(),
