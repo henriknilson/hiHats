@@ -3,8 +3,19 @@
     android:layout_height="match_parent"
     tools:context="hihats.electricity.fragment.DashboardFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <Button
+        android:id="@+id/changeMapView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="@string/common_google_play_services_enable_button"
+        android:background="@color/my_primary" />
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="770dp"
+        android:layout_alignParentBottom="true"
+        class="com.google.android.gms.maps.MapFragment" />
 
 </FrameLayout>

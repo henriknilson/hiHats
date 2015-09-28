@@ -1,8 +1,8 @@
 package hihats.electricity.fragment;
 
+import android.support.v4.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +10,11 @@ import android.view.ViewGroup;
 import hihats.electricity.R;
 
 public class DashboardFragment extends Fragment {
-    private static final String PARAM = "param";
-
-    private String mParam;
 
     private OnFragmentInteractionListener mListener;
 
-    public static DashboardFragment newInstance(String param) {
+    public static DashboardFragment newInstance() {
         DashboardFragment fragment = new DashboardFragment();
-        Bundle args = new Bundle();
-        args.putString(PARAM, param);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -29,9 +23,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam = getArguments().getString(PARAM);
-        }
     }
 
     @Override
