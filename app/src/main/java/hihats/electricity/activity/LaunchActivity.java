@@ -23,7 +23,7 @@ public class LaunchActivity extends Activity {
         // Check if user is logged in or not
         if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
             // If user is not logged in send to Log in class
-            Intent intent = new Intent(LaunchActivity.this, LogInAndSignUpActivity.class);
+            Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         } else {
@@ -35,7 +35,7 @@ public class LaunchActivity extends Activity {
                 finish();
             } else {
                 Intent intent = new Intent(LaunchActivity.this,
-                        LogInAndSignUpActivity.class);
+                        LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
