@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupMap() {
-
         //temp. latlng, later to be replaced with cellphone latlng
         LatLng latlng = new LatLng(57.68857167,11.97830168);
 
