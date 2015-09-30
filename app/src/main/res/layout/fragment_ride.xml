@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rideFragment"
+    tools:context="hihats.electricity.fragment.RideFragment">
+
+    <Button
+        android:id="@+id/changeMapView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="@string/common_google_play_services_enable_button"
+        android:background="@color/primary" />
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="770dp"
+        android:layout_alignParentBottom="true"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+</FrameLayout>
