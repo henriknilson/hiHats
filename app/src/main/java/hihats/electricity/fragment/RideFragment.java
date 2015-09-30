@@ -78,12 +78,14 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
 
         changeMapView = (Button) view.findViewById(R.id.changeMapView);
 
+
         mMapFragment = new SupportMapFragment() {
             @Override
             public void onActivityCreated(Bundle savedInstanceState) {
                 super.onActivityCreated(savedInstanceState);
                 mMap = mMapFragment.getMap();
                 if (mMap != null) {
+                    mShowMap = true;
                     setupMap();
                     drawPath();
                 }
@@ -127,14 +129,6 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         public void onFragmentInteraction(Uri uri);
     }
 
-    private boolean initMap() {
-        if(mMap == null){
-            SupportMapFragment mapFrag = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
-            mMap = mapFrag.getMap();
-        }
-        return mMap != null;
-    }
-
     private void setupMap() {
         //temp. latlng, later to be replaced with cellphone latlng
         LatLng latlng = new LatLng(57.68857167,11.97830168);
@@ -174,7 +168,7 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
 
         //Direct camera to given position and add markers
         if(mShowMap){
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 15);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 20);
             mMap.moveCamera(update);
             mMap.addMarker(new MarkerOptions()
                     .position(latlng)
