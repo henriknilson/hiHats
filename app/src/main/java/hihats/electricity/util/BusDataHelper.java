@@ -4,14 +4,14 @@ import android.location.Location;
 
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.ApiDataObject;
-import hihats.electricity.net.ApiHttpHandler;
+import hihats.electricity.net.HttpHandler;
 
 /**
- * This class converts the data obtained by the backend class
- * ApiHttpHandler to useful formats to use further up in the application.
- * This is the class that gets called from outside the api package.
+ * This class converts the data obtained by the net class
+ * HttpHandler to useful formats to use further up in the application tree.
+ * This is the class that gets called from outside the net/util package.
  */
-public class ApiDataHelper {
+public class BusDataHelper {
 
     /**
      * Returns the last known location for a certain bus.
@@ -20,7 +20,7 @@ public class ApiDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      */
     public static Location getMostRecentLocationForBus(String busId) throws AccessErrorException {
-        ApiDataObject rawData = ApiHttpHandler.getMostRecentLocationForBus(busId);
+        ApiDataObject rawData = HttpHandler.getMostRecentLocationForBus(busId);
         String data = rawData.getValue();
         Location loc = new Location(busId);
 
@@ -61,7 +61,7 @@ public class ApiDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      */
     public static int getTotalDistanceForBus(String busId) throws AccessErrorException {
-        ApiDataObject rawData = ApiHttpHandler.getTotalDistanceForBus(busId);
+        ApiDataObject rawData = HttpHandler.getTotalDistanceForBus(busId);
         int data = Integer.parseInt(rawData.getValue());
         return data*5;
     }

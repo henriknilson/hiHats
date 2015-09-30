@@ -14,9 +14,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  * This is the backend class for all api http calls.
- * It sends ApiDataObjects that the class above ApiDataHelper then parses to more useful formats.
+ * It returns ApiDataObjects that the util classes then parses to more useful formats.
  */
-public class ApiHttpHandler {
+public class HttpHandler {
 
     private static String key = "Basic Z3JwNDU6RlozRWN1TFljag==";
 
