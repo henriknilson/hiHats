@@ -10,7 +10,6 @@ import hihats.electricity.model.Location;
 public class RmcConverter {
 
     static Location rmcToLocation(String rmc, String timestamp) {
-        System.out.println(rmc);
         if (rmc.startsWith("$GPRMC")) {
             Location loc = new Location();
             String[] gpsValues = rmc.split(",");
@@ -32,15 +31,16 @@ public class RmcConverter {
                 }
                 loc.setLongitude(longitude);
             } catch (StringIndexOutOfBoundsException e) {
-                throw new IllegalArgumentException("Illegal GPRMC format");
+                throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
             }
+
             // Set time
             Date time = new Date(Long.parseLong(timestamp));
             loc.setTime(time);
 
             return loc;
         } else {
-            throw new IllegalArgumentException("Needs to me in GPRMC format");
+            throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
         }
     }
 

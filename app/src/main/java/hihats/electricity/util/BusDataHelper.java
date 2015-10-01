@@ -31,6 +31,7 @@ public class BusDataHelper {
      * @param busId The bus you want to get data for.
      * @return The most recent location for said bus as an Android Location object.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
      */
     public Location getCurrentLocationForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
@@ -39,16 +40,27 @@ public class BusDataHelper {
         return RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
     }
 
+    public Bus getCurrentDataForBus(String busId) throws AccessErrorException, NoDataException {
+        String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
+        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ApiDataObject data = rawData.get(0);
+        String id = data.getGatewayId();
+        Location loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
+        float speed = RmcConverter.rmcToSpeed(data.getValue());
+        float bearing = RmcConverter.rmcToBearing(data.getValue());
+        return new Bus(id, loc, speed, bearing);
+    }
+
     public ArrayList<Bus> getCurrentDataForAllBuses() throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
-            String busId = o.getGatewayId();
+            String id = o.getGatewayId();
             Location loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
             float speed = RmcConverter.rmcToSpeed(o.getValue());
             float bearing = RmcConverter.rmcToBearing(o.getValue());
-            buses.add(new Bus(busId, loc, speed, bearing));
+            buses.add(new Bus(id, loc, speed, bearing));
         }
         return buses;
     }
@@ -58,6 +70,7 @@ public class BusDataHelper {
      * @param busId The bus you want to get data for.
      * @return The total distance in meters.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
      */
     public int getTotalDistanceForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, TOTAL_VEHICLE_DISTANCE, 10000);
