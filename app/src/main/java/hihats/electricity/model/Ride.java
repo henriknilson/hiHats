@@ -15,7 +15,7 @@ public class Ride {
     }
 
     public void startRide() {
-
+        //bus.updateLocation();
     }
 
     public void appendDistance(int distance) {
