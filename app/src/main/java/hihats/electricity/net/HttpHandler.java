@@ -32,7 +32,7 @@ public class HttpHandler {
      * @return An ApiDataObject with data when successful, null if not successful.
      * @throws AccessErrorException If there was an error connection to the server.
      */
-    public ArrayList<ApiDataObject> getResponse(String url) throws AccessErrorException {
+    public ArrayList<ApiDataObject> getResponse(String url) throws AccessErrorException, NoDataException {
         try {
             HttpURLConnection connection = establishConnection(url, KEY);
             if (connectionWasSuccessful(connection)) {
@@ -61,14 +61,18 @@ public class HttpHandler {
         int responseCode = connection.getResponseCode();
         return responseCode == 200;
     }
-    private ArrayList<ApiDataObject> getDataObjectFromStream(HttpURLConnection connection) throws IOException {
+    private ArrayList<ApiDataObject> getDataObjectFromStream(HttpURLConnection connection) throws IOException, NoDataException {
         InputStream stream = connection.getInputStream();
         InputStreamReader streamReader = new InputStreamReader(stream);
         Reader reader = new BufferedReader(streamReader);
         Gson gson = new Gson();
         ApiDataObject[] fromStream = gson.fromJson(reader, ApiDataObject[].class);
         ArrayList<ApiDataObject> dataObjects = new ArrayList<>();
-        Collections.addAll(dataObjects, fromStream);
+        try {
+            Collections.addAll(dataObjects, fromStream);
+        } catch (NullPointerException e) {
+            throw new NoDataException();
+        }
         return dataObjects;
     }
 }
