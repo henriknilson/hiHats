@@ -35,8 +35,6 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     SupportMapFragment mMapFragment;
     private static String TAG = "RideFragment";
 
-    Button changeMapView;
-
     BusStop svenHultin;
     BusStop chalmersPlatsen;
     BusStop kapellPlatsen;
@@ -58,7 +56,6 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     Polyline line;
     ArrayList<BusStop> busStops;
 
-
     public static RideFragment newInstance() {
         RideFragment fragment = new RideFragment();
         return fragment;
@@ -71,13 +68,9 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {;
+                             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_ride, container, false);
-
-
-        changeMapView = (Button) view.findViewById(R.id.changeMapView);
-
 
         mMapFragment = new SupportMapFragment() {
             @Override

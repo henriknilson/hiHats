@@ -35,19 +35,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(),
-                MainActivity.this));
+        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), MainActivity.this));
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
         // Retrieve current user from Parse.com
         ParseUser currentUser = ParseUser.getCurrentUser();
-
-        // Convert currentUser into String
-        String struser = currentUser.getUsername().toString();
 
         // Locate Button in activity_main.xml
         logout = (Button) findViewById(R.id.logout);
