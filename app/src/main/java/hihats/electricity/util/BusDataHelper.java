@@ -36,39 +36,10 @@ public class BusDataHelper {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
         String gpsData = rawData.get(0).getValue();
-        Location loc = new Location(busId);
-
-        if (gpsData.startsWith("$GPRMC")) {
-            String[] gpsValues = gpsData.split(",");
-
-            // Set latitude
-            double latitude = Double.parseDouble(gpsValues[3].substring(2))/60.0;
-            latitude +=  Double.parseDouble(gpsValues[3].substring(0, 2));
-            if (gpsValues[4].charAt(0) == 'S') {
-                latitude = -latitude;
-            }
-            loc.setLatitude(latitude);
-
-            // Set longitude
-            double longitude = Double.parseDouble(gpsValues[5].substring(3))/60.0;
-            longitude +=  Double.parseDouble(gpsValues[5].substring(0, 3));
-            if (gpsValues[6].charAt(0) == 'W') {
-                longitude = -longitude;
-            }
-            loc.setLongitude(longitude);
-
-            // Set speed
-            float speed = (Float.parseFloat(gpsValues[7])*1.85200f);
-            loc.setSpeed(speed);
-
-            // Set bearing
-            float bearing = Float.parseFloat(gpsValues[8]);
-            loc.setBearing(bearing);
-        }
-        return loc;
+        return RmcConverter.rmcToLocation(gpsData);
     }
 
-    public ArrayList<String> getCurrentLocationForAllBusses() throws AccessErrorException {
+    public ArrayList<String> getCurrentLocationForAllBuses() throws AccessErrorException {
         ArrayList<String> response = new ArrayList<>();
         String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
