@@ -119,7 +119,7 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
     private void setupMap() {
@@ -160,7 +160,7 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         busStops.add(lindHolmsPlatsen);
 
         //Direct camera to given position and add markers
-        if(mShowMap){
+        if (mShowMap){
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 20);
             mMap.moveCamera(update);
             mMap.addMarker(new MarkerOptions()
