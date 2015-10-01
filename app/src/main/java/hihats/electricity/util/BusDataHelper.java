@@ -2,6 +2,8 @@ package hihats.electricity.util;
 
 import android.location.Location;
 
+import java.util.ArrayList;
+
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.ApiDataObject;
 import hihats.electricity.net.HttpHandler;
@@ -22,7 +24,7 @@ public class BusDataHelper {
 
     // Initialize the HttpHandler
     private HttpHandler httpHandler = new HttpHandler();
-    
+
     /**
      * Returns the last known location for a certain bus.
      * @param busId The bus you want to get data for.
@@ -31,8 +33,8 @@ public class BusDataHelper {
      */
     public Location getCurrentLocationForBus(String busId) throws AccessErrorException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
-        ApiDataObject rawData = httpHandler.getResponse(url);
-        String data = rawData.getValue();
+        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        String data = rawData.get(0).getValue();
         Location loc = new Location(busId);
 
         if (data.startsWith("$GPRMC")) {
@@ -65,6 +67,11 @@ public class BusDataHelper {
         return loc;
     }
 
+    public ArrayList<Location> getCurrentLocationForAllBusses() throws AccessErrorException {
+        String url = urlRetriever.getUrl(null, null, GPS_RMC, 5000);
+        return null;
+    }
+
     /**
      * Returns the total distance traveled for a certain bus.
      * @param busId The bus you want to get data for.
@@ -73,8 +80,8 @@ public class BusDataHelper {
      */
     public int getTotalDistanceForBus(String busId) throws AccessErrorException {
         String url = urlRetriever.getUrl(busId, null, TOTAL_VEHICLE_DISTANCE, 10000);
-        ApiDataObject rawData = httpHandler.getResponse(url);
-        int data = Integer.parseInt(rawData.getValue());
+        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        int data = Integer.parseInt(rawData.get(0).getValue());
         return data * 5;
     }
 }
