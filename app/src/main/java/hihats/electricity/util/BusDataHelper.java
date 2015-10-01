@@ -5,6 +5,7 @@ import android.location.Location;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.ApiDataObject;
 import hihats.electricity.net.HttpHandler;
+import hihats.electricity.net.UrlRetriever;
 
 /**
  * This class converts the data obtained by the net class
@@ -13,14 +14,24 @@ import hihats.electricity.net.HttpHandler;
  */
 public class BusDataHelper {
 
+    private String GPS_RMC = "Ericsson$RMC_Value";
+    private String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
+
+    // Initialize the URLRetriever
+    private UrlRetriever urlRetriever = new UrlRetriever();
+
+    // Initialize the HttpHandler
+    private HttpHandler httpHandler = new HttpHandler();
+
     /**
      * Returns the last known location for a certain bus.
      * @param busId The bus you want to get data for.
      * @return The most recent location for said bus as an Android Location object.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      */
-    public static Location getMostRecentLocationForBus(String busId) throws AccessErrorException {
-        ApiDataObject rawData = HttpHandler.getMostRecentLocationForBus(busId);
+    public Location getMostRecentLocationForBus(String busId) throws AccessErrorException {
+        String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
+        ApiDataObject rawData = httpHandler.getResponse(url);
         String data = rawData.getValue();
         Location loc = new Location(busId);
 
@@ -60,9 +71,10 @@ public class BusDataHelper {
      * @return The total distance in meters.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      */
-    public static int getTotalDistanceForBus(String busId) throws AccessErrorException {
-        ApiDataObject rawData = HttpHandler.getTotalDistanceForBus(busId);
+    public int getTotalDistanceForBus(String busId) throws AccessErrorException {
+        String url = urlRetriever.getUrl(busId, null, TOTAL_VEHICLE_DISTANCE, 10000);
+        ApiDataObject rawData = httpHandler.getResponse(url);
         int data = Integer.parseInt(rawData.getValue());
-        return data*5;
+        return data * 5;
     }
 }
