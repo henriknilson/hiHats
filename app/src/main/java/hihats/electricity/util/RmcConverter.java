@@ -15,7 +15,7 @@ public class RmcConverter {
      * @param timestamp The timestamp milliseconds.
      * @return A location object with latitude, longitude and date.
      */
-    static Location rmcToLocation(String rmc, String timestamp) {
+    public static Location rmcToLocation(String rmc, String timestamp) {
         if (rmc.startsWith("$GPRMC")) {
             Location loc = new Location();
             String[] gpsValues = rmc.split(",");
@@ -36,17 +36,17 @@ public class RmcConverter {
                     longitude = -longitude;
                 }
                 loc.setLongitude(longitude);
-            } catch (StringIndexOutOfBoundsException e) {
+            } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
                 throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
             }
 
             // Set time
             Date time = new Date(Long.parseLong(timestamp));
-            loc.setTime(time);
+            loc.setDate(time);
 
             return loc;
         } else {
-            throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
+            throw new IllegalArgumentException("Input must be in GPRMC format");
         }
     }
 
@@ -55,7 +55,7 @@ public class RmcConverter {
      * @param rmc The string to parse.
      * @return A float object representing the speed.
      */
-    static float rmcToSpeed(String rmc) {
+    public static float rmcToSpeed(String rmc) {
         if (rmc.startsWith("$GPRMC")) {
             String[] gpsValues = rmc.split(",");
             return (Float.parseFloat(gpsValues[7])*1.85200f);
@@ -69,7 +69,7 @@ public class RmcConverter {
      * @param rmc The string to parse.
      * @return A float object representing the bearing.
      */
-    static float rmcToBearing(String rmc) {
+    public static float rmcToBearing(String rmc) {
         if (rmc.startsWith("$GPRMC")) {
             String[] gpsValues = rmc.split(",");
             return Float.parseFloat(gpsValues[8]);

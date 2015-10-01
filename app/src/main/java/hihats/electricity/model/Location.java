@@ -9,14 +9,14 @@ public class Location {
 
     private double latitude;
     private double longitude;
-    private Date time;
+    private Date date;
 
     public Location() {}
 
-    public Location(double latitude, double longitude, Date time) {
+    public Location(double latitude, double longitude, Date date) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.time = time;
+        this.date = date;
     }
 
     public double getLatitude() {
@@ -27,8 +27,8 @@ public class Location {
         return longitude;
     }
 
-    public Date getTime() {
-        return time;
+    public Date getDate() {
+        return date;
     }
 
     public void setLatitude(double latitude) {
@@ -39,7 +39,7 @@ public class Location {
         this.longitude = longitude;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
