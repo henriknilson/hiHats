@@ -40,6 +40,13 @@ public class BusDataHelper {
         return RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
     }
 
+    /**
+     * Returns the last known complete data for a certain bus.
+     * @param busId The bus you want to get data for.
+     * @return A Bus object containing all the data obtained.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
     public Bus getCurrentDataForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
@@ -51,6 +58,12 @@ public class BusDataHelper {
         return new Bus(id, loc, speed, bearing);
     }
 
+    /**
+     * Returns the last known complete data for every available bus.
+     * @return A Bus object array containing all buses with all the data obtained.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
     public ArrayList<Bus> getCurrentDataForAllBuses() throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
