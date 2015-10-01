@@ -17,15 +17,15 @@ import hihats.electricity.net.UrlRetriever;
  */
 public class BusDataHelper {
 
-    private String GPS_RMC = "Ericsson$RMC_Value";
-    private String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
-    private String AT_STOP = "Ericsson$At_Stop_Value";
+    private final String GPS_RMC = "Ericsson$RMC_Value";
+    private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
+    private final String AT_STOP = "Ericsson$At_Stop_Value";
 
     // Initialize the URLRetriever
-    private UrlRetriever urlRetriever = new UrlRetriever();
+    private final UrlRetriever urlRetriever = new UrlRetriever();
 
     // Initialize the HttpHandler
-    private HttpHandler httpHandler = new HttpHandler();
+    private final HttpHandler httpHandler = new HttpHandler();
 
     /**
      * Returns the last known location for a certain bus.
@@ -41,6 +41,13 @@ public class BusDataHelper {
         return RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
     }
 
+    /**
+     * Returns if the bus is currently located at a bus stop or not.
+     * @param busId The bus you want to get data for.
+     * @return True if the bus is at a bus stop, false if not.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
     public boolean isBusAtStop(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, AT_STOP, 30000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
