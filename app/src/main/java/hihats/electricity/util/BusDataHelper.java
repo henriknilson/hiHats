@@ -3,6 +3,7 @@ package hihats.electricity.util;
 import android.location.Location;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.ApiDataObject;
@@ -34,42 +35,48 @@ public class BusDataHelper {
     public Location getCurrentLocationForBus(String busId) throws AccessErrorException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
-        String data = rawData.get(0).getValue();
+        String gpsData = rawData.get(0).getValue();
         Location loc = new Location(busId);
 
-        if (data.startsWith("$GPRMC")) {
-            String[] strValues = data.split(",");
+        if (gpsData.startsWith("$GPRMC")) {
+            String[] gpsValues = gpsData.split(",");
 
             // Set latitude
-            double latitude = Double.parseDouble(strValues[3].substring(2))/60.0;
-            latitude +=  Double.parseDouble(strValues[3].substring(0, 2));
-            if (strValues[4].charAt(0) == 'S') {
+            double latitude = Double.parseDouble(gpsValues[3].substring(2))/60.0;
+            latitude +=  Double.parseDouble(gpsValues[3].substring(0, 2));
+            if (gpsValues[4].charAt(0) == 'S') {
                 latitude = -latitude;
             }
             loc.setLatitude(latitude);
 
             // Set longitude
-            double longitude = Double.parseDouble(strValues[5].substring(3))/60.0;
-            longitude +=  Double.parseDouble(strValues[5].substring(0, 3));
-            if (strValues[6].charAt(0) == 'W') {
+            double longitude = Double.parseDouble(gpsValues[5].substring(3))/60.0;
+            longitude +=  Double.parseDouble(gpsValues[5].substring(0, 3));
+            if (gpsValues[6].charAt(0) == 'W') {
                 longitude = -longitude;
             }
             loc.setLongitude(longitude);
 
             // Set speed
-            float speed = (Float.parseFloat(strValues[7])*1.85200f);
+            float speed = (Float.parseFloat(gpsValues[7])*1.85200f);
             loc.setSpeed(speed);
 
             // Set bearing
-            float bearing = Float.parseFloat(strValues[8]);
+            float bearing = Float.parseFloat(gpsValues[8]);
             loc.setBearing(bearing);
         }
         return loc;
     }
 
-    public ArrayList<Location> getCurrentLocationForAllBusses() throws AccessErrorException {
-        String url = urlRetriever.getUrl(null, null, GPS_RMC, 5000);
-        return null;
+    public ArrayList<String> getCurrentLocationForAllBusses() throws AccessErrorException {
+        ArrayList<String> response = new ArrayList<>();
+        String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
+        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        System.out.println(rawData.size());
+        for (ApiDataObject o : rawData) {
+            response.add(o.toString());
+        }
+        return response;
     }
 
     /**
