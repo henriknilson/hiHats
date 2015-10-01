@@ -17,36 +17,4 @@ public class Bus {
         this.speed = speed;
         this.bearing = bearing;
     }
-
-    public String getBusId() {
-        return busId;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public float getBearing() {
-        return bearing;
-    }
-
-    public void setBusId(String busId) {
-        this.busId = busId;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    public void setBearing(float bearing) {
-        this.bearing = bearing;
-    }
 }

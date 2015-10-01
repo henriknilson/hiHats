@@ -15,7 +15,7 @@ public class Ride {
     }
 
     public void startRide() {
-        
+
     }
 
     public void appendDistance(int distance) {
