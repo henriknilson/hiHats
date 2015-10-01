@@ -19,6 +19,7 @@ public class BusDataHelper {
 
     private String GPS_RMC = "Ericsson$RMC_Value";
     private String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
+    private String AT_STOP = "Ericsson$At_Stop_Value";
 
     // Initialize the URLRetriever
     private UrlRetriever urlRetriever = new UrlRetriever();
@@ -33,13 +34,27 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public Location getCurrentLocationForBus(String busId) throws AccessErrorException, NoDataException {
+    public Location getLastLocationForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
         ApiDataObject data = rawData.get(0);
         return RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
     }
 
+    public boolean isBusAtStop(String busId) throws AccessErrorException, NoDataException {
+        String url = urlRetriever.getUrl(busId, null, AT_STOP, 30000);
+        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        System.out.println(rawData.size());
+        ApiDataObject data = rawData.get(0);
+        switch (data.getValue()) {
+            case "true":
+                return true;
+            case "false":
+                return false;
+            default:
+                throw new NoDataException();
+        }
+    }
     /**
      * Returns the last known complete data for a certain bus.
      * @param busId The bus you want to get data for.
@@ -47,7 +62,7 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public Bus getCurrentDataForBus(String busId) throws AccessErrorException, NoDataException {
+    public Bus getLastDataForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
         ApiDataObject data = rawData.get(0);
@@ -64,7 +79,7 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public ArrayList<Bus> getCurrentDataForAllBuses() throws AccessErrorException, NoDataException {
+    public ArrayList<Bus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
         ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
         ArrayList<Bus> buses = new ArrayList<>();
