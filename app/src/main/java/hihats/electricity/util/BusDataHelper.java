@@ -20,6 +20,7 @@ public class BusDataHelper {
     private final String GPS_RMC = "Ericsson$RMC_Value";
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
+    private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
 
     // Initialize the URLRetriever
     private final UrlRetriever urlRetriever = new UrlRetriever();
@@ -62,6 +63,22 @@ public class BusDataHelper {
                 throw new NoDataException();
         }
     }
+
+    /**
+     * Returns the name of the next bus stop for a bus.
+     * @param busId The bus you want to get data for.
+     * @return A String with the name of the bus stop.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
+    public String getNextStopForBus(String busId) throws AccessErrorException, NoDataException {
+        String url = urlRetriever.getUrl(busId, null, NEXT_STOP, 15000);
+        System.out.println(url);
+        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ApiDataObject data = rawData.get(0);
+        return data.getValue();
+    }
+    
     /**
      * Returns the last known complete data for a certain bus.
      * @param busId The bus you want to get data for.
