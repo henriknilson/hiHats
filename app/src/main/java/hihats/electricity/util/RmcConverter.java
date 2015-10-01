@@ -9,6 +9,12 @@ import hihats.electricity.model.Location;
  */
 public class RmcConverter {
 
+    /**
+     * Parses the GPRMC string to a Location object.
+     * @param rmc The string to parse.
+     * @param timestamp The timestamp milliseconds.
+     * @return A location object with latitude, longitude and date.
+     */
     static Location rmcToLocation(String rmc, String timestamp) {
         if (rmc.startsWith("$GPRMC")) {
             Location loc = new Location();
@@ -44,21 +50,31 @@ public class RmcConverter {
         }
     }
 
+    /**
+     * Parses the GPRMC string to a float speed number.
+     * @param rmc The string to parse.
+     * @return A float object representing the speed.
+     */
     static float rmcToSpeed(String rmc) {
         if (rmc.startsWith("$GPRMC")) {
             String[] gpsValues = rmc.split(",");
             return (Float.parseFloat(gpsValues[7])*1.85200f);
         } else {
-            throw new IllegalArgumentException("Needs to be in GPRMC format");
+            throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
         }
     }
 
+    /**
+     * Parses the GPRMC string to a float bearing number.
+     * @param rmc The string to parse.
+     * @return A float object representing the bearing.
+     */
     static float rmcToBearing(String rmc) {
         if (rmc.startsWith("$GPRMC")) {
             String[] gpsValues = rmc.split(",");
             return Float.parseFloat(gpsValues[8]);
         } else {
-            throw new IllegalArgumentException("Needs to be in GPRMC format");
+            throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
         }
     }
 }
