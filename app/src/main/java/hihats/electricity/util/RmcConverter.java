@@ -49,7 +49,7 @@ public class RmcConverter {
             String[] gpsValues = rmc.split(",");
             return (Float.parseFloat(gpsValues[7])*1.85200f);
         } else {
-            throw new IllegalArgumentException("Needs to me in GPRMC format");
+            throw new IllegalArgumentException("Needs to be in GPRMC format");
         }
     }
 
@@ -58,7 +58,7 @@ public class RmcConverter {
             String[] gpsValues = rmc.split(",");
             return Float.parseFloat(gpsValues[8]);
         } else {
-            throw new IllegalArgumentException("Needs to me in GPRMC format");
+            throw new IllegalArgumentException("Needs to be in GPRMC format");
         }
     }
 }
