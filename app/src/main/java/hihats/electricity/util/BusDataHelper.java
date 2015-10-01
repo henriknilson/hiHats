@@ -22,14 +22,14 @@ public class BusDataHelper {
 
     // Initialize the HttpHandler
     private HttpHandler httpHandler = new HttpHandler();
-
+    
     /**
      * Returns the last known location for a certain bus.
      * @param busId The bus you want to get data for.
      * @return The most recent location for said bus as an Android Location object.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      */
-    public Location getMostRecentLocationForBus(String busId) throws AccessErrorException {
+    public Location getCurrentLocationForBus(String busId) throws AccessErrorException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
         ApiDataObject rawData = httpHandler.getResponse(url);
         String data = rawData.getValue();
