@@ -1,11 +1,13 @@
 package hihats.electricity.fragment;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,14 +31,15 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.util.LocationTracker;
 import hihats.electricity.util.ParseBusStopHelper;
 
-public class RideFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
+public class RideFragment extends Fragment {
 
-    private FindBusFragment.OnFragmentInteractionListener mListener;
-    private GoogleApiClient mGoogleApiClient;
-    private static String TAG = "RideFragment";
-    
+    View view;
+    Button test1;
+    Button test2;
+    LocationTracker gps;
 
     //Map Variables
     MapView mapView;
@@ -44,22 +47,47 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     Polyline line;
     ArrayList<BusStop> busStops;
 
+    /*
+    Fragment standard methods
+     */
+
     public static RideFragment newInstance() {
         return new RideFragment();
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ride, container, false);
-
+        view = inflater.inflate(R.layout.fragment_ride, container, false);
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        mapView.onResume();
+
+        // Locate Buttons in fragment_ride.xml
+        test1 = (Button) view.findViewById(R.id.test1Button);
+        test2 = (Button) view.findViewById(R.id.test2Button);
+
+        // Test Button Click Listener
+        test1.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                if (gps == null) {
+                    gps = new LocationTracker(getContext());
+                }
+            }
+        });
+        // Test Button Click Listener
+        test2.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                if (gps != null) {
+                    //gps.stopUsingGPS();
+                }
+            }
+        });
+
+        return view;
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -69,23 +97,21 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         googleMap = mapView.getMap();
         // latitude and longitude
         getBusStopsFromParse();
-
-        return view;
     }
-
     @Override
-    public void onConnected(Bundle bundle) {}
-
-    @Override
-    public void onConnectionSuspended(int i) {}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
-
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
     @Override
     public void onResume() {
         super.onResume();
+        mapView.onResume();
     }
+
+    /*
+    Map related methods
+     */
 
     private void setupMap(GoogleMap googleMap) {
         //temp. latlng, later to be replaced with cellphone latlng
@@ -105,14 +131,25 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
             );
         }
     }
-
-    private void drawPath(){
+    private void drawPath() {
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLACK).geodesic(true);
         for(BusStop i : busStops){
             LatLng point = i.getLatLng();
             options.add(point);
         }
         line = googleMap.addPolyline(options);
+    }
+
+    /*
+    AsynkTasks
+     */
+
+    private class GetGpsPosition extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
     }
 
     //Fetches data on bus stops from parse cloud
