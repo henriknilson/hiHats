@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Retrieve current user from Parse.com
-        ParseUser currentUser = ParseUser.getCurrentUser();
-
         // Locate Button in activity_main.xml
         logout = (Button) findViewById(R.id.logout);
 
