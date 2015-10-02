@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import hihats.electricity.R;
 
 public class DashboardFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private TextView t;
 
     public static DashboardFragment newInstance() {
         DashboardFragment fragment = new DashboardFragment();
@@ -28,7 +30,16 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        int oldTtlDistance = 15;
+        int newTtlDistance = 20;
+
+        t = (TextView) view.findViewById(R.id.co2);
+        t.setText("You have saved " + Double.toString(calcCo2(getRideDistance(oldTtlDistance, newTtlDistance))) + " today!");
+
+        return view;
     }
 
     public void onButtonPressed(Uri uri) {
@@ -41,4 +52,12 @@ public class DashboardFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    public int getRideDistance(int busPreviousTtlDistance, int busNewTtlDistance){
+        return busNewTtlDistance - busPreviousTtlDistance;
+    }
+
+    public double calcCo2(int distance){
+        double co2 = 0.3;
+        return distance * co2;
+    }
 }

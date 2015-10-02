@@ -5,10 +5,11 @@
     tools:context="hihats.electricity.fragment.DashboardFragment">
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
+        android:id="@+id/co2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:textColor="@color/primary"
-        android:text="DashboardFragment"/>
+        />
 
 </FrameLayout>

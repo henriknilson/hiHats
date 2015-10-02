@@ -1,7 +1,5 @@
 package hihats.electricity.activity;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Polyline;
 import com.parse.ParseUser;
 
 
@@ -12,13 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-
 import hihats.electricity.R;
-import hihats.electricity.adapter.TabsAdapter;
-import hihats.electricity.model.BusStop;
+
 
 /**
  * Created by henriknilson on 18/09/15.
@@ -42,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Retrieve current user from Parse.com
-        ParseUser currentUser = ParseUser.getCurrentUser();
-
         // Locate Button in activity_main.xml
         logout = (Button) findViewById(R.id.logout);
 
@@ -59,6 +49,5 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 }

@@ -1,7 +1,6 @@
-package hihats.electricity.adapter;
+package hihats.electricity.activity;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,7 +13,7 @@ import hihats.electricity.fragment.RideFragment;
  * Created by filip on 28/09/15.
  */
 public class TabsAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
+
     private String tabTitles[] = new String[] { "Ride", "Dashboard", "Deals" };
     private Context context;
 
@@ -25,7 +24,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return tabTitles.length;
     }
 
     @Override
@@ -41,7 +40,6 @@ public class TabsAdapter extends FragmentPagerAdapter {
             default:
                 throw new NullPointerException();
         }
-
     }
 
     @Override
