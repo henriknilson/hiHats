@@ -10,8 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-
 import hihats.electricity.R;
+
 
 /**
  * Created by henriknilson on 18/09/15.
@@ -49,6 +49,5 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 }
