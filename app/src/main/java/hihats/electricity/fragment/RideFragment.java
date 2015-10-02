@@ -2,9 +2,7 @@ package hihats.electricity.fragment;
 
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.*;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,19 +33,19 @@ import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
 
-    private OnFragmentInteractionListener mListener;
+    private FindBusFragment.OnFragmentInteractionListener mListener;
     private GoogleApiClient mGoogleApiClient;
     private static String TAG = "RideFragment";
     
+
     //Map Variables
-    MapView mMapView;
+    MapView mapView;
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
 
     public static RideFragment newInstance() {
-        RideFragment fragment = new RideFragment();
-        return fragment;
+        return new RideFragment();
     }
 
     @Override
@@ -60,53 +57,36 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ride, container, false);
 
-        mMapView = (MapView) view.findViewById(R.id.gMap);
-        mMapView.onCreate(savedInstanceState);
+        mapView = (MapView) view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
 
-        mMapView.onResume();// needed to get the map to display immediately
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        googleMap = mMapView.getMap();
+        googleMap = mapView.getMap();
         // latitude and longitude
         getBusStopsFromParse();
 
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        Log.i(TAG, "Building GoogleApiClient");
-        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
+    @Override
+    public void onConnected(Bundle bundle) {}
 
     @Override
-    public void onConnected(Bundle bundle) {
-
-    }
+    public void onConnectionSuspended(int i) {}
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
+    public void onConnectionFailed(ConnectionResult connectionResult) {}
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    public void onResume() {
+        super.onResume();
+        setupMap(googleMap);
+        drawPath();
     }
 
     private void setupMap(GoogleMap googleMap) {
