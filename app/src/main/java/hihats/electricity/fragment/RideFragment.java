@@ -169,7 +169,7 @@ public class RideFragment extends Fragment {
     AsynkTasks
      */
 
-    private class CheckWifiData extends AsyncTask<Void, Void, Boolean> {
+    private class GetGpsPosition extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
