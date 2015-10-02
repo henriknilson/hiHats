@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.*;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,28 +19,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.FindCallback;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
 
-    BusStop svenHultin;
-    BusStop chalmersPlatsen;
-    BusStop kapellPlatsen;
-    BusStop gotaPlatsen;
-    BusStop valand;
-    BusStop kungsPortsPlatsen;
-    BusStop brunnsParken;
-    BusStop lillaBommen;
-    BusStop friHamnen;
-    BusStop pumpGatan;
-    BusStop regnBagsGatan;
-    BusStop lindHolmen;
-    BusStop lindHolmsPlatsen;
-    BusStop teknikGatan;
+    private FindBusFragment.OnFragmentInteractionListener mListener;
+    private GoogleApiClient mGoogleApiClient;
+    private static String TAG = "RideFragment";
+    
 
     //Map Variables
     MapView mapView;
@@ -69,10 +66,9 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         googleMap = mapView.getMap();
-        setupMap(googleMap);
-        drawPath();
+        // latitude and longitude
+        getBusStopsFromParse();
 
         return view;
     }
@@ -97,61 +93,53 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         //temp. latlng, later to be replaced with cellphone latlng
         LatLng latlng = new LatLng(57.68857167,11.97830168);
 
-        //Busstop variables
-        svenHultin = new BusStop(57.685825, 11.977261, "Sven Hultins Gata");
-        chalmersPlatsen = new BusStop(57.689312, 11.973452, "Chalmersplatsen");
-        kapellPlatsen = new BusStop(57.693730, 11.973338, "Kapellplatsen");
-        gotaPlatsen = new BusStop(57.697652, 11.978949, "Götaplatsen");
-        valand = new BusStop(57.700347, 11.974572, "Valand");
-        kungsPortsPlatsen = new BusStop(57.704038, 11.969529, "Kungsportsplatsen");
-        brunnsParken = new BusStop(57.706962, 11.967620, "Brunnsparken");
-        lillaBommen = new BusStop(57.709549, 11.965952, "Lilla Bommen");
-        friHamnen = new BusStop(57.718204, 11.959474, "Frihamnsporten");
-        pumpGatan = new BusStop(57.712793, 11.946173, "Pumpgatan");
-        regnBagsGatan = new BusStop(57.710765, 11.942761, "Regnbågsgatan");
-        lindHolmen = new BusStop(57.708105, 11.938089, "Lindholmen");
-        teknikGatan = new BusStop(57.706907, 11.937150, "Teknikgatan");
-        lindHolmsPlatsen = new BusStop(57.706993, 11.938464, "Lindholmsplatsen");
-
-        //Array containing the busstops
-        busStops = new ArrayList<>();
-        busStops.add(svenHultin);
-        busStops.add(chalmersPlatsen);
-        busStops.add(kapellPlatsen);
-        busStops.add(gotaPlatsen);
-        busStops.add(valand);
-        busStops.add(kungsPortsPlatsen);
-        busStops.add(brunnsParken);
-        busStops.add(lillaBommen);
-        busStops.add(friHamnen);
-        busStops.add(pumpGatan);
-        busStops.add(regnBagsGatan);
-        busStops.add(lindHolmen);
-        busStops.add(teknikGatan);
-        busStops.add(lindHolmsPlatsen);
-
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 15);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 10);
         googleMap.moveCamera(update);
         googleMap.addMarker(new MarkerOptions()
                         .position(latlng)
                         .title("You are here!")
         );
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        for(int i = 0; i < busStops.size(); i++){
+        for(BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
-                            .position(busStops.get(i).getLatLng())
-                            .title(busStops.get(i).getName())
+                            .position(i.getLatLng())
+                            .title(i.getName())
             );
         }
     }
 
     private void drawPath(){
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLACK).geodesic(true);
-        for(int i = 0; i < busStops.size(); i++){
-            LatLng point = busStops.get(i).getLatLng();
+        for(BusStop i : busStops){
+            LatLng point = i.getLatLng();
             options.add(point);
         }
         line = googleMap.addPolyline(options);
     }
 
+    //Fetches data on bus stops from parse cloud
+    public void getBusStopsFromParse() {
+        ParseQuery<ParseBusStopHelper> stops = ParseQuery.getQuery(ParseBusStopHelper.class);
+        stops.findInBackground(new FindCallback<ParseBusStopHelper>() {
+            @Override
+            public void done(List<ParseBusStopHelper> objects, com.parse.ParseException e) {
+                busStops = new ArrayList<>();
+                for (ParseBusStopHelper i : objects) {
+                    //Add all to list of stops
+                    BusStop stop = new BusStop(i.getLat(), i.getLng(), i.getStopName(), i.getOrder());
+                    busStops.add(stop);
+                }
+                //Sorts bus stops in right order
+                Collections.sort(busStops, new Comparator<BusStop>() {
+                    @Override
+                    public int compare(BusStop stop1, BusStop  stop2)
+                    {
+                        return  stop1.compareTo(stop2);
+                    }
+                });
+                setupMap(googleMap);
+                drawPath();
+            }
+        });
+    }
 }
