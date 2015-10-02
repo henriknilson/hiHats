@@ -63,7 +63,7 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ride, container, false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         mMapView = (MapView) view.findViewById(R.id.gMap);
         mMapView.onCreate(savedInstanceState);

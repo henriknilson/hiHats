@@ -4,12 +4,11 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rideFragment">
+    android:id="@+id/mapFragment">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/gMap"
         android:layout_width="fill_parent"
-        android:layout_height="700dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="700dp" />
 
 </LinearLayout>
