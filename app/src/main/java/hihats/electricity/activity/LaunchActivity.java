@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.parse.*;
+
+import hihats.electricity.util.ParseBusStopHelper;
+
 public class LaunchActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Parse.enableLocalDatastore(this);
+        ParseObject.registerSubclass(ParseBusStopHelper.class);
         Parse.initialize(this, "w5w8u7YeyDApblFiC9XPn509REPNdFIv1SleClrR", "IxqGzyFnJUENwSpNl4vRajZaW9gPPgPdK3cArFse");
 
         ParseUser.enableAutomaticUser();

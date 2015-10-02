@@ -22,11 +22,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.FindCallback;
+import com.parse.ParseQuery;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
 
@@ -193,4 +198,16 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         line = mMap.addPolyline(options);
     }
 
+    public void parseQueryTest() {
+        ParseQuery<ParseBusStopHelper> stops = ParseQuery.getQuery(ParseBusStopHelper.class);
+        stops.findInBackground(new FindCallback<ParseBusStopHelper>() {
+            @Override
+            public void done(List<ParseBusStopHelper> objects, com.parse.ParseException e) {
+                for (ParseBusStopHelper i : objects) {
+                    // They're already instruments!
+                    System.out.println(i.toString());
+                }
+            }
+        });
+    }
 }
