@@ -81,18 +81,8 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         }
         googleMap = mMapView.getMap();
         // latitude and longitude
-        double latitude = 17.385044;
-        double longitude = 78.486671;
-
-        // create marker
-        MarkerOptions marker = new MarkerOptions().position(
-                new LatLng(latitude, longitude)).title("Hello Maps");
-
-        googleMap.addMarker(marker);
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(17.385044, 78.486671)).zoom(12).build();
-        googleMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(cameraPosition));
+        setupMap(googleMap);
+        drawPath();
 
         return view;
     }
@@ -167,21 +157,18 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         busStops.add(teknikGatan);
         busStops.add(lindHolmsPlatsen);
 
-        //Direct camera to given position and add markers
-        if (true){
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 20);
-            googleMap.moveCamera(update);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 15);
+        googleMap.moveCamera(update);
+        googleMap.addMarker(new MarkerOptions()
+                        .position(latlng)
+                        .title("You are here!")
+        );
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        for(int i = 0; i < busStops.size(); i++){
             googleMap.addMarker(new MarkerOptions()
-                            .position(latlng)
-                            .title("You are here!")
+                            .position(busStops.get(i).getLatLng())
+                            .title(busStops.get(i).getName())
             );
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            for(int i = 0; i < busStops.size(); i++){
-                googleMap.addMarker(new MarkerOptions()
-                                .position(busStops.get(i).getLatLng())
-                                .title(busStops.get(i).getName())
-                );
-            }
         }
     }
 
