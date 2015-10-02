@@ -2,7 +2,6 @@ package hihats.electricity.fragment;
 
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +24,7 @@ import java.util.ArrayList;
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
 
-public class MapFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
-
-    private OnFragmentInteractionListener mListener;
+public class RideFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
 
     BusStop svenHultin;
     BusStop chalmersPlatsen;
@@ -50,8 +47,8 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
     Polyline line;
     ArrayList<BusStop> busStops;
 
-    public static MapFragment newInstance() {
-        return new MapFragment();
+    public static RideFragment newInstance() {
+        return new RideFragment();
     }
 
     @Override
@@ -61,7 +58,7 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_ride, container, false);
 
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -94,10 +91,6 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
         super.onResume();
         setupMap(googleMap);
         drawPath();
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 
     private void setupMap(GoogleMap googleMap) {

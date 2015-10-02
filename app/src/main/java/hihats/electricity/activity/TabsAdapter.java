@@ -7,13 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import hihats.electricity.fragment.DashboardFragment;
 import hihats.electricity.fragment.DealsFragment;
-import hihats.electricity.fragment.MapFragment;
+import hihats.electricity.fragment.RideFragment;
 
 /**
  * Created by filip on 28/09/15.
  */
 public class TabsAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
+
     private String tabTitles[] = new String[] { "Ride", "Dashboard", "Deals" };
     private Context context;
 
@@ -24,7 +24,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return tabTitles.length;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
         switch(position) {
             case 0:
-                return MapFragment.newInstance();
+                return RideFragment.newInstance();
             case 1:
                 return DashboardFragment.newInstance();
             case 2:
@@ -40,7 +40,6 @@ public class TabsAdapter extends FragmentPagerAdapter {
             default:
                 throw new NullPointerException();
         }
-
     }
 
     @Override
