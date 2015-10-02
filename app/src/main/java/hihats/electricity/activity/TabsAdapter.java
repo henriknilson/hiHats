@@ -1,14 +1,13 @@
 package hihats.electricity.activity;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import hihats.electricity.fragment.DashboardFragment;
 import hihats.electricity.fragment.DealsFragment;
-import hihats.electricity.fragment.RideFragment;
+import hihats.electricity.fragment.MapFragment;
 
 /**
  * Created by filip on 28/09/15.
@@ -33,7 +32,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
         switch(position) {
             case 0:
-                return RideFragment.newInstance();
+                return MapFragment.newInstance();
             case 1:
                 return DashboardFragment.newInstance();
             case 2:
