@@ -95,8 +95,6 @@ public class RideFragment extends Fragment {
             e.printStackTrace();
         }
         googleMap = mapView.getMap();
-        setupMap(googleMap);
-        drawPath();
         // latitude and longitude
         getBusStopsFromParse();
     }
