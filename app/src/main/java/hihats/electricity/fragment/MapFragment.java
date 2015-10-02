@@ -28,7 +28,6 @@ import hihats.electricity.model.BusStop;
 public class MapFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private OnFragmentInteractionListener mListener;
-    private static String TAG = "MapFragment";
 
     BusStop svenHultin;
     BusStop chalmersPlatsen;
@@ -46,7 +45,7 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
     BusStop teknikGatan;
 
     //Map Variables
-    MapView mMapView;
+    MapView mapView;
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
@@ -64,17 +63,17 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        mMapView = (MapView) view.findViewById(R.id.gMap);
-        mMapView.onCreate(savedInstanceState);
+        mapView = (MapView) view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
 
-        mMapView.onResume();// needed to get the map to display immediately
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        googleMap = mMapView.getMap();
-        // latitude and longitude
+
+        googleMap = mapView.getMap();
         setupMap(googleMap);
         drawPath();
 
@@ -82,18 +81,19 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
     }
 
     @Override
-    public void onConnected(Bundle bundle) {
-
-    }
+    public void onConnected(Bundle bundle) {}
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
+    public void onConnectionSuspended(int i) {}
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(ConnectionResult connectionResult) {}
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupMap(googleMap);
+        drawPath();
     }
 
     public interface OnFragmentInteractionListener {
@@ -154,7 +154,7 @@ public class MapFragment extends Fragment implements ConnectionCallbacks, OnConn
 
     private void drawPath(){
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLACK).geodesic(true);
-        for(int i=0; i < busStops.size(); i++){
+        for(int i = 0; i < busStops.size(); i++){
             LatLng point = busStops.get(i).getLatLng();
             options.add(point);
         }
