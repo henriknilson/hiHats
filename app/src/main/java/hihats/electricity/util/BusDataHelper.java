@@ -37,7 +37,7 @@ public class BusDataHelper {
      */
     public Location getLastLocationForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
-        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ArrayList<ApiDataObject> rawData = httpHandler.getJSONResponse(url);
         ApiDataObject data = rawData.get(0);
         return RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
     }
@@ -51,7 +51,7 @@ public class BusDataHelper {
      */
     public boolean isBusAtStop(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, AT_STOP, 30000);
-        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ArrayList<ApiDataObject> rawData = httpHandler.getJSONResponse(url);
         System.out.println(rawData.size());
         ApiDataObject data = rawData.get(0);
         switch (data.getValue()) {
@@ -74,7 +74,7 @@ public class BusDataHelper {
     public String getNextStopForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, NEXT_STOP, 15000);
         System.out.println(url);
-        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ArrayList<ApiDataObject> rawData = httpHandler.getJSONResponse(url);
         ApiDataObject data = rawData.get(0);
         return data.getValue();
     }
@@ -88,7 +88,7 @@ public class BusDataHelper {
      */
     public Bus getLastDataForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, GPS_RMC, 5000);
-        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ArrayList<ApiDataObject> rawData = httpHandler.getJSONResponse(url);
         ApiDataObject data = rawData.get(0);
         String id = data.getGatewayId();
         Location loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
@@ -105,7 +105,7 @@ public class BusDataHelper {
      */
     public ArrayList<Bus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
-        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ArrayList<ApiDataObject> rawData = httpHandler.getJSONResponse(url);
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
@@ -126,7 +126,7 @@ public class BusDataHelper {
      */
     public int getTotalDistanceForBus(String busId) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(busId, null, TOTAL_VEHICLE_DISTANCE, 10000);
-        ArrayList<ApiDataObject> rawData = httpHandler.getResponse(url);
+        ArrayList<ApiDataObject> rawData = httpHandler.getJSONResponse(url);
         int data = Integer.parseInt(rawData.get(0).getValue());
         return data * 5;
     }
