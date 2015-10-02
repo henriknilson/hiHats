@@ -42,4 +42,8 @@ public class Location {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public String toString() {
+        return "lat=" + latitude + " long=" + longitude + " date=" + date;
+    }
 }
