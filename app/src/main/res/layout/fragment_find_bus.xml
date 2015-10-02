@@ -1,0 +1,11 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hihats.electricity.fragment.FindBusFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView android:layout_width="match_parent" android:layout_height="172dp"
+        android:text="@string/hello_blank_fragment"
+        android:layout_gravity="center_horizontal|bottom" />
+
+</FrameLayout>
