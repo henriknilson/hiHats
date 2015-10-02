@@ -13,7 +13,7 @@ import hihats.electricity.R;
 public class DashboardFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-
+    private TextView t;
 
     public static DashboardFragment newInstance() {
         DashboardFragment fragment = new DashboardFragment();
@@ -36,8 +36,8 @@ public class DashboardFragment extends Fragment {
         int oldTtlDistance = 15;
         int newTtlDistance = 20;
 
-        TextView t = (TextView) view.findViewById(R.id.co2);
-        t.setText(Double.toString(calcCo2(getRideDistance(oldTtlDistance, newTtlDistance))));
+        t = (TextView) view.findViewById(R.id.co2);
+        t.setText("You have saved " + Double.toString(calcCo2(getRideDistance(oldTtlDistance, newTtlDistance))) + " today!");
 
         return view;
     }
