@@ -32,11 +32,30 @@ public class HttpHandler {
      * @return An ApiDataObject with data when successful, null if not successful.
      * @throws AccessErrorException If there was an error connection to the server.
      */
-    public ArrayList<ApiDataObject> getResponse(String url) throws AccessErrorException, NoDataException {
+    public ArrayList<ApiDataObject> getJSONResponse(String url) throws AccessErrorException, NoDataException {
         try {
             HttpURLConnection connection = establishConnection(url, KEY);
             if (connectionWasSuccessful(connection)) {
-                return getDataObjectFromStream(connection);
+                return getJSONObjectFromStream(connection);
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            throw new AccessErrorException();
+        }
+    }
+
+    /**
+     * Returns an XML String with data if the request was successful, null if not.
+     * @param url The url query to access the api with.
+     * @return An XML String with data when successful, null if not successful.
+     * @throws AccessErrorException If there was an error connection to the server.
+     */
+    public String getXMLResponse(String url) throws AccessErrorException, NoDataException {
+        try {
+            HttpURLConnection connection = establishConnection(url, KEY);
+            if (connectionWasSuccessful(connection)) {
+                return getXMLObjectFromStream(connection);
             } else {
                 return null;
             }
@@ -61,7 +80,7 @@ public class HttpHandler {
         int responseCode = connection.getResponseCode();
         return responseCode == 200;
     }
-    private ArrayList<ApiDataObject> getDataObjectFromStream(HttpURLConnection connection) throws IOException, NoDataException {
+    private ArrayList<ApiDataObject> getJSONObjectFromStream(HttpURLConnection connection) throws IOException, NoDataException {
         InputStream stream = connection.getInputStream();
         InputStreamReader streamReader = new InputStreamReader(stream);
         Reader reader = new BufferedReader(streamReader);
@@ -74,5 +93,17 @@ public class HttpHandler {
             throw new NoDataException();
         }
         return dataObjects;
+    }
+    private String getXMLObjectFromStream(HttpURLConnection connection) throws IOException, NoDataException {
+        StringBuilder response = new StringBuilder();
+        InputStream stream = connection.getInputStream();
+        InputStreamReader streamReader = new InputStreamReader(stream);
+        BufferedReader reader = new BufferedReader(streamReader);
+        String inputLine;
+        while ((inputLine = reader.readLine()) != null) {
+            response.append(inputLine);
+        }
+        reader.close();
+        return response.toString();
     }
 }
