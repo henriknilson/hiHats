@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,7 +16,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -37,10 +38,7 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
 
     private OnFragmentInteractionListener mListener;
     private GoogleApiClient mGoogleApiClient;
-    SupportMapFragment mMapFragment;
     private static String TAG = "RideFragment";
-
-    Button changeMapView;
 
     BusStop svenHultin;
     BusStop chalmersPlatsen;
@@ -58,11 +56,10 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     BusStop teknikGatan;
 
     //Map Variables
-    boolean mShowMap;
-    GoogleMap mMap;
+    MapView mMapView;
+    GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
-
 
     public static RideFragment newInstance() {
         RideFragment fragment = new RideFragment();
@@ -75,28 +72,22 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {;
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ride, container, false);
 
+        mMapView = (MapView) view.findViewById(R.id.gMap);
+        mMapView.onCreate(savedInstanceState);
 
-        changeMapView = (Button) view.findViewById(R.id.changeMapView);
-
-
-        mMapFragment = new SupportMapFragment() {
-            @Override
-            public void onActivityCreated(Bundle savedInstanceState) {
-                super.onActivityCreated(savedInstanceState);
-                mMap = mMapFragment.getMap();
-                if (mMap != null) {
-                    mShowMap = true;
-                    setupMap();
-                    drawPath();
-                }
-            }
-        };
-        getChildFragmentManager().beginTransaction().add(R.id.rideFragment, mMapFragment).commit();
+        mMapView.onResume();// needed to get the map to display immediately
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        googleMap = mMapView.getMap();
+        // latitude and longitude
+        setupMap(googleMap);
+        drawPath();
 
         return view;
     }
@@ -131,10 +122,10 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
-    private void setupMap() {
+    private void setupMap(GoogleMap googleMap) {
         //temp. latlng, later to be replaced with cellphone latlng
         LatLng latlng = new LatLng(57.68857167,11.97830168);
 
@@ -171,21 +162,18 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         busStops.add(teknikGatan);
         busStops.add(lindHolmsPlatsen);
 
-        //Direct camera to given position and add markers
-        if(mShowMap){
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 20);
-            mMap.moveCamera(update);
-            mMap.addMarker(new MarkerOptions()
-                    .position(latlng)
-                    .title("You are here!")
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 15);
+        googleMap.moveCamera(update);
+        googleMap.addMarker(new MarkerOptions()
+                        .position(latlng)
+                        .title("You are here!")
+        );
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        for(int i = 0; i < busStops.size(); i++){
+            googleMap.addMarker(new MarkerOptions()
+                            .position(busStops.get(i).getLatLng())
+                            .title(busStops.get(i).getName())
             );
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            for(int i = 0; i < busStops.size(); i++){
-                mMap.addMarker(new MarkerOptions()
-                        .position(busStops.get(i).getLatLng())
-                        .title(busStops.get(i).getName())
-                );
-            }
         }
     }
 
@@ -195,7 +183,7 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
             LatLng point = busStops.get(i).getLatLng();
             options.add(point);
         }
-        line = mMap.addPolyline(options);
+        line = googleMap.addPolyline(options);
     }
 
     public void parseQueryTest() {

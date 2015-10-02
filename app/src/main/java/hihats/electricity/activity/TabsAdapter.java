@@ -1,4 +1,4 @@
-package hihats.electricity.adapter;
+package hihats.electricity.activity;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -15,7 +15,7 @@ import hihats.electricity.fragment.RideFragment;
  */
 public class TabsAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Dashboard", "Deals", "Ride" };
+    private String tabTitles[] = new String[] { "Ride", "Dashboard", "Deals" };
     private Context context;
 
     public TabsAdapter(FragmentManager fm, Context context) {
@@ -33,11 +33,11 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
         switch(position) {
             case 0:
-                return DashboardFragment.newInstance();
-            case 1:
-                return DealsFragment.newInstance();
-            case 2:
                 return RideFragment.newInstance();
+            case 1:
+                return DashboardFragment.newInstance();
+            case 2:
+                return DealsFragment.newInstance();
             default:
                 throw new NullPointerException();
         }

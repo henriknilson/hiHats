@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import hihats.electricity.R;
-import hihats.electricity.adapter.TabsAdapter;
+
 
 /**
  * Created by henriknilson on 18/09/15.
@@ -28,11 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(),
-                MainActivity.this));
+        viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), MainActivity.this));
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
