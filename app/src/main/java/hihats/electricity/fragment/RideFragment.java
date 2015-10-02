@@ -1,11 +1,14 @@
 package hihats.electricity.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient.*;
@@ -18,13 +21,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
 import hihats.electricity.R;
+import hihats.electricity.activity.LoginActivity;
 import hihats.electricity.model.BusStop;
 
-public class RideFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener {
+public class RideFragment extends Fragment {
+
+    View view;
+    Button test;
 
     BusStop svenHultin;
     BusStop chalmersPlatsen;
@@ -47,22 +55,35 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     Polyline line;
     ArrayList<BusStop> busStops;
 
+    /*
+    Fragment standard methods
+     */
+
     public static RideFragment newInstance() {
         return new RideFragment();
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ride, container, false);
-
+        view = inflater.inflate(R.layout.fragment_ride, container, false);
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        mapView.onResume();
+
+        // Locate Button in fragment_ride.xml
+        test = (Button) view.findViewById(R.id.testButton);
+
+        // Test Button Click Listener
+        test.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+
+            }
+        });
+
+        return view;
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -73,25 +94,21 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         googleMap = mapView.getMap();
         setupMap(googleMap);
         drawPath();
-
-        return view;
     }
-
     @Override
-    public void onConnected(Bundle bundle) {}
-
-    @Override
-    public void onConnectionSuspended(int i) {}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
-
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
     @Override
     public void onResume() {
         super.onResume();
-        setupMap(googleMap);
-        drawPath();
+        mapView.onResume();
     }
+
+    /*
+    Map related methods
+     */
 
     private void setupMap(GoogleMap googleMap) {
         //temp. latlng, later to be replaced with cellphone latlng
@@ -144,8 +161,7 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
             );
         }
     }
-
-    private void drawPath(){
+    private void drawPath() {
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLACK).geodesic(true);
         for(int i = 0; i < busStops.size(); i++){
             LatLng point = busStops.get(i).getLatLng();
@@ -154,4 +170,15 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
         line = googleMap.addPolyline(options);
     }
 
+    /*
+    AsynkTasks
+     */
+
+    private class CheckWifiData extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return null;
+        }
+    }
 }

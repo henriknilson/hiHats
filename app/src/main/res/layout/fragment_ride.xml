@@ -9,15 +9,15 @@
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="296dp"
         android:layout_gravity="center_horizontal|top" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
+        android:text="Find bus"
+        android:id="@+id/testButton"
         android:layout_gravity="center_horizontal|bottom" />
 
 </LinearLayout>
