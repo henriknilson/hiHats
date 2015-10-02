@@ -10,19 +10,25 @@ import com.parse.ParseObject;
 public class ParseBusStopHelper extends ParseObject {
 
     public ParseBusStopHelper () {
-
     }
+
+    /*
+    Getters
+     */
 
     public String getStopName() {
         return getString("Name");
     }
 
-    public Number getLat() {
+    public Double getLat() {
         return getDouble("Latitude");
     }
 
-    public Number getLng() {
+    public Double getLng() {
         return getDouble("Longitude");
     }
 
+    public int getOrder() {
+        return getInt("inOrder");
+    }
 }
