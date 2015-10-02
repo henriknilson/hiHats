@@ -1,15 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rideFragment"
-    tools:context="hihats.electricity.fragment.RideFragment">
+    android:id="@+id/rideFragment">
 
-    <fragment
-        android:id="@+id/map"
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/gMap"
         android:layout_width="fill_parent"
-        android:layout_height="770dp"
-        android:layout_alignParentBottom="true"
-        class="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_height="700dp"
+        android:layout_alignParentBottom="true" />
 
-</FrameLayout>
+</LinearLayout>

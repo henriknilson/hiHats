@@ -10,5 +10,4 @@
         android:gravity="center"
         android:textColor="@color/primary"
         android:text="DealsFragment"/>
-
 </FrameLayout>
