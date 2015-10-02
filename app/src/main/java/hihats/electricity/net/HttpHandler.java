@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -30,7 +32,7 @@ public class HttpHandler {
      * @return An ApiDataObject with data when successful, null if not successful.
      * @throws AccessErrorException If there was an error connection to the server.
      */
-    public ApiDataObject getResponse(String url) throws AccessErrorException {
+    public ArrayList<ApiDataObject> getResponse(String url) throws AccessErrorException, NoDataException {
         try {
             HttpURLConnection connection = establishConnection(url, KEY);
             if (connectionWasSuccessful(connection)) {
@@ -59,12 +61,18 @@ public class HttpHandler {
         int responseCode = connection.getResponseCode();
         return responseCode == 200;
     }
-    private ApiDataObject getDataObjectFromStream(HttpURLConnection connection) throws IOException {
+    private ArrayList<ApiDataObject> getDataObjectFromStream(HttpURLConnection connection) throws IOException, NoDataException {
         InputStream stream = connection.getInputStream();
         InputStreamReader streamReader = new InputStreamReader(stream);
         Reader reader = new BufferedReader(streamReader);
         Gson gson = new Gson();
-        ApiDataObject[] data = gson.fromJson(reader, ApiDataObject[].class);
-        return data[0];
+        ApiDataObject[] fromStream = gson.fromJson(reader, ApiDataObject[].class);
+        ArrayList<ApiDataObject> dataObjects = new ArrayList<>();
+        try {
+            Collections.addAll(dataObjects, fromStream);
+        } catch (NullPointerException e) {
+            throw new NoDataException();
+        }
+        return dataObjects;
     }
 }
