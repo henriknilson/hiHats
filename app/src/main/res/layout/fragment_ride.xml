@@ -16,8 +16,15 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Find bus"
-        android:id="@+id/testButton"
+        android:text="start track GPS"
+        android:id="@+id/test1Button"
         android:layout_gravity="center_horizontal|bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop track gps"
+        android:id="@+id/test2Button"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

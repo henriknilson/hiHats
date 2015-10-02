@@ -23,11 +23,14 @@ import java.util.ArrayList;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.util.LocationTracker;
 
 public class RideFragment extends Fragment {
 
     View view;
-    Button test;
+    Button test1;
+    Button test2;
+    LocationTracker gps;
 
     BusStop svenHultin;
     BusStop chalmersPlatsen;
@@ -63,14 +66,26 @@ public class RideFragment extends Fragment {
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
-        // Locate Button in fragment_ride.xml
-        test = (Button) view.findViewById(R.id.testButton);
+        // Locate Buttons in fragment_ride.xml
+        test1 = (Button) view.findViewById(R.id.test1Button);
+        test2 = (Button) view.findViewById(R.id.test2Button);
 
         // Test Button Click Listener
-        test.setOnClickListener(new View.OnClickListener() {
+        test1.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
+                if (gps == null) {
+                    gps = new LocationTracker(getContext());
+                }
+            }
+        });
+        // Test Button Click Listener
+        test2.setOnClickListener(new View.OnClickListener() {
 
+            public void onClick(View arg0) {
+                if (gps != null) {
+                    //gps.stopUsingGPS();
+                }
             }
         });
 
@@ -169,10 +184,10 @@ public class RideFragment extends Fragment {
     AsynkTasks
      */
 
-    private class GetGpsPosition extends AsyncTask<Void, Void, Boolean> {
+    private class GetGpsPosition extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             return null;
         }
     }
