@@ -85,8 +85,6 @@ public class RideFragment extends Fragment implements ConnectionCallbacks, OnCon
     @Override
     public void onResume() {
         super.onResume();
-        setupMap(googleMap);
-        drawPath();
     }
 
     private void setupMap(GoogleMap googleMap) {
