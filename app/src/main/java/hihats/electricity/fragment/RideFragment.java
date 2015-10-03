@@ -16,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -44,6 +45,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
+    LatLng currentPosition;
 
     // Promise variables
     private Boolean mapReady = false;
@@ -51,6 +53,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     public static RideFragment newInstance() {
         return new RideFragment();
+    }
+
+    public GoogleMap getMap() {
+        return this.googleMap;
+    }
+
+    public LatLng getCurrentPosition() {
+        return this.currentPosition;
     }
 
     @Override
@@ -68,6 +78,17 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 if (gps == null) {
                     gps = new LocationTracker(getContext());
                 }
+
+                if(mapReady && busStopsReady && getMap() != null) {
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(getCurrentPosition())
+                            .zoom(17)
+                            .tilt(70)
+                            .build();                   // Creates a CameraPosition from the builder
+                    getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+
+                }
+
             }
         });
 
@@ -112,7 +133,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
 
         // To be replaced with device current position
-        LatLng currentPosition = new LatLng(57.68857167,11.97830168);
+        currentPosition = new LatLng(57.68857167,11.97830168);
 
         // Set map center and zoom level
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentPosition, 10);
