@@ -22,7 +22,7 @@ public class FindBusHelper {
         return wifiNetwork != null && wifiNetwork.isConnected();
     }
 
-    public String askBusNetworkForId() throws AccessErrorException, NoDataException {
+    public String askNetworkForId() throws AccessErrorException, NoDataException {
         String response;
         response = httpHandler.getXMLResponse("ombord.info/api/xml/system/");
         return response;

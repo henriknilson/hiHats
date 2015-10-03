@@ -153,7 +153,7 @@ public class RideFragment extends Fragment {
         protected String doInBackground(Void... params) {
             if (helper.isConnectedToWifi(getContext())) {
                 try {
-                    return helper.askBusNetworkForId();
+                    return helper.askNetworkForId();
                 } catch (AccessErrorException e) {
                     e.printStackTrace();
                 } catch (NoDataException e) {

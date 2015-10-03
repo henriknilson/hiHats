@@ -110,9 +110,9 @@ public class BusDataHelper {
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
             Location loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
-            float speed = RmcConverter.rmcToSpeed(o.getValue());
-            float bearing = RmcConverter.rmcToBearing(o.getValue());
-            buses.add(new Bus(id, loc, speed, bearing));
+            // float speed = RmcConverter.rmcToSpeed(o.getValue());
+            // float bearing = RmcConverter.rmcToBearing(o.getValue());
+            buses.add(new Bus(id, loc));
         }
         return buses;
     }
