@@ -71,6 +71,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        mapView.getMapAsync(this);
+        fetchBusStops();
+
         return view;
     }
 
@@ -83,9 +86,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        mapView.getMapAsync(this);
-        fetchBusStops();
 
     }
 
