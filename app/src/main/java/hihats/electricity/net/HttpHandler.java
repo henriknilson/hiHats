@@ -53,7 +53,7 @@ public class HttpHandler {
      */
     public String getXMLResponse(String url) throws AccessErrorException, NoDataException {
         try {
-            HttpURLConnection connection = establishConnection(url, KEY);
+            HttpURLConnection connection = establishConnection(url, null);
             if (connectionWasSuccessful(connection)) {
                 return getXMLObjectFromStream(connection);
             } else {
@@ -73,7 +73,9 @@ public class HttpHandler {
         URL requestURL = new URL(url);
         connection = (HttpsURLConnection)requestURL.openConnection();
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Authorization", key);
+        if (key != null) {
+            connection.setRequestProperty("Authorization", key);
+        }
         return connection;
     }
     private boolean connectionWasSuccessful(HttpURLConnection connection) throws IOException {
