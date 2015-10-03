@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/primary_text">
+        android:background="@color/primaryText">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -23,7 +23,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/LogInTitle"
-                android:textColor="@color/primary_text"
+                android:textColor="@color/primaryText"
                 android:padding="5dp"
                 android:layout_marginTop="40dp"/>
         </LinearLayout>
@@ -33,14 +33,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="5dp"
-            android:background="@color/primary_text">
+            android:background="@color/primaryText">
 
             <TextView
                 android:id="@+id/txtusername"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/Username"
-                android:textColor="@color/text_label" />
+                android:textColor="@color/textLabel" />
 
             <EditText
                 android:id="@+id/username"
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/username"
                 android:text="@string/Password"
-                android:textColor="@color/text_label" />
+                android:textColor="@color/textLabel" />
 
             <EditText
                 android:id="@+id/password"

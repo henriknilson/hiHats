@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import hihats.electricity.R;
 
 public class DashboardFragment extends Fragment {
@@ -34,10 +38,21 @@ public class DashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         int oldTtlDistance = 15;
-        int newTtlDistance = 20;
+        int newTtlDistance = 30;
 
         t = (TextView) view.findViewById(R.id.co2);
-        t.setText("You have saved " + Double.toString(calcCo2(getRideDistance(oldTtlDistance, newTtlDistance))) + " today!");
+        t.setText("You have saved " + Double.toString(calcCo2(getRideDistance(oldTtlDistance, newTtlDistance))) + " kg CO2 today!");
+
+        GraphView graph = (GraphView) view.findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
+           new DataPoint (0,1),
+           new DataPoint (1,5),
+           new DataPoint (2,3),
+           new DataPoint (3,2),
+           new DataPoint (4,6),
+        });
+
+        graph.addSeries(series);
 
         return view;
     }
