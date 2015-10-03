@@ -60,25 +60,28 @@ public class RideFragment extends Fragment {
 
         // Locate Buttons in fragment_ride.xml
         test1 = (Button) view.findViewById(R.id.test1Button);
+        /*
         test2 = (Button) view.findViewById(R.id.test2Button);
 
         // Test Button Click Listener
         test1.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                System.out.println("Button clicked");
-                FindBusIdTask task = new FindBusIdTask();
-                task.execute();
+                if (gps == null) {
+                    gps = new LocationTracker(getContext());
+                }
             }
         });
         // Test Button Click Listener
         test2.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                //TODO
+                if (gps != null) {
+                    //gps.stopUsingGPS();
+                }
             }
         });
-
+        */
         return view;
     }
     @Override
