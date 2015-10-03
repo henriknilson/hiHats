@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.*;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +28,8 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.net.AccessErrorException;
+import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.FindBusHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
@@ -67,7 +66,9 @@ public class RideFragment extends Fragment {
         test1.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                new FindBusId();
+                System.out.println("Button clicked");
+                FindBusIdTask task = new FindBusIdTask();
+                task.execute();
             }
         });
         // Test Button Click Listener
@@ -139,7 +140,7 @@ public class RideFragment extends Fragment {
     AsynkTasks
      */
 
-    private class FindBusId extends AsyncTask<Void, String, String> {
+    private class FindBusIdTask extends AsyncTask<Void, String, String> {
 
         private FindBusHelper helper = new FindBusHelper();
 
@@ -151,10 +152,17 @@ public class RideFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
             if (helper.isConnectedToWifi(getContext())) {
-                return "Wifi connected";
+                try {
+                    return helper.askBusNetworkForId();
+                } catch (AccessErrorException e) {
+                    e.printStackTrace();
+                } catch (NoDataException e) {
+                    e.printStackTrace();
+                }
             } else {
                 return "Wifi not connected";
             }
+            return null;
         }
 
         @Override
