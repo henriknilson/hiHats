@@ -31,7 +31,6 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
-import hihats.electricity.util.LocationTracker;
 import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment {
@@ -39,7 +38,6 @@ public class RideFragment extends Fragment {
     View view;
     Button test1;
     Button test2;
-    LocationTracker gps;
 
     //Map Variables
     MapView mapView;
@@ -68,18 +66,14 @@ public class RideFragment extends Fragment {
         test1.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                if (gps == null) {
-                    gps = new LocationTracker(getContext());
-                }
+                //TODO
             }
         });
         // Test Button Click Listener
         test2.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                if (gps != null) {
-                    //gps.stopUsingGPS();
-                }
+                //TODO
             }
         });
 
