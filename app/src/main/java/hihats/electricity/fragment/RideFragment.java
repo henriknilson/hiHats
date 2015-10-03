@@ -31,6 +31,7 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.util.FindBusHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment {
@@ -66,7 +67,7 @@ public class RideFragment extends Fragment {
         test1.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                //TODO
+                new FindBusId();
             }
         });
         // Test Button Click Listener
@@ -138,11 +139,28 @@ public class RideFragment extends Fragment {
     AsynkTasks
      */
 
-    private class GetGpsPosition extends AsyncTask<Void, Void, Void> {
+    private class FindBusId extends AsyncTask<Void, String, String> {
+
+        private FindBusHelper helper = new FindBusHelper();
 
         @Override
-        protected Void doInBackground(Void... params) {
-            return null;
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            if (helper.isConnectedToWifi(getContext())) {
+                return "Wifi connected";
+            } else {
+                return "Wifi not connected";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            System.out.println(s);
         }
     }
 
