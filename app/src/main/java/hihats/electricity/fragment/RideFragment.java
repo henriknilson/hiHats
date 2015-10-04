@@ -86,9 +86,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
-        animFlyout = AnimationUtils.loadAnimation(getContext(), R.anim.anim_flyout);
-        animFlyin = AnimationUtils.loadAnimation(getContext(), R.anim.anim_flyin);
-
         findBusButton = (Button) view.findViewById(R.id.findBusButton);
 
         findBusButton.setOnClickListener(new View.OnClickListener() {
