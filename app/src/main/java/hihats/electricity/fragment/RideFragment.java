@@ -180,8 +180,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     return helper.askNetworkForId();
                 } catch (AccessErrorException e) {
                     e.printStackTrace();
-                } catch (NoDataException e) {
-                    e.printStackTrace();
                 }
             } else {
                 return "Wifi not connected";

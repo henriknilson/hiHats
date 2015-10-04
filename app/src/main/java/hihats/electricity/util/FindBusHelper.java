@@ -22,9 +22,9 @@ public class FindBusHelper {
         return wifiNetwork != null && wifiNetwork.isConnected();
     }
 
-    public String askNetworkForId() throws AccessErrorException, NoDataException {
+    public String askNetworkForId() throws AccessErrorException {
         String response;
-        response = httpHandler.getXMLResponse("http://www.gettingagile.com/feed/rss2/");
+        response = httpHandler.getResponse("http://www.gettingagile.com/feed/rss2/");
         return response;
     }
 }
