@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +37,9 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
-import hihats.electricity.util.LocationTracker;
+import hihats.electricity.net.AccessErrorException;
+import hihats.electricity.net.NoDataException;
+import hihats.electricity.util.FindBusHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
@@ -47,7 +47,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     View view;
     Button findBusButton;
     TableLayout statusLayout;
-    LocationTracker gps;
 
     MapView mapView;
     GoogleMap googleMap;
@@ -91,9 +90,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                if (gps == null) {
-                    gps = new LocationTracker(getContext());
-                }
 
                 ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
 
@@ -119,7 +115,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                             .zoom(17)
                             .tilt(70)
                             .build();
-
                     getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
                 }
 
@@ -195,6 +190,40 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             options.add(point);
         }
         line = googleMap.addPolyline(options);
+    }
+
+    /*
+    AsynkTasks
+     */
+
+    private class FindBusIdTask extends AsyncTask<Void, String, String> {
+
+        private FindBusHelper helper = new FindBusHelper();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            if (helper.isConnectedToWifi(getContext())) {
+                try {
+                    return helper.askNetworkForId();
+                } catch (AccessErrorException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                return "Wifi not connected";
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            System.out.println(s);
+        }
     }
 
     @Override

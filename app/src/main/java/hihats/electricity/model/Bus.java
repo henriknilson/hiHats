@@ -17,4 +17,9 @@ public class Bus {
         this.speed = speed;
         this.bearing = bearing;
     }
+
+    public Bus(String busId, Location location) {
+        this.busId = busId;
+        this.location = location;
+    }
 }
