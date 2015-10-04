@@ -31,6 +31,10 @@ public class BusDataHelper {
     // Initialize the HttpHandler
     private final HttpHandler httpHandler = new HttpHandler();
 
+    /*
+    Util methods
+     */
+
     /**
      * Returns the last known location for a certain bus.
      * @param busId The bus you want to get data for.
