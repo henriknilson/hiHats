@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/statusLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:stretchColumns="*"
+    android:elevation="2dp"
+    android:background="@color/white">
+
+    <TableRow>
+        <TextView
+            android:text="Riding bus"
+            android:textSize="12sp"
+            android:textColor="@color/caption"
+            android:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:text="Next stop"
+            android:textSize="12sp"
+            android:textColor="@color/caption"
+            android:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:text="Points"
+            android:textSize="12sp"
+            android:textColor="@color/caption"
+            android:layout_gravity="fill_horizontal" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="EOL 355"
+            android:textColor="@color/background"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:text="Johanneberg"
+            android:textColor="@color/background"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:text="3"
+            android:textColor="@color/primary"
+            android:textSize="18sp"/>
+    </TableRow>
+
+</TableLayout>
