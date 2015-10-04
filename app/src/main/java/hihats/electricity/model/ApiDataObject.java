@@ -1,4 +1,4 @@
-package hihats.electricity.net;
+package hihats.electricity.model;
 
 /**
  * Created by fredrikkindstrom on 24/09/15.
