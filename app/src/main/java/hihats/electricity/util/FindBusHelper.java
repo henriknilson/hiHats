@@ -24,7 +24,7 @@ public class FindBusHelper {
 
     public String askNetworkForId() throws AccessErrorException, NoDataException {
         String response;
-        response = httpHandler.getXMLResponse("ombord.info/api/xml/system/");
+        response = httpHandler.getXMLResponse("http://www.gettingagile.com/feed/rss2/");
         return response;
     }
 }

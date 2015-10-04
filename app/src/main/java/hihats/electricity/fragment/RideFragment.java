@@ -76,6 +76,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View arg0) {
 
+                new FindBusIdTask().execute();
+
                 if (mapReady && busStopsReady && getMap() != null) {
                     CameraPosition cameraPosition = new CameraPosition.Builder()
                             .target(getCurrentPosition())

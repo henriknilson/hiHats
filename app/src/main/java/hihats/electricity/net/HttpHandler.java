@@ -71,6 +71,16 @@ public class HttpHandler {
     private HttpURLConnection establishConnection(String url, String key) throws IOException {
         HttpURLConnection connection;
         URL requestURL = new URL(url);
+        connection = (HttpURLConnection)requestURL.openConnection();
+        connection.setRequestMethod("GET");
+        if (key != null) {
+            connection.setRequestProperty("Authorization", key);
+        }
+        return connection;
+    }
+    private HttpsURLConnection establishSecureConnection(String url, String key) throws IOException {
+        HttpsURLConnection connection;
+        URL requestURL = new URL(url);
         connection = (HttpsURLConnection)requestURL.openConnection();
         connection.setRequestMethod("GET");
         if (key != null) {
