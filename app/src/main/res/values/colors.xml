@@ -10,5 +10,6 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
     <color name="textLabel">#BBBBBB</color>
-    <array name="white">#FFFFFF</array>
+    <color name="caption">#8C000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
