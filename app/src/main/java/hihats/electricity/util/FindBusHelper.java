@@ -26,7 +26,6 @@ import hihats.electricity.net.HttpHandler;
  */
 public class FindBusHelper {
 
-    // Initialize the HttpHandler
     private final HttpHandler httpHandler = new HttpHandler();
 
     /*

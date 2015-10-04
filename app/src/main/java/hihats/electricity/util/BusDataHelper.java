@@ -8,7 +8,6 @@ import java.util.Collections;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.Location;
 import hihats.electricity.net.AccessErrorException;
-import hihats.electricity.model.ApiDataObject;
 import hihats.electricity.net.HttpHandler;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.net.UrlRetriever;
@@ -25,10 +24,7 @@ public class BusDataHelper {
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
 
-    // Initialize the URLRetriever
     private final UrlRetriever urlRetriever = new UrlRetriever();
-
-    // Initialize the HttpHandler
     private final HttpHandler httpHandler = new HttpHandler();
 
     /*
@@ -159,4 +155,40 @@ public class BusDataHelper {
         }
         return dataObjects;
     }
+
+    private class ApiDataObject {
+
+        private final String resourceSpec;
+        private final String timestamp;
+        private final String value;
+        private final String gatewayId;
+
+        public ApiDataObject(String resourceSpec, String timestamp, String value, String gatewayId) {
+            this.resourceSpec = resourceSpec;
+            this.timestamp = timestamp;
+            this.value = value;
+            this.gatewayId = gatewayId;
+        }
+
+        public String toString() {
+            return "resourceSpec=" + resourceSpec + " timestamp=" + timestamp + " value=" + value + " gatewayId=" + gatewayId;
+        }
+
+        public String getResourceSpec() {
+            return resourceSpec;
+        }
+
+        public String getTimestamp() {
+            return timestamp;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public String getGatewayId() {
+            return gatewayId;
+        }
+    }
+
 }
