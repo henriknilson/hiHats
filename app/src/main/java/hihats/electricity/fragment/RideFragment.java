@@ -1,7 +1,6 @@
 package hihats.electricity.fragment;
 
 import android.content.Context;
-import android.support.v4.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -18,7 +16,6 @@ import android.widget.TableLayout;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,7 +35,6 @@ import java.util.List;
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
 import hihats.electricity.net.AccessErrorException;
-import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.FindBusHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
@@ -86,7 +82,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
 
         findBusButton = (Button) view.findViewById(R.id.findBusButton);
-
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -96,7 +91,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 RelativeLayout rideFragment = (RelativeLayout) view.findViewById(R.id.rideFragment);
 
                 // Inflate the status bar view and set the correct gravity
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                        TableLayout.LayoutParams.WRAP_CONTENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
                 LayoutInflater layoutInflater = (LayoutInflater)
@@ -108,7 +105,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 // Add the status bar view to ride fragment
                 rideFragment.addView(statusBarView, 1);
 
-                if(mapReady && busStopsReady && getMap() != null) {
+                if (mapReady && busStopsReady && getMap() != null) {
 
                     CameraPosition cameraPosition = new CameraPosition.Builder()
                             .target(getCurrentPosition())
