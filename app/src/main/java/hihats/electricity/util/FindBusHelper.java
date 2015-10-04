@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -63,15 +62,19 @@ public class FindBusHelper {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
-        document.getDocumentElement().normalize();
-        NodeList nList = document.getElementsByTagName(GROUP);
-        for (int temp = 0; temp < nList.getLength(); temp++) {
-            Node nNode = nList.item(temp);
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) nNode;
-                result = eElement.getElementsByTagName(VALUE).item(0).getTextContent();
+        if (document != null) {
+            document.getDocumentElement().normalize();
+            NodeList nList = document.getElementsByTagName(GROUP);
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    result = eElement.getElementsByTagName(VALUE).item(0).getTextContent();
+                }
             }
+            return result;
+        } else {
+            return null;
         }
-        return result;
     }
 }
