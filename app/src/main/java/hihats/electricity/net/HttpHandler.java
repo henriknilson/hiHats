@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  * This is the backend class for all api http calls.
- * It returns ApiDataObjects that the util classes then parses to more useful formats.
+ * It returns a String with data that the util classes then parses to more useful formats.
  */
 public class HttpHandler {
 

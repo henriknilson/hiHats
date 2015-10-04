@@ -8,7 +8,7 @@ import java.util.Collections;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.Location;
 import hihats.electricity.net.AccessErrorException;
-import hihats.electricity.net.ApiDataObject;
+import hihats.electricity.model.ApiDataObject;
 import hihats.electricity.net.HttpHandler;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.net.UrlRetriever;
@@ -31,10 +31,14 @@ public class BusDataHelper {
     // Initialize the HttpHandler
     private final HttpHandler httpHandler = new HttpHandler();
 
+    /*
+    Util methods
+     */
+
     /**
      * Returns the last known location for a certain bus.
      * @param busId The bus you want to get data for.
-     * @return The most recent location for said bus as an Android Location object.
+     * @return The most recent location for said bus as a Location object.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
