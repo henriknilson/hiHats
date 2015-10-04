@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         // Create the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
-        toolbar.setTitle("My custom toolbar!");
+        toolbar.setTitle(R.string.app_name);
         toolbar.setTitleTextColor(getResources().getColor(R.color.primary));
 
         // Give the TabLayout the ViewPager
