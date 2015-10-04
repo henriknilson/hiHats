@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -33,35 +36,68 @@ import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.FindBusHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
-public class RideFragment extends Fragment {
+public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
     Button test1;
     Button test2;
+    Button findBusButton;
+    LocationTracker gps;
 
-    //Map Variables
+    // Map variables
     MapView mapView;
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
+    LatLng currentPosition;
 
-    /*
-    Fragment standard methods
-     */
+    // Promise variables
+    private Boolean mapReady = false;
+    private Boolean busStopsReady = false;
 
     public static RideFragment newInstance() {
         return new RideFragment();
     }
+
+    public GoogleMap getMap() {
+        return this.googleMap;
+    }
+
+    public LatLng getCurrentPosition() {
+        return this.currentPosition;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_ride, container, false);
+
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
-        // Locate Buttons in fragment_ride.xml
-        test1 = (Button) view.findViewById(R.id.test1Button);
-        /*
-        test2 = (Button) view.findViewById(R.id.test2Button);
+        findBusButton = (Button) view.findViewById(R.id.findBusButton);
+
+        findBusButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                if (gps == null) {
+                    gps = new LocationTracker(getContext());
+                }
+
+                if(mapReady && busStopsReady && getMap() != null) {
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(getCurrentPosition())
+                            .zoom(17)
+                            .tilt(70)
+                            .build();                   // Creates a CameraPosition from the builder
+                    getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+
+                }
+
+            }
+        });
+
+        mapView.getMapAsync(this);
+        fetchBusStops();
 
         // Test Button Click Listener
         test1.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +120,7 @@ public class RideFragment extends Fragment {
         */
         return view;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -93,42 +130,51 @@ public class RideFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        googleMap = mapView.getMap();
-        // latitude and longitude
-        getBusStopsFromParse();
+
     }
+
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
-    /*
-    Map related methods
+    /**
+     * Add markers, setup the camera, and all map settings in general.
      */
+    private void setupMap() {
 
-    private void setupMap(GoogleMap googleMap) {
-        //temp. latlng, later to be replaced with cellphone latlng
-        LatLng latlng = new LatLng(57.68857167,11.97830168);
+        // Make sure both Google and Parse requests are done
+        if(!(mapReady && busStopsReady)) {
+            return;
+        }
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latlng, 10);
+        // To be replaced with device current position
+        currentPosition = new LatLng(57.68857167,11.97830168);
+
+        // Set map center and zoom level
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentPosition, 10);
         googleMap.moveCamera(update);
-        googleMap.addMarker(new MarkerOptions()
-                        .position(latlng)
-                        .title("You are here!")
-        );
+
+        // Set map type (terrain, normal, hybrid etc.)
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        // Create markers for each bus stop
         for(BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
                             .title(i.getName())
             );
         }
+
+        drawPath();
+
     }
     private void drawPath() {
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLACK).geodesic(true);
@@ -175,28 +221,37 @@ public class RideFragment extends Fragment {
         }
     }
 
-    //Fetches data on bus stops from parse cloud
-    public void getBusStopsFromParse() {
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        mapReady = true;
+
+        setupMap();
+    }
+
+    // Fetches data on bus stops from parse cloud
+    public void fetchBusStops() {
         ParseQuery<ParseBusStopHelper> stops = ParseQuery.getQuery(ParseBusStopHelper.class);
         stops.findInBackground(new FindCallback<ParseBusStopHelper>() {
             @Override
             public void done(List<ParseBusStopHelper> objects, com.parse.ParseException e) {
+
                 busStops = new ArrayList<>();
                 for (ParseBusStopHelper i : objects) {
                     //Add all to list of stops
                     BusStop stop = new BusStop(i.getLat(), i.getLng(), i.getStopName(), i.getOrder());
                     busStops.add(stop);
                 }
-                //Sorts bus stops in right order
+
+                // Sorts bus stops in right order
                 Collections.sort(busStops, new Comparator<BusStop>() {
                     @Override
-                    public int compare(BusStop stop1, BusStop  stop2)
-                    {
-                        return  stop1.compareTo(stop2);
+                    public int compare(BusStop stop1, BusStop stop2) {
+                        return stop1.compareTo(stop2);
                     }
                 });
-                setupMap(googleMap);
-                drawPath();
+                busStopsReady = true;
+                setupMap();
             }
         });
     }

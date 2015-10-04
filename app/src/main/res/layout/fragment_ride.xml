@@ -59,7 +59,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="24dp"
             android:backgroundTint="@color/primary"
-            android:id="@+id/test1Button" />
+            android:id="@+id/findBusButton" />
 
     </FrameLayout>
 
