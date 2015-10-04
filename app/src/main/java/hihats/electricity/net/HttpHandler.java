@@ -78,16 +78,6 @@ public class HttpHandler {
         }
         return connection;
     }
-    private HttpsURLConnection establishSecureConnection(String url, String key) throws IOException {
-        HttpsURLConnection connection;
-        URL requestURL = new URL(url);
-        connection = (HttpsURLConnection)requestURL.openConnection();
-        connection.setRequestMethod("GET");
-        if (key != null) {
-            connection.setRequestProperty("Authorization", key);
-        }
-        return connection;
-    }
     private boolean connectionWasSuccessful(HttpURLConnection connection) throws IOException {
         int responseCode = connection.getResponseCode();
         return responseCode == 200;
