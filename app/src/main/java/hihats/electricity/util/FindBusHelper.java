@@ -32,7 +32,7 @@ public class FindBusHelper {
     /*
     Util methods
      */
-    
+
     public boolean isConnectedToWifi(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);

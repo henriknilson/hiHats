@@ -86,6 +86,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View arg0) {
 
+                new FindBusIdTask().execute();
+
                 ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
 
                 RelativeLayout rideFragment = (RelativeLayout) view.findViewById(R.id.rideFragment);
