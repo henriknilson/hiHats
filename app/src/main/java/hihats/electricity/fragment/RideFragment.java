@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +38,7 @@ import hihats.electricity.util.ParseBusStopHelper;
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
-    Button test1;
-    Button test2;
     Button findBusButton;
-    LocationTracker gps;
 
     // Map variables
     MapView mapView;
@@ -79,18 +75,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                if (gps == null) {
-                    gps = new LocationTracker(getContext());
-                }
 
-                if(mapReady && busStopsReady && getMap() != null) {
+                if (mapReady && busStopsReady && getMap() != null) {
                     CameraPosition cameraPosition = new CameraPosition.Builder()
                             .target(getCurrentPosition())
                             .zoom(17)
                             .tilt(70)
                             .build();                   // Creates a CameraPosition from the builder
                     getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
-
                 }
 
             }
@@ -99,25 +91,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
         fetchBusStops();
 
-        // Test Button Click Listener
-        test1.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                if (gps == null) {
-                    gps = new LocationTracker(getContext());
-                }
-            }
-        });
-        // Test Button Click Listener
-        test2.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                if (gps != null) {
-                    //gps.stopUsingGPS();
-                }
-            }
-        });
-        */
         return view;
     }
 
