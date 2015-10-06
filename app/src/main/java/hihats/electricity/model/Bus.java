@@ -83,6 +83,8 @@ public class Bus {
                     this.systemId = "2501074720";
                     this.busType = BusType.HYBRID;
                     break;
+                case "Ericsson$Vin_Num_001":
+                    break;
                 default:
                     throw new IllegalArgumentException("No such bus in database");
             }
