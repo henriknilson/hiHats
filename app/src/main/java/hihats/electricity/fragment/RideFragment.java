@@ -35,6 +35,7 @@ import java.util.List;
 import hihats.electricity.R;
 import hihats.electricity.model.BusStop;
 import hihats.electricity.net.AccessErrorException;
+import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.FindBusHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
@@ -209,7 +210,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             if (helper.isConnectedToWifi(getContext())) {
                 try {
                     helper.getBusFromSystemId();
-                } catch (AccessErrorException e) {
+                } catch (AccessErrorException | NoDataException e) {
                     e.printStackTrace();
                 }
             } else {

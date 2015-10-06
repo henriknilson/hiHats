@@ -18,8 +18,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import hihats.electricity.model.Bus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.HttpHandler;
+import hihats.electricity.net.NoDataException;
 
 /**
  * Created by fredrikkindstrom on 03/10/15.
@@ -38,11 +40,15 @@ public class FindBusHelper {
         return wifiNetwork != null && wifiNetwork.isConnected();
     }
 
-    public String askNetworkForId() throws AccessErrorException {
+    public Bus getBusFromSystemId() throws AccessErrorException, NoDataException {
         String response = httpHandler.getResponse("http://feeds.feedburner.com/entrepreneur/startingabusiness.rss");
         String result = parseFromXML(response);
         if (result != null) {
-            return result;
+            try {
+                return new Bus(result);
+            } catch (IllegalArgumentException e) {
+                throw new NoDataException();
+            }
         } else {
             throw new AccessErrorException();
         }
