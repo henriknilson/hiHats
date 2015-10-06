@@ -112,6 +112,7 @@ public class BusDataHelper {
                     location.getLatitude(),
                     location.getLongitude(),
                     distanceBetweenBuses);
+            System.out.println("Distance between 'DEVICE' and '" + bus.getDgw() + "' is " + distanceBetweenBuses[0] + "m");
             if (distanceBetweenBuses[0] < 20) {
                 return bus;
             }
@@ -133,7 +134,7 @@ public class BusDataHelper {
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
             SimpleLocation loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
-            Bus bus = new Bus(id);
+            Bus bus = new Bus("Ericsson$" + id);
             bus.setSimpleLocation(loc);
             buses.add(bus);
         }

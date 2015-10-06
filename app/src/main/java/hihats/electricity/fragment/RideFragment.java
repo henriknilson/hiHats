@@ -39,7 +39,10 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
+import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.net.AccessErrorException;
+import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
@@ -195,7 +198,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     AsynkTasks
      */
 
-    private class AsyncFindBusTask extends AsyncTask<Void, String, String> implements LocationListener{
+    private class AsyncFindBusTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
 
         private BusDataHelper helper = new BusDataHelper();
         private LocationRequest locationRequest;
@@ -211,28 +214,54 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Bus doInBackground(Void... params) {
             if (helper.isConnectedToWifi(getContext())) {
-                // Request GPS updates. The third param is the looper to use, which defaults the the one for
-                // the current thread.
-                Looper.prepare();
-                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-                // Start waiting... when this is done, we'll have the location in this.location.
-                Looper.loop();
-                // Now go use the location to load some data.
-                currentLocation = location;
-                System.out.println(currentLocation.getLatitude());
-                System.out.println(currentLocation.getLongitude());
-            } else {
-                return "Wifi not connected";
+                return getBusFromNetwork();
+            } else if (helper.isGPSEnabled(getContext())) {
+
             }
             return null;
         }
 
+        private Bus getBusFromNetwork() {
+            try {
+                return helper.getBusFromSystemId();
+            } catch (AccessErrorException | NoDataException e) {
+                //TODO GUI Alert
+                getBusFromLocation();
+            }
+            return null;
+        }
+        private Bus getBusFromLocation() {
+            // Request GPS updates
+            Looper.prepare();
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+            // Start waiting... when this is done, we'll have the location in this.location.
+            Looper.loop();
+            // Now go use the location to load some data.
+            try {
+                Bus bus = helper.getBusNearestLocation(location);
+                if (bus != null) {
+                    return bus;
+                }
+            } catch (AccessErrorException e) {
+                //TODO GUI Alert
+                System.out.println("NO INTERNET CONNECTION");
+            } catch (NoDataException e) {
+                //TODO GUI Alert
+                System.out.println("ELECTRICITY SERVER DOWN");
+            }
+            currentLocation = location;
+            return null;
+        }
+
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(Bus s) {
             super.onPostExecute(s);
-            System.out.println(s);
+            //TODO GUI Alert
+            if (s == null) {
+                System.out.println("NO NEARBY BUS FOUND");
+            }
         }
 
         @Override
