@@ -40,14 +40,13 @@ import java.util.List;
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.BusStop;
-import hihats.electricity.util.FindBusHelper;
+import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
     Button findBusButton;
-    private GoogleApiClient googleApiClient;
 
     MapView mapView;
     GoogleMap googleMap;
@@ -57,6 +56,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     LatLng currentPosition;
 
     // Promise/async variables
+    private GoogleApiClient googleApiClient;
     private Boolean mapReady = false;
     private Boolean busStopsReady = false;
 
@@ -195,7 +195,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     private class AsyncFindBusTask extends AsyncTask<Void, String, String> implements LocationListener{
 
-        private FindBusHelper helper = new FindBusHelper();
+        private BusDataHelper helper = new BusDataHelper();
         private LocationRequest locationRequest;
         private Location location;
 
