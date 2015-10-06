@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import hihats.electricity.model.Bus;
-import hihats.electricity.model.Location;
+import hihats.electricity.model.SimpleLocation;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.HttpHandler;
 import hihats.electricity.net.NoDataException;
@@ -42,10 +42,10 @@ public class BusDataHelper {
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
-        Location loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
+        SimpleLocation loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
         float speed = RmcConverter.rmcToSpeed(data.getValue());
         float bearing = RmcConverter.rmcToBearing(data.getValue());
-        bus.setLocation(loc);
+        bus.setSimpleLocation(loc);
         bus.setSpeed(speed);
         bus.setBearing(bearing);
     }
@@ -63,9 +63,9 @@ public class BusDataHelper {
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
-            Location loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
+            SimpleLocation loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
             Bus bus = new Bus(id);
-            bus.setLocation(loc);
+            bus.setSimpleLocation(loc);
             buses.add(bus);
         }
         return buses;
@@ -74,11 +74,11 @@ public class BusDataHelper {
     /**
      * Returns the last known location for a certain bus.
      * @param bus The bus you want to get data for.
-     * @return The most recent location for said bus as a Location object.
+     * @return The most recent location for said bus as a SimpleLocation object.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public Location getLastLocationForBus(Bus bus) throws AccessErrorException, NoDataException {
+    public SimpleLocation getLastLocationForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);

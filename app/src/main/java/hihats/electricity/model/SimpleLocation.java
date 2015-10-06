@@ -5,15 +5,15 @@ import java.util.Date;
 /**
  * Created by fredrikkindstrom on 01/10/15.
  */
-public class Location {
+public class SimpleLocation {
 
     private double latitude;
     private double longitude;
     private Date date;
 
-    public Location() {}
+    public SimpleLocation() {}
 
-    public Location(double latitude, double longitude, Date date) {
+    public SimpleLocation(double latitude, double longitude, Date date) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.date = date;
