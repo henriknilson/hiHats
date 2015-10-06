@@ -1,6 +1,7 @@
 package hihats.electricity.util;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -13,6 +14,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,6 +31,7 @@ import hihats.electricity.net.NoDataException;
 public class FindBusHelper {
 
     private final HttpHandler httpHandler = new HttpHandler();
+    private final BusDataHelper busDataHelper = new BusDataHelper();
 
     /*
     Util methods
@@ -52,6 +55,11 @@ public class FindBusHelper {
         } else {
             throw new AccessErrorException();
         }
+    }
+
+    public Bus findBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
+        ArrayList<Bus> allBuses = busDataHelper.getLastDataForAllBuses();
+        return null;
     }
 
     /*
