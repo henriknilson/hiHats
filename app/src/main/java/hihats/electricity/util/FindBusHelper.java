@@ -59,6 +59,18 @@ public class FindBusHelper {
 
     public Bus findBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
         ArrayList<Bus> allBuses = busDataHelper.getLastDataForAllBuses();
+        for (Bus bus : allBuses) {
+            float[] distanceBetweenBuses = new float[1];
+            Location.distanceBetween(
+                    bus.getSimpleLocation().getLatitude(),
+                    bus.getSimpleLocation().getLongitude(),
+                    location.getLatitude(),
+                    location.getLongitude(),
+                    distanceBetweenBuses);
+            if (distanceBetweenBuses[0] < 20) {
+                return bus;
+            }
+        }
         return null;
     }
 
