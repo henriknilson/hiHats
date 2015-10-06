@@ -2,17 +2,22 @@ package hihats.electricity.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,9 +38,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import hihats.electricity.R;
+import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.BusStop;
-import hihats.electricity.net.AccessErrorException;
-import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.FindBusHelper;
 import hihats.electricity.util.ParseBusStopHelper;
 
@@ -43,21 +47,18 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
     Button findBusButton;
-    TableLayout statusLayout;
+    private GoogleApiClient googleApiClient;
 
     MapView mapView;
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
+    Location currentLocation;
     LatLng currentPosition;
 
     // Promise/async variables
     private Boolean mapReady = false;
     private Boolean busStopsReady = false;
-
-    // Animations
-    private Animation animFlyout;
-    private Animation animFlyin;
 
     public static RideFragment newInstance() {
         return new RideFragment();
@@ -67,15 +68,22 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         return this.googleMap;
     }
 
-    public void setMap(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-    }
-
     public LatLng getCurrentPosition() {
         return this.currentPosition;
     }
 
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        googleApiClient = ((MainActivity)getActivity()).googleApiClient;
+        try {
+            MapsInitializer.initialize(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -89,7 +97,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View arg0) {
 
-                new FindBusIdTask().execute();
+                new AsyncFindBusTask().execute();
 
                 ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
 
@@ -130,18 +138,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
@@ -151,6 +147,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
         mapView.onResume();
+
     }
 
     /**
@@ -198,23 +195,34 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     AsynkTasks
      */
 
-    private class FindBusIdTask extends AsyncTask<Void, String, String> {
+    private class AsyncFindBusTask extends AsyncTask<Void, String, String> implements LocationListener{
 
         private FindBusHelper helper = new FindBusHelper();
+        private LocationRequest locationRequest;
+        private Location location;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            locationRequest = LocationRequest.create()
+                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                    .setFastestInterval(1 * 1000); // 1 second, in milliseconds
         }
 
         @Override
         protected String doInBackground(Void... params) {
             if (helper.isConnectedToWifi(getContext())) {
-                try {
-                    helper.getBusFromSystemId();
-                } catch (AccessErrorException | NoDataException e) {
-                    e.printStackTrace();
-                }
+                // Request GPS updates. The third param is the looper to use, which defaults the the one for
+                // the current thread.
+                Looper.prepare();
+                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+                // Start waiting... when this is done, we'll have the location in this.location.
+                Looper.loop();
+                // Now go use the location to load some data.
+                currentLocation = location;
+                System.out.println(currentLocation.getLatitude());
+                System.out.println(currentLocation.getLongitude());
             } else {
                 return "Wifi not connected";
             }
@@ -225,6 +233,13 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             System.out.println(s);
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+            this.location = location;
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+            Looper.myLooper().quit();
         }
     }
 
