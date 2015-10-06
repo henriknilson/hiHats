@@ -210,7 +210,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         protected String doInBackground(Void... params) {
             if (helper.isConnectedToWifi(getContext())) {
                 try {
-                    return helper.askNetworkForId();
+                    helper.getBusFromSystemId();
                 } catch (AccessErrorException e) {
                     e.printStackTrace();
                 }
