@@ -43,6 +43,8 @@ public class BusDataHelper {
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
 
+    private final float BUS_DISTANCE_METERS = 800;
+
     private final UrlRetriever urlRetriever = new UrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
 
@@ -105,16 +107,18 @@ public class BusDataHelper {
     public Bus getBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
         ArrayList<Bus> allBuses = getLastDataForAllBuses();
         for (Bus bus : allBuses) {
-            float[] distanceBetweenBuses = new float[1];
-            Location.distanceBetween(
-                    bus.getSimpleLocation().getLatitude(),
-                    bus.getSimpleLocation().getLongitude(),
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    distanceBetweenBuses);
-            System.out.println("Distance between 'DEVICE' and '" + bus.getDgw() + "' is " + distanceBetweenBuses[0] + "m");
-            if (distanceBetweenBuses[0] < 20) {
-                return bus;
+            if (bus.getSimpleLocation() != null && location != null) {
+                float[] distanceBetweenBuses = new float[1];
+                Location.distanceBetween(
+                        bus.getSimpleLocation().getLatitude(),
+                        bus.getSimpleLocation().getLongitude(),
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        distanceBetweenBuses);
+                System.out.println("Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
+                if (distanceBetweenBuses[0] < BUS_DISTANCE_METERS) {
+                    return bus;
+                }
             }
         }
         return null;
@@ -133,7 +137,12 @@ public class BusDataHelper {
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
-            SimpleLocation loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
+            SimpleLocation loc;
+            try {
+                loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
+            } catch (IllegalArgumentException e) {
+                loc = null;
+            }
             Bus bus = new Bus("Ericsson$" + id);
             bus.setSimpleLocation(loc);
             buses.add(bus);
