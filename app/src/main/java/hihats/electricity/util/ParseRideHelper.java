@@ -18,32 +18,74 @@ import hihats.electricity.model.Ride;
 @ParseClassName("ParseRideHelper")
 public class ParseRideHelper extends ParseObject {
 
+    /*
+    Variables
+     */
     private ArrayList<Ride> rides;
 
+    /*
+    Constructor
+     */
     public ParseRideHelper(){}
 
+    /*
+    Getters
+     */
+
+    /**
+     *
+     * @return date, from parse
+     */
     public Date getDate(){
         return getDate("date");
     }
 
+    /**
+     *
+     * @return busStopFrom, from parse
+     */
     public String getBusStopFrom(){
         return getString("busStopFrom");
     }
 
+    /**
+     *
+     * @return busStopToo, from parse
+     */
     public String getBusStopToo(){
         return getString("busStopToo");
     }
 
+    /**
+     *
+     * @return points, from parse
+     */
     public int getPoints(){
         return getInt("points");
     }
 
+    /**
+     *
+     * @return distance, from parse
+     */
     public double getDistance(){
-        return getDouble("distance");}
+        return getDouble("distance");
+    }
 
+    /**
+     *
+     * @return owner, from parse
+     */
     public String getOwner(){
-        return getString("owner");}
+        return getString("owner");
+    }
 
+    /**
+     * Fetches rides from parse and puts them in an arraylist, if they belong to the owner
+     *
+     * @param owner the owner of the rides
+     * @return an arraylist containing rides, from parse
+     */
     public ArrayList<Ride> getRides(final String owner){
         ParseQuery<ParseRideHelper> parseRides = ParseQuery.getQuery(ParseRideHelper.class);
         parseRides.findInBackground(new FindCallback<ParseRideHelper>() {
