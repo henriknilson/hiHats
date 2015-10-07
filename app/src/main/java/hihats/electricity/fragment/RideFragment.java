@@ -218,6 +218,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             // Now go use the location to load some data.
             try {
                 Bus bus = helper.getBusNearestLocation(location);
+                System.out.print(bus);
                 if (bus != null) {
                     return bus;
                 }
