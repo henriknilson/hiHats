@@ -42,8 +42,7 @@ public class BusDataHelper {
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-
-    private final float BUS_DISTANCE_METERS = 800;
+    private final float BUS_DISTANCE_METERS = 800.0f;
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
@@ -75,12 +74,22 @@ public class BusDataHelper {
         }
     }
 
+    /**
+     * Returns if the device is connected to a wifi network or not.
+     * @param context The context of the application, get this from MainActivity.
+     * @return True if the device is connected to wifi, false if not
+     */
     public boolean isConnectedToWifi(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifiNetwork != null && wifiNetwork.isConnected();
     }
 
+    /**
+     * Returns if the device is able to use the GPS or not.
+     * @param context The context of the application, get this from MainActivity.
+     * @return True if the device is able to use GPS, false if not
+     */
     public boolean isGPSEnabled(Context context) {
         LocationManager locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         return locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -90,6 +99,13 @@ public class BusDataHelper {
     Get data methods
      */
 
+    /**
+     * Returns a Bus object that matches a System Id obtained from the bus onboard network API.
+     * This method can only be successful when the device is connected to the bus onboard wifi.
+     * @return A bus matching the SystemId if its valid, null if not.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
     public Bus getBusFromSystemId() throws AccessErrorException, NoDataException {
         String response = httpHandler.getResponse("http://feeds.feedburner.com/entrepreneur/startingabusiness.rss");
         String result = parseFromXML(response);
@@ -104,6 +120,17 @@ public class BusDataHelper {
         }
     }
 
+    /**
+     * Returns a Bus object that is closest to the given location.
+     * Calls the API to get all the active buses and then compare distances
+     * to obtain the bus that is closest to the given location.
+     * Use this to obtain a bus closest to the device location.
+     * This will probably be the bus the user is riding.
+     * @param location A location to compare to all the buses in the system.
+     * @return A bus object if there is any buses within 20 meters from the given location, null if not.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
     public Bus getBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
         ArrayList<Bus> allBuses = getLastDataForAllBuses();
         for (Bus bus : allBuses) {
@@ -113,10 +140,11 @@ public class BusDataHelper {
                         bus.getSimpleLocation().getLatitude(),
                         bus.getSimpleLocation().getLongitude(),
                         location.getLatitude(),
-                        location.getLongitude(),
+                        location.getLongitude(),/**/
                         distanceBetweenBuses);
                 System.out.println("Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
                 if (distanceBetweenBuses[0] < BUS_DISTANCE_METERS) {
+                    System.out.println("FOUND BUS '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters away");
                     return bus;
                 }
             }
