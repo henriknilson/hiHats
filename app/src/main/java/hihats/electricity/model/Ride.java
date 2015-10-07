@@ -14,6 +14,8 @@ public class Ride {
     private BusStop busStopFrom;
     private BusStop busStopToo;
     private int points;
+    private double distance;
+    private String owner;
 
     /**
      *Constructor
@@ -23,11 +25,14 @@ public class Ride {
      * @param busStopToo The end position of the ride
      * @param points The number of points the ride generated
      */
-    public Ride(Date date, BusStop busStopFrom, BusStop busStopToo, int points ){
+    public Ride(Date date, BusStop busStopFrom, BusStop busStopToo, int points, double distance, String userId){
         this.date = date;
         this.busStopFrom = busStopFrom;
         this.busStopToo = busStopToo;
         this.points = points;
+        this.distance = distance;
+        this.owner = userId;
+
     }
 
     /*
@@ -66,6 +71,22 @@ public class Ride {
         return points;
     }
 
+    /**
+     *
+     * @return distance
+     */
+    public double getDistance() {
+        return distance;
+    }
+
+    /**
+     *
+     * @return owner
+     */
+    public String getOwner() {
+        return owner;
+    }
+
     /*
     Equals and Hashcode
      */
@@ -79,18 +100,18 @@ public class Ride {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Ride))
-            return false;
+        if (!(o instanceof Ride)) return false;
 
         Ride ride = (Ride) o;
 
-        if (points != ride.points)
-            return false;
-        if (date != null ? !date.equals(ride.date) : ride.date != null)
-            return false;
+        if (points != ride.points) return false;
+        if (Double.compare(ride.distance, distance) != 0) return false;
+        if (date != null ? !date.equals(ride.date) : ride.date != null) return false;
         if (busStopFrom != null ? !busStopFrom.equals(ride.busStopFrom) : ride.busStopFrom != null)
             return false;
-        return !(busStopToo != null ? !busStopToo.equals(ride.busStopToo) : ride.busStopToo != null);
+        if (busStopToo != null ? !busStopToo.equals(ride.busStopToo) : ride.busStopToo != null)
+            return false;
+        return !(owner != null ? !owner.equals(ride.owner) : ride.owner != null);
 
     }
 
@@ -101,10 +122,15 @@ public class Ride {
      */
     @Override
     public int hashCode() {
-        int result = date != null ? date.hashCode() : 0;
+        int result;
+        long temp;
+        result = date != null ? date.hashCode() : 0;
         result = 31 * result + (busStopFrom != null ? busStopFrom.hashCode() : 0);
         result = 31 * result + (busStopToo != null ? busStopToo.hashCode() : 0);
         result = 31 * result + points;
+        temp = Double.doubleToLongBits(distance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         return result;
     }
 
