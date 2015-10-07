@@ -117,6 +117,7 @@ public class BusDataHelper {
                         distanceBetweenBuses);
                 System.out.println("Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
                 if (distanceBetweenBuses[0] < BUS_DISTANCE_METERS) {
+                    System.out.println("FOUND BUS '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters away");
                     return bus;
                 }
             }

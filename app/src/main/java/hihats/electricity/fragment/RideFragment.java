@@ -193,7 +193,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             if (helper.isConnectedToWifi(getContext())) {
                 return getBusFromNetwork();
             } else if (helper.isGPSEnabled(getContext())) {
-                getBusFromLocation();
+                return getBusFromLocation();
             }
             return null;
         }
@@ -203,9 +203,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 return helper.getBusFromSystemId();
             } catch (AccessErrorException | NoDataException e) {
                 //TODO GUI Alert
-                getBusFromLocation();
+                return getBusFromLocation();
             }
-            return null;
         }
         private Bus getBusFromLocation() {
             // Request GPS updates
@@ -218,7 +217,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             // Now go use the location to load some data.
             try {
                 Bus bus = helper.getBusNearestLocation(location);
-                System.out.print(bus);
                 if (bus != null) {
                     return bus;
                 }
