@@ -11,8 +11,8 @@ public class Ride {
     Instance Variables
      */
     private Date date;
-    private BusStop busStopFrom;
-    private BusStop busStopToo;
+    private String busStopFrom;
+    private String busStopToo;
     private int points;
     private double distance;
     private String owner;
@@ -25,7 +25,8 @@ public class Ride {
      * @param busStopToo The end position of the ride
      * @param points The number of points the ride generated
      */
-    public Ride(Date date, BusStop busStopFrom, BusStop busStopToo, int points, double distance, String userId){
+    public Ride(Date date, String busStopFrom, String busStopToo,
+                int points, double distance, String userId){
         this.date = date;
         this.busStopFrom = busStopFrom;
         this.busStopToo = busStopToo;
@@ -51,7 +52,7 @@ public class Ride {
      *
      * @return busStopFrom
      */
-    public BusStop getBusStopFrom() {
+    public String getBusStopFrom() {
         return busStopFrom;
     }
 
@@ -59,7 +60,7 @@ public class Ride {
      *
      * @return busStopToo
      */
-    public BusStop getBusStopToo() {
+    public String getBusStopToo() {
         return busStopToo;
     }
 
