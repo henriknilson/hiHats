@@ -50,6 +50,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
     Button findBusButton;
+    ViewGroup container;
 
     MapView mapView;
     GoogleMap googleMap;
@@ -89,6 +90,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_ride, container, false);
+        this.container = container;
 
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -99,35 +101,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View arg0) {
 
                 new AsyncFindBusTask().execute();
-
-                ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
-
-                RelativeLayout rideFragment = (RelativeLayout) view.findViewById(R.id.rideFragment);
-
-                // Inflate the status bar view and set the correct gravity
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                        TableLayout.LayoutParams.WRAP_CONTENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-
-                LayoutInflater layoutInflater = (LayoutInflater)
-                        getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                View statusBarView = layoutInflater.inflate(R.layout.statusbar_ride, container, false);
-                statusBarView.setLayoutParams(params);
-
-                // Add the status bar view to ride fragment
-                rideFragment.addView(statusBarView, 1);
-
-                if (mapReady && busStopsReady && getMap() != null) {
-
-                    CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(getCurrentPosition())
-                            .zoom(17)
-                            .tilt(70)
-                            .build();
-                    getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
-                }
 
             }
         });
@@ -207,16 +180,18 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             super.onPreExecute();
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                    .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                    .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+                    .setInterval(10 * 1000)
+                    .setFastestInterval(1 * 1000)
+                    .setExpirationDuration(3 * 1000);
         }
 
         @Override
         protected Bus doInBackground(Void... params) {
+            System.out.println("INSIDE TASK");
             if (helper.isConnectedToWifi(getContext())) {
                 return getBusFromNetwork();
             } else if (helper.isGPSEnabled(getContext())) {
-
+                getBusFromLocation();
             }
             return null;
         }
@@ -232,7 +207,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
         private Bus getBusFromLocation() {
             // Request GPS updates
-            Looper.prepare();
+            if (Looper.myLooper() == null) {
+                Looper.prepare();
+            }
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
             // Start waiting... when this is done, we'll have the location in this.location.
             Looper.loop();
@@ -254,11 +231,40 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
-        protected void onPostExecute(Bus s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(Bus bus) {
+            super.onPostExecute(bus);
             //TODO GUI Alert
-            if (s == null) {
+            if (bus == null) {
                 System.out.println("NO NEARBY BUS FOUND");
+            } else {
+                ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
+
+                RelativeLayout rideFragment = (RelativeLayout) view.findViewById(R.id.rideFragment);
+
+                // Inflate the status bar view and set the correct gravity
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                        TableLayout.LayoutParams.WRAP_CONTENT,
+                        TableLayout.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+
+                LayoutInflater layoutInflater = (LayoutInflater)
+                        getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                View statusBarView = layoutInflater.inflate(R.layout.statusbar_ride, container, false);
+                statusBarView.setLayoutParams(params);
+
+                // Add the status bar view to ride fragment
+                rideFragment.addView(statusBarView, 1);
+
+                if (mapReady && busStopsReady && getMap() != null) {
+
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(getCurrentPosition())
+                            .zoom(17)
+                            .tilt(70)
+                            .build();
+                    getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+                }
             }
         }
 
@@ -266,6 +272,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         public void onLocationChanged(Location location) {
             this.location = location;
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+            System.out.println(location.toString());
             Looper.myLooper().quit();
         }
     }
