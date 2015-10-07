@@ -43,7 +43,7 @@ public class BusDataHelper {
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
 
-    private final float BUS_DISTANCE_METERS = 800;
+    private final float BUS_DISTANCE_METERS = 800.0f;
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
@@ -117,6 +117,7 @@ public class BusDataHelper {
                         distanceBetweenBuses);
                 System.out.println("Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
                 if (distanceBetweenBuses[0] < BUS_DISTANCE_METERS) {
+                    System.out.println("FOUND BUS '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters away");
                     return bus;
                 }
             }
