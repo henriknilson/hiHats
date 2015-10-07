@@ -7,6 +7,7 @@
     <color name="accent">#E8F5E9</color>
     <color name="primaryText">#ffffff</color>
     <color name="secondaryText">#ffffff</color>
+    <color name="baseSheet">#EEEEEE</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
     <color name="textLabel">#BBBBBB</color>
