@@ -30,4 +30,7 @@ public class ParseRideHelper extends ParseObject {
     public int getPoints(){
         return getInt("points");
     }
+
+    public String getOwner(){
+        return getString("owner");}
 }
