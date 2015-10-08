@@ -15,13 +15,13 @@ public class User {
     String userId;
     int points;
     ArrayList<Ride> rides = new ArrayList<>();
-    ParseRideHelper rideHelper = new ParseRideHelper();
+    //ParseRideHelper rideHelper = new ParseRideHelper();
 
     protected User(String userName, String userId, int points) {
         this.userName = userName;
         this.userId = userId;
         this.points = points;
-        this.rides = rideHelper.getRides(userId);
+        //this.rides = rideHelper.getRides(userId);
     }
 
     public static User getInstance(String userName, String userId, int points) {
