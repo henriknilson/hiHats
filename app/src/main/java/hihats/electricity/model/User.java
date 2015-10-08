@@ -2,22 +2,33 @@ package hihats.electricity.model;
 
 import java.util.ArrayList;
 
+import hihats.electricity.util.ParseRideHelper;
+
 /**
  * Created by Pertta on 15-10-07.
  * This class represents the user
  */
 public class User {
 
+    private static User user = null;
     String userName;
     String userId;
     int points;
     ArrayList<Ride> rides = new ArrayList<>();
+    ParseRideHelper rideHelper = new ParseRideHelper();
 
-    public User(String userName, String userId, int points) {
+    protected User(String userName, String userId, int points) {
         this.userName = userName;
         this.userId = userId;
         this.points = points;
-        //this.rides = rides.getRides();
+        this.rides = rideHelper.getRides(userId);
+    }
+
+    public static User getInstance(String userName, String userId, int points) {
+        if(user == null) {
+            user = new User(userName, userId, points);
+        }
+        return user;
     }
 
     @Override
