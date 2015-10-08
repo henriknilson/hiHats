@@ -2,7 +2,7 @@ package hihats.electricity.util;
 
 import java.util.Date;
 
-import hihats.electricity.model.SimpleLocation;
+import hihats.electricity.model.DatedPosition;
 
 /**
  * Created by fredrikkindstrom on 01/10/15.
@@ -10,14 +10,14 @@ import hihats.electricity.model.SimpleLocation;
 public class RmcConverter {
 
     /**
-     * Parses the GPRMC string to a SimpleLocation object.
+     * Parses the GPRMC string to a DatedPosition object.
      * @param rmc The string to parse.
      * @param timestamp The timestamp milliseconds.
      * @return A location object with latitude, longitude and date.
      */
-    public static SimpleLocation rmcToLocation(String rmc, String timestamp) {
+    public static DatedPosition rmcToLocation(String rmc, String timestamp) {
         if (rmc.startsWith("$GPRMC")) {
-            SimpleLocation loc = new SimpleLocation();
+            DatedPosition loc = new DatedPosition();
             String[] gpsValues = rmc.split(",");
 
             try {
