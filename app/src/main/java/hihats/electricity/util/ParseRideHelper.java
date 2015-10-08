@@ -2,8 +2,10 @@ package hihats.electricity.util;
 
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +69,7 @@ public class ParseRideHelper extends ParseObject {
         });
         return rides;
     }
-    
+
     /*
     ClassMethod
      */
@@ -84,13 +86,22 @@ public class ParseRideHelper extends ParseObject {
      */
     public void uploadRide(Date date, String bsf, String bst, int points, double distance, String owner ){
 
-        ParseObject ride = new ParseObject("ParseRideHelper");
+        ParseObject ride = ParseObject.create("ParseRideHelper");
         ride.add("date", date);
         ride.add("busStopFrom", bsf);
         ride.add("busStopToo", bst);
         ride.add("points", points);
         ride.add("distance", distance);
         ride.add("owner", owner);
-        ride.saveInBackground();
+        ride.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+
+                }else{
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
