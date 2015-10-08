@@ -74,6 +74,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         return this.currentPosition;
     }
 
+
+
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_ride, container, false);
