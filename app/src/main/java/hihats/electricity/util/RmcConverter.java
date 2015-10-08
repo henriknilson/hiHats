@@ -13,11 +13,11 @@ public class RmcConverter {
      * Parses the GPRMC string to a DatedPosition object.
      * @param rmc The string to parse.
      * @param timestamp The timestamp milliseconds.
-     * @return A location object with latitude, longitude and date.
+     * @return A position object with latitude, longitude and date.
      */
-    public static DatedPosition rmcToLocation(String rmc, String timestamp) {
+    public static DatedPosition rmcToPosition(String rmc, String timestamp) {
         if (rmc.startsWith("$GPRMC")) {
-            DatedPosition loc = new DatedPosition();
+            DatedPosition pos = new DatedPosition();
             String[] gpsValues = rmc.split(",");
 
             try {
@@ -27,7 +27,7 @@ public class RmcConverter {
                 if (gpsValues[4].charAt(0) == 'S') {
                     latitude = -latitude;
                 }
-                loc.setLatitude(latitude);
+                pos.setLatitude(latitude);
 
                 // Set longitude
                 double longitude = Double.parseDouble(gpsValues[5].substring(3)) / 60.0;
@@ -35,16 +35,16 @@ public class RmcConverter {
                 if (gpsValues[6].charAt(0) == 'W') {
                     longitude = -longitude;
                 }
-                loc.setLongitude(longitude);
+                pos.setLongitude(longitude);
             } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
                 throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
             }
 
             // Set time
             Date time = new Date(Long.parseLong(timestamp));
-            loc.setDate(time);
+            pos.setDate(time);
 
-            return loc;
+            return pos;
         } else {
             throw new IllegalArgumentException("Input must be in GPRMC format");
         }

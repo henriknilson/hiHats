@@ -56,6 +56,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
+
+    Bus activeBus;
     DatedPosition activeBusPosition;
 
     // Promise/async variables
@@ -201,10 +203,12 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     .target(new LatLng(activeBusPosition.getLatitude(), activeBusPosition.getLongitude()))
                     .zoom(17)
                     .tilt(70)
+                    .bearing(activeBus.getBearing())
                     .build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
         }
     }
+    
     /*
     Asynchronous tasks
      */
@@ -277,6 +281,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 //TODO GUI Alert
                 System.out.println("NO NEARBY BUS FOUND");
             } else {
+                activeBus = bus;
                 activeBusPosition = bus.getDatedPosition();
                 engageRidingMode();
             }
