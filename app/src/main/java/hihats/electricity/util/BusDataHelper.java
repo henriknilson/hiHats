@@ -25,7 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import hihats.electricity.model.Bus;
-import hihats.electricity.model.SimpleLocation;
+import hihats.electricity.model.DatedPosition;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.HttpHandler;
 import hihats.electricity.net.NoDataException;
@@ -133,11 +133,11 @@ public class BusDataHelper {
     public Bus getBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
         ArrayList<Bus> allBuses = getLastDataForAllBuses();
         for (Bus bus : allBuses) {
-            if (bus.getSimpleLocation() != null && location != null) {
+            if (bus.getDatedPosition() != null && location != null) {
                 float[] distanceBetweenBuses = new float[1];
                 Location.distanceBetween(
-                        bus.getSimpleLocation().getLatitude(),
-                        bus.getSimpleLocation().getLongitude(),
+                        bus.getDatedPosition().getLatitude(),
+                        bus.getDatedPosition().getLongitude(),
                         location.getLatitude(),
                         location.getLongitude(),
                         distanceBetweenBuses);
@@ -164,27 +164,27 @@ public class BusDataHelper {
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
-            SimpleLocation loc;
+            DatedPosition loc;
             try {
                 loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
             } catch (IllegalArgumentException e) {
                 loc = null;
             }
             Bus bus = new Bus("Ericsson$" + id);
-            bus.setSimpleLocation(loc);
+            bus.setDatedPosition(loc);
             buses.add(bus);
         }
         return buses;
     }
 
     /**
-     * Returns the last known location for a certain bus.
+     * Returns the last known position for a certain bus.
      * @param bus The bus you want to get data for.
-     * @return The most recent location for said bus as a SimpleLocation object.
+     * @return The most recent location for said bus as a DatedPosition object.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public SimpleLocation getLastLocationForBus(Bus bus) throws AccessErrorException, NoDataException {
+    public DatedPosition getLastPositionForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
@@ -238,10 +238,10 @@ public class BusDataHelper {
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
-        SimpleLocation loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
+        DatedPosition loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
         float speed = RmcConverter.rmcToSpeed(data.getValue());
         float bearing = RmcConverter.rmcToBearing(data.getValue());
-        bus.setSimpleLocation(loc);
+        bus.setDatedPosition(loc);
         bus.setSpeed(speed);
         bus.setBearing(bearing);
     }

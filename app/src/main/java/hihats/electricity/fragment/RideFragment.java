@@ -40,7 +40,7 @@ import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
-import hihats.electricity.model.SimpleLocation;
+import hihats.electricity.model.DatedPosition;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
@@ -56,7 +56,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
-    SimpleLocation activeBusLocation;
+    DatedPosition activeBusPosition;
 
     // Promise/async variables
     private GoogleApiClient googleApiClient;
@@ -198,7 +198,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         if (mapReady && busStopsReady && googleMap != null) {
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(activeBusLocation.getLatitude(), activeBusLocation.getLongitude()))
+                    .target(new LatLng(activeBusPosition.getLatitude(), activeBusPosition.getLongitude()))
                     .zoom(17)
                     .tilt(70)
                     .build();
@@ -277,7 +277,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 //TODO GUI Alert
                 System.out.println("NO NEARBY BUS FOUND");
             } else {
-                activeBusLocation = bus.getSimpleLocation();
+                activeBusPosition = bus.getDatedPosition();
                 engageRidingMode();
             }
         }
