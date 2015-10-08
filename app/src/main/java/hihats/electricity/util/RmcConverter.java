@@ -58,7 +58,12 @@ public class RmcConverter {
     public static float rmcToSpeed(String rmc) {
         if (rmc.startsWith("$GPRMC")) {
             String[] gpsValues = rmc.split(",");
-            return (Float.parseFloat(gpsValues[7])*1.85200f);
+
+            try {
+                return (Float.parseFloat(gpsValues[7])*1.85200f);
+            } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
+                throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
+            }
         } else {
             throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
         }
@@ -72,7 +77,12 @@ public class RmcConverter {
     public static float rmcToBearing(String rmc) {
         if (rmc.startsWith("$GPRMC")) {
             String[] gpsValues = rmc.split(",");
-            return Float.parseFloat(gpsValues[8]);
+
+            try {
+                return Float.parseFloat(gpsValues[8]);
+            } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
+                throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
+            }
         } else {
             throw new IllegalArgumentException("Illegal GPRMC format: " + rmc);
         }

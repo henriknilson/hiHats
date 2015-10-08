@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -153,6 +154,12 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Configure the Google Map
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        UiSettings mapUi = googleMap.getUiSettings();
+        mapUi.setCompassEnabled(false);
+        mapUi.setMapToolbarEnabled(false);
+        mapUi.setScrollGesturesEnabled(false);
+        mapUi.setZoomControlsEnabled(false);
+        mapUi.setZoomGesturesEnabled(false);
     }
     private void setupBusStops() {
         // Place the bus stops on the map
@@ -208,7 +215,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
         }
     }
-    
+
     /*
     Asynchronous tasks
      */

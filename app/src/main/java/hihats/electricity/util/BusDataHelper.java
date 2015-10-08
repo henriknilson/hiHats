@@ -164,15 +164,25 @@ public class BusDataHelper {
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
-            DatedPosition loc;
-            try {
-                loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
-            } catch (IllegalArgumentException e) {
-                loc = null;
+            // Ignore stupid test bus for now
+            if (!id.equals("Ericsson$Vin_Num_001")) {
+                DatedPosition loc;
+                float bearing;
+                try {
+                    loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
+                } catch (IllegalArgumentException e) {
+                    loc = null;
+                }
+                try {
+                    bearing = RmcConverter.rmcToBearing(o.getValue());
+                } catch (IllegalArgumentException e) {
+                    bearing = 0f;
+                }
+                Bus bus = new Bus("Ericsson$" + id);
+                bus.setDatedPosition(loc);
+                bus.setBearing(bearing);
+                buses.add(bus);
             }
-            Bus bus = new Bus("Ericsson$" + id);
-            bus.setDatedPosition(loc);
-            buses.add(bus);
         }
         return buses;
     }
