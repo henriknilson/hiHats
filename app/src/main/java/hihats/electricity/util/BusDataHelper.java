@@ -166,7 +166,7 @@ public class BusDataHelper {
             String id = o.getGatewayId();
             DatedPosition loc;
             try {
-                loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
+                loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
             } catch (IllegalArgumentException e) {
                 loc = null;
             }
@@ -189,7 +189,7 @@ public class BusDataHelper {
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
-        return RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
+        return RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
     }
 
     /**
@@ -238,7 +238,7 @@ public class BusDataHelper {
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
-        DatedPosition loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
+        DatedPosition loc = RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
         float speed = RmcConverter.rmcToSpeed(data.getValue());
         float bearing = RmcConverter.rmcToBearing(data.getValue());
         bus.setDatedPosition(loc);
