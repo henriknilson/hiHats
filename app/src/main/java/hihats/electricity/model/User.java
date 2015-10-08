@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Pertta on 15-10-07.
- * This class represents the
+ * This class represents the user
  */
 public class User {
 
