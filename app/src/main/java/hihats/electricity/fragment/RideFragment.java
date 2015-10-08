@@ -24,6 +24,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -146,17 +148,18 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
     private void setupMap() {
         // To be replaced with device current position
-        LatLng tempPos = new LatLng(57.68857167,11.97830168);
+        LatLng startPos = new LatLng(57.69999167, 11.96330168);
 
         // Set map center and zoom level
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(tempPos, 12);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(startPos, 13);
         googleMap.moveCamera(update);
 
         // Configure the Google Map
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings mapUi = googleMap.getUiSettings();
-        mapUi.setCompassEnabled(false);
         mapUi.setMapToolbarEnabled(false);
+        mapUi.setCompassEnabled(false);
+        mapUi.setTiltGesturesEnabled(false);
         mapUi.setScrollGesturesEnabled(false);
         mapUi.setZoomControlsEnabled(false);
         mapUi.setZoomGesturesEnabled(false);
@@ -166,13 +169,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         for (BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
+                            .icon(BitmapDescriptorFactory.defaultMarker(359))
                             .title(i.getName())
             );
         }
 
         // Draw a line between the bus stops
-        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLACK).geodesic(true);
-        for(BusStop i : busStops){
+        PolylineOptions options = new PolylineOptions().width(16).color(getResources().getColor(R.color.primary)).geodesic(true);
+        for (BusStop i : busStops){
             LatLng point = i.getLatLng();
             options.add(point);
         }

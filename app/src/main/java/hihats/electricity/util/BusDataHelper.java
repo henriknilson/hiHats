@@ -158,14 +158,14 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public ArrayList<Bus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
+        String url = urlRetriever.getUrl(null, null, GPS_RMC, 8000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
             // Ignore stupid test bus for now
-            if (!id.equals("Ericsson$Vin_Num_001")) {
+            if (!id.equals("Vin_Num_001")) {
                 DatedPosition loc;
                 float bearing;
                 try {
