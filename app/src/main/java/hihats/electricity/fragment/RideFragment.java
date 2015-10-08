@@ -73,21 +73,21 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     public void onAttach(Context context) {
         super.onAttach(context);
         googleApiClient = ((MainActivity)getActivity()).googleApiClient;
-        try {
-            MapsInitializer.initialize(context);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+
+        // Create the whole fragment view
         view = inflater.inflate(R.layout.fragment_ride, container, false);
         this.container = container;
 
+        // Create the map view and fetch the map from Google
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
 
+        // Create the "Find My Bus" button and set its properties
         findBusButton = (Button) view.findViewById(R.id.findBusButton);
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
@@ -97,9 +97,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        mapView.getMapAsync(this);
         fetchBusStops();
 
+        // Return the finished view
         return view;
     }
 
@@ -116,16 +116,37 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    /**
-     * Add markers, setup the camera, and all map settings in general.
+    /*
+    Help methods for map
      */
+
+    private void fetchBusStops() {
+        ParseQuery<ParseBusStopHelper> stops = ParseQuery.getQuery(ParseBusStopHelper.class);
+        stops.findInBackground(new FindCallback<ParseBusStopHelper>() {
+            @Override
+            public void done(List<ParseBusStopHelper> objects, com.parse.ParseException e) {
+
+                busStops = new ArrayList<>();
+                for (ParseBusStopHelper i : objects) {
+                    //Add all to list of stops
+                    BusStop stop = new BusStop(i.getLat(), i.getLng(), i.getStopName(), i.getOrder());
+                    busStops.add(stop);
+                }
+
+                // Sorts bus stops in right order
+                Collections.sort(busStops, new Comparator<BusStop>() {
+                    @Override
+                    public int compare(BusStop stop1, BusStop stop2) {
+                        return stop1.compareTo(stop2);
+                    }
+                });
+
+                busStopsReady = true;
+                setupBusStops();
+            }
+        });
+    }
     private void setupMap() {
-
-        // Make sure both Google and Parse requests are done
-        if(!(mapReady && busStopsReady)) {
-            return;
-        }
-
         // To be replaced with device current position
         currentPosition = new LatLng(57.68857167,11.97830168);
 
@@ -135,20 +156,17 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Configure the Google Map
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-        // Create markers for each bus stop
-        for(BusStop i : busStops){
+    }
+    private void setupBusStops() {
+        // Place the bus stops on the map
+        for (BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
                             .title(i.getName())
             );
         }
 
-        // Draw a line between the markers
-        drawPath();
-
-    }
-    private void drawPath() {
+        // Draw a line between the bus stops
         PolylineOptions options = new PolylineOptions().width(5).color(Color.BLACK).geodesic(true);
         for(BusStop i : busStops){
             LatLng point = i.getLatLng();
@@ -158,7 +176,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /*
-    AsynkTasks
+    Asynchronous tasks
      */
 
     private class AsyncFindBusTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
@@ -174,7 +192,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
                     .setFastestInterval(1 * 1000)
-                    .setExpirationDuration(3 * 1000);
+                    .setMaxWaitTime(3 * 1000);
         }
 
         @Override
@@ -193,7 +211,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 return helper.getBusFromSystemId();
             } catch (AccessErrorException | NoDataException e) {
                 //TODO GUI Alert
-                System.out.println(helper.isGPSEnabled(getContext()));
                 if (helper.isGPSEnabled(getContext())) {
                     return getBusFromLocation();
                 }
@@ -276,34 +293,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         mapReady = true;
-
         setupMap();
-    }
-
-    // Fetches data on bus stops from parse cloud
-    public void fetchBusStops() {
-        ParseQuery<ParseBusStopHelper> stops = ParseQuery.getQuery(ParseBusStopHelper.class);
-        stops.findInBackground(new FindCallback<ParseBusStopHelper>() {
-            @Override
-            public void done(List<ParseBusStopHelper> objects, com.parse.ParseException e) {
-
-                busStops = new ArrayList<>();
-                for (ParseBusStopHelper i : objects) {
-                    //Add all to list of stops
-                    BusStop stop = new BusStop(i.getLat(), i.getLng(), i.getStopName(), i.getOrder());
-                    busStops.add(stop);
-                }
-
-                // Sorts bus stops in right order
-                Collections.sort(busStops, new Comparator<BusStop>() {
-                    @Override
-                    public int compare(BusStop stop1, BusStop stop2) {
-                        return stop1.compareTo(stop2);
-                    }
-                });
-                busStopsReady = true;
-                setupMap();
-            }
-        });
     }
 }
