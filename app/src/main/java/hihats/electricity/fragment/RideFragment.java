@@ -22,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,12 +35,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
+import hihats.electricity.model.SimpleLocation;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
@@ -57,8 +56,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap googleMap;
     Polyline line;
     ArrayList<BusStop> busStops;
-    Location currentLocation;
-    LatLng currentPosition;
+    SimpleLocation activeBusLocation;
 
     // Promise/async variables
     private GoogleApiClient googleApiClient;
@@ -74,7 +72,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         super.onAttach(context);
         googleApiClient = ((MainActivity)getActivity()).googleApiClient;
     }
-
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
@@ -102,13 +99,11 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         // Return the finished view
         return view;
     }
-
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -117,7 +112,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /*
-    Help methods for map
+    Setup methods for map
      */
 
     private void fetchBusStops() {
@@ -148,10 +143,10 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
     private void setupMap() {
         // To be replaced with device current position
-        currentPosition = new LatLng(57.68857167,11.97830168);
+        LatLng tempPos = new LatLng(57.68857167,11.97830168);
 
         // Set map center and zoom level
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(currentPosition, 12);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(tempPos, 12);
         googleMap.moveCamera(update);
 
         // Configure the Google Map
@@ -176,6 +171,41 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /*
+    Action methods for map
+     */
+
+    private void engageRidingMode() {
+        ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
+
+        RelativeLayout rideFragment = (RelativeLayout) view.findViewById(R.id.rideFragment);
+
+        // Inflate the status bar view and set the correct gravity
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                TableLayout.LayoutParams.WRAP_CONTENT,
+                TableLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+
+        LayoutInflater layoutInflater = (LayoutInflater)
+                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View statusBarView = layoutInflater.inflate(R.layout.statusbar_ride, container, false);
+        statusBarView.setLayoutParams(params);
+
+        // Add the status bar view to ride fragment
+        rideFragment.addView(statusBarView, 1);
+
+        // Zoom in the camera on the active bus
+        if (mapReady && busStopsReady && googleMap != null) {
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(activeBusLocation.getLatitude(), activeBusLocation.getLongitude()))
+                    .zoom(17)
+                    .tilt(70)
+                    .build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+        }
+    }
+    /*
     Asynchronous tasks
      */
 
@@ -191,8 +221,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
-                    .setFastestInterval(1 * 1000)
-                    .setMaxWaitTime(3 * 1000);
+                    .setFastestInterval(1 * 1000);
         }
 
         @Override
@@ -238,45 +267,18 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 //TODO GUI Alert
                 System.out.println("ELECTRICITY SERVER DOWN");
             }
-            currentLocation = location;
             return null;
         }
 
         @Override
         protected void onPostExecute(Bus bus) {
             super.onPostExecute(bus);
-            //TODO GUI Alert
             if (bus == null) {
+                //TODO GUI Alert
                 System.out.println("NO NEARBY BUS FOUND");
             } else {
-                ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
-
-                RelativeLayout rideFragment = (RelativeLayout) view.findViewById(R.id.rideFragment);
-
-                // Inflate the status bar view and set the correct gravity
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                        TableLayout.LayoutParams.WRAP_CONTENT,
-                        TableLayout.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-
-                LayoutInflater layoutInflater = (LayoutInflater)
-                        getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                View statusBarView = layoutInflater.inflate(R.layout.statusbar_ride, container, false);
-                statusBarView.setLayoutParams(params);
-
-                // Add the status bar view to ride fragment
-                rideFragment.addView(statusBarView, 1);
-
-                if (mapReady && busStopsReady && googleMap != null) {
-
-                    CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(currentPosition)
-                            .zoom(17)
-                            .tilt(70)
-                            .build();
-                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
-                }
+                activeBusLocation = bus.getSimpleLocation();
+                engageRidingMode();
             }
         }
 
