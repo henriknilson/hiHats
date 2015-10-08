@@ -14,18 +14,18 @@ public class ParseDealHelper extends ParseObject {
     }
 
     public String getName() {
-        return getString("Name");
+        return getString("name");
     }
 
     public String getAuthor() {
-        return getString("Author");
+        return getString("author");
     }
 
     public int getPoints() {
-        return getInt("Points");
+        return getInt("points");
     }
 
     public String getDescription() {
-        return getString("Description");
+        return getString("description");
     }
 }
