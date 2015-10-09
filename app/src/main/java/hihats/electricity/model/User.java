@@ -8,17 +8,58 @@ import java.util.ArrayList;
  */
 public class User {
 
+    private static User user = null;
+
     String userName;
     String userId;
     int points;
     ArrayList<Ride> rides = new ArrayList<>();
 
-    public User(String userName, String userId, int points) {
-        this.userName = userName;
-        this.userId = userId;
-        this.points = points;
-        //this.rides = rides.getRides();
+    protected User() {
     }
+
+    public static User getInstance() {
+        if(user == null) {
+            user = new User();
+        }
+        return user;
+    }
+
+
+    /*
+    Getters
+     */
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public ArrayList getUserRides() {
+        return rides;
+    }
+
+    /*
+    Setters
+     */
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setNewPoints(int points) {
+        this.points = points;
+    }
+
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -39,21 +80,5 @@ public class User {
         result = 31 * result + points;
         result = 31 * result + (rides != null ? rides.hashCode() : 0);
         return result;
-    }
-
-    /*
-    Getters
-     */
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public ArrayList getUserRides() {
-        return rides;
     }
 }
