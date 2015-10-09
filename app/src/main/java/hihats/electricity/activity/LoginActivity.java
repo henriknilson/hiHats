@@ -64,7 +64,9 @@ public class LoginActivity extends AppCompatActivity {
                                             "Successfully Logged in",
                                             Toast.LENGTH_LONG).show();
                                     //Create local user
-                                    User.getInstance(user.getUsername(), user.getObjectId(), user.getInt("points"));
+                                    User.getInstance().setUserName(user.getUsername());
+                                    User.getInstance().setUserId(user.getObjectId());
+                                    User.getInstance().setNewPoints(user.getInt("points"));
                                     finish();
                                 } else {
                                     Toast.makeText(
