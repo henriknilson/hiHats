@@ -1,9 +1,7 @@
 package hihats.electricity.util;
 
 import com.parse.ParseUser;
-
-import static hihats.electricity.model.User.getInstance;
-
+import hihats.electricity.model.User;
 
 /**
  * Created by Pertta on 15-10-07.
@@ -12,6 +10,18 @@ import static hihats.electricity.model.User.getInstance;
 
 public class ParseUserHelper {
 
+    private static ParseUserHelper userHelper = null;
+
+    protected ParseUserHelper() {
+    }
+
+    public static ParseUserHelper getInstance() {
+        if(userHelper == null) {
+            userHelper = new ParseUserHelper();
+        }
+        return userHelper;
+    }
+
     public int getPoints() {
         return ParseUser.getCurrentUser().getInt("points");
     }
@@ -19,7 +29,7 @@ public class ParseUserHelper {
     //Sets the new points on parse and local
     public void setPoints(int points) {
         ParseUser.getCurrentUser().put("points", points);
-        getInstance().setNewPoints(points);
+        User.getInstance().setPoints(points);
     }
 
 }

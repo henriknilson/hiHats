@@ -2,6 +2,8 @@ package hihats.electricity.model;
 
 import java.util.ArrayList;
 
+import hihats.electricity.util.ParseRideHelper;
+
 /**
  * Created by Pertta on 15-10-07.
  * This class represents the user
@@ -38,7 +40,7 @@ public class User {
         return points;
     }
 
-    public ArrayList getUserRides() {
+    public ArrayList getRides() {
         return rides;
     }
 
@@ -54,8 +56,13 @@ public class User {
         this.userId = userId;
     }
 
-    public void setNewPoints(int points) {
+    public void setPoints(int points) {
         this.points = points;
+    }
+
+    public void setRides() {
+        this.rides = ParseRideHelper.getInstance().getRides(this.userName);
+
     }
 
 
