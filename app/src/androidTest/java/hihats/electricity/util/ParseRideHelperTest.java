@@ -1,22 +1,12 @@
 package hihats.electricity.util;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityTestCase;
-import android.test.ActivityUnitTestCase;
-
 import com.parse.Parse;
-import com.parse.ParseACL;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-
-import junit.framework.TestCase;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import hihats.electricity.activity.LaunchActivity;
 import hihats.electricity.activity.LoginActivity;
 import hihats.electricity.model.Ride;
 
