@@ -71,7 +71,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     public static RideFragment newInstance() {
         return new RideFragment();
     }
-    
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
