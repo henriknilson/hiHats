@@ -2,8 +2,10 @@ package hihats.electricity.util;
 
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,5 +110,40 @@ public class ParseRideHelper extends ParseObject {
 
         });
         return rides;
+    }
+
+    /*
+    ClassMethod
+     */
+
+    /**
+     *Call this method to easily upload a ride to parse!
+     *
+     * @param date The date the ride was initialized
+     * @param bsf The initial bus stop
+     * @param bst The final bus stop
+     * @param points The points generated
+     * @param distance The distance covered
+     * @param owner The owner of the ride
+     */
+    public void uploadRide(Date date, String bsf, String bst, int points, double distance, String owner ){
+
+        ParseObject ride = ParseObject.create("ParseRideHelper");
+        ride.add("date", date);
+        ride.add("busStopFrom", bsf);
+        ride.add("busStopToo", bst);
+        ride.add("points", points);
+        ride.add("distance", distance);
+        ride.add("owner", owner);
+        ride.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+
+                }else{
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
