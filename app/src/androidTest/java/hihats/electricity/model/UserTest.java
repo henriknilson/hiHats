@@ -13,12 +13,12 @@ public class UserTest extends TestCase {
         super(name);
     }
     public void setUp() {
-        uone = User.getInstance("Test1", "1234", 10);
+        uone = User.getInstance();
         System.out.println("Created singleton user: " + uone);
-        System.out.println(uone.getUserName());
-        utwo = User.getInstance("Test2", "1337", 100);
-        System.out.println(utwo.getUserName());
+        System.out.println(uone.getUserName() + uone.getPoints());
+        utwo = User.getInstance();
         System.out.println("Created singleton user: " + utwo);
+        System.out.println(utwo.getUserName() + utwo.getPoints());
         testUnique();
 
     }
