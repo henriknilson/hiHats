@@ -124,7 +124,6 @@ public class BusDataHelper {
      * Returns a Bus object that is closest to the given location.
      * Calls the API to get all the active buses and then compare distances
      * to obtain the bus that is closest to the given location.
-     * Use this to obtain a bus closest to the device location.
      * This will probably be the bus the user is riding.
      * @param location A location to compare to all the buses in the system.
      * @return A bus object if there is any buses within 20 meters from the given location, null if not.
@@ -140,7 +139,7 @@ public class BusDataHelper {
                         bus.getSimpleLocation().getLatitude(),
                         bus.getSimpleLocation().getLongitude(),
                         location.getLatitude(),
-                        location.getLongitude(),/**/
+                        location.getLongitude(),
                         distanceBetweenBuses);
                 System.out.println("Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
                 if (distanceBetweenBuses[0] < BUS_DISTANCE_METERS) {

@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
@@ -67,17 +68,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     public static RideFragment newInstance() {
         return new RideFragment();
     }
-
-    public GoogleMap getMap() {
-        return this.googleMap;
-    }
-
-    public LatLng getCurrentPosition() {
-        return this.currentPosition;
-    }
-
-
-
+    
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -101,9 +92,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-
-                new AsyncFindBusTask().execute();
-
+                AsyncFindBusTask task = new AsyncFindBusTask();
+                task.execute();
             }
         });
 
@@ -203,8 +193,12 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 return helper.getBusFromSystemId();
             } catch (AccessErrorException | NoDataException e) {
                 //TODO GUI Alert
-                return getBusFromLocation();
+                System.out.println(helper.isGPSEnabled(getContext()));
+                if (helper.isGPSEnabled(getContext())) {
+                    return getBusFromLocation();
+                }
             }
+            return null;
         }
         private Bus getBusFromLocation() {
             // Request GPS updates
@@ -257,14 +251,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 // Add the status bar view to ride fragment
                 rideFragment.addView(statusBarView, 1);
 
-                if (mapReady && busStopsReady && getMap() != null) {
+                if (mapReady && busStopsReady && googleMap != null) {
 
                     CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(getCurrentPosition())
+                            .target(currentPosition)
                             .zoom(17)
                             .tilt(70)
                             .build();
-                    getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
                 }
             }
         }
