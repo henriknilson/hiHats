@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import hihats.electricity.model.BusStop;
 import hihats.electricity.model.Ride;
 
 /**
@@ -20,15 +19,22 @@ import hihats.electricity.model.Ride;
 @ParseClassName("ParseRideHelper")
 public class ParseRideHelper extends ParseObject {
 
+    private static ParseRideHelper rideHelper = null;
+
+    public ParseRideHelper() {
+    }
+
+    public static ParseRideHelper getInstance() {
+        if(rideHelper == null) {
+            rideHelper = new ParseRideHelper();
+        }
+        return rideHelper;
+    }
+
     /*
     Variables
      */
     private ArrayList<Ride> rides;
-
-    /*
-    Constructor
-     */
-    public ParseRideHelper(){}
 
     /*
     Getters
@@ -138,9 +144,9 @@ public class ParseRideHelper extends ParseObject {
         ride.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e == null){
+                if (e == null) {
 
-                }else{
+                } else {
                     e.printStackTrace();
                 }
             }
