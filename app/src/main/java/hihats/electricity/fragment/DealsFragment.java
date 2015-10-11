@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
-import hihats.electricity.util.ParseDealHelper;
 
 public class DealsFragment extends Fragment {
 
@@ -27,6 +28,9 @@ public class DealsFragment extends Fragment {
     ListView dealsListView;
     SimpleAdapter dealsAdapter;
 
+    /**
+     * The data container for the ListView
+     */
     List<HashMap<String, String>> deals;
 
     public static DealsFragment newInstance() {
@@ -42,20 +46,7 @@ public class DealsFragment extends Fragment {
 
         this.deals = new ArrayList<HashMap<String, String>>();
 
-//        fetchDeals();
-
-        for(int i = 0; i < 10; i++) {
-            HashMap<String, String> deal = new HashMap<String, String>();
-
-            deal.put("objectId", "object" + i);
-            deal.put("name", "name" + 1);
-            deal.put("author", "author" + i);
-            deal.put("description", "description" + 1);
-            deal.put("points", "points" + i);
-
-            deals.add(deal);
-        }
-
+        fetchDeals();
     }
 
     @Override
@@ -63,6 +54,7 @@ public class DealsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deals, container, false);
 
+        // "Take these keys from our data array..."
         String[] from = {
                 "name",
                 "author",
@@ -70,6 +62,7 @@ public class DealsFragment extends Fragment {
                 "points"
         };
 
+        // "... and put their values in these places..."
         int[] to = {
                 R.id.dealName,
                 R.id.dealAuthor,
@@ -77,44 +70,56 @@ public class DealsFragment extends Fragment {
                 R.id.dealPoints
         };
 
-        this.dealsListView = (ListView) view.findViewById(R.id.dealsListView);
+        // ...and use these arrays arrays to build a ListView adapter.
         this.dealsAdapter = new SimpleAdapter(getContext(), deals, R.layout.card_deal, from, to);
 
+        this.dealsListView = (ListView) view.findViewById(R.id.dealsListView);
         this.dealsListView.setAdapter(dealsAdapter);
 
         return view;
 
     }
 
+    /**
+     * Fetches Deals from Parse and adds the returned deals to the UI (via the deals array).
+     */
     public void fetchDeals() {
 
         Log.i(TAG, "fetchDeals()");
 
-        ParseQuery<ParseDealHelper> parseDeals = ParseQuery.getQuery(ParseDealHelper.class);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> parseDeals, ParseException e) {
+                if (e == null) {
 
-        Log.i(TAG, "ParseQuery.getQuery()");
+                    Log.d(TAG, "Retrieved " + parseDeals.size() + " deals");
 
-        parseDeals.findInBackground(new FindCallback<ParseDealHelper>() {
-            @Override
-            public void done(List<ParseDealHelper> objects, com.parse.ParseException e) {
+                    for(ParseObject parseObject : parseDeals) {
+                        HashMap<String, String> deal = new HashMap<String, String>();
 
-                Log.i(TAG, "FindCallback.done()");
+                        // Create Deal HashMaps from the parse objects
+                        deal.put("objectId", parseObject.getString("objectId"));
+                        deal.put("name", parseObject.getString("name"));
+                        deal.put("author", parseObject.getString("author"));
+                        deal.put("description", parseObject.getString("description"));
+                        deal.put("points", Integer.toString(
+                                        parseObject.getNumber("points").intValue()
+                                )
+                        );
 
-                for (ParseDealHelper i : objects) {
+                        deals.add(deal);
 
-                    HashMap<String, String> deal = new HashMap<String, String>();
+                        // Notify the ListViews SimpleAdapter adapter to update UI
+                        dealsAdapter.notifyDataSetChanged();
 
-                    deal.put("objectId", i.getObjectId());
-                    deal.put("name", i.getName());
-                    deal.put("author", i.getAuthor());
-                    deal.put("description", i.getDescription());
-                    deal.put("points", Integer.toString(i.getPoints()));
+                    }
 
-                    deals.add(deal);
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
                 }
-
             }
         });
+
     }
 
 }

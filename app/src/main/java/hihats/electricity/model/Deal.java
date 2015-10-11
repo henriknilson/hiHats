@@ -7,13 +7,13 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Deal {
 
-    private int objectId;
+    private String objectId;
     private String name;
     private String author;
     private String description;
     private int points;
 
-    public Deal(int objectId, String name, String author, String description, int points) {
+    public Deal(String objectId, String name, String author, String description, int points) {
         this.objectId = objectId;
         this.name = name;
         this.author = author;
@@ -21,7 +21,7 @@ public class Deal {
         this.points = points;
     }
 
-    public int getobjectId() {
+    public String getobjectId() {
         return objectId;
     }
 
