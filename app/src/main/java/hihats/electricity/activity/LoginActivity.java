@@ -66,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                                     //Create local user
                                     User.getInstance().setUserName(user.getUsername());
                                     User.getInstance().setUserId(user.getObjectId());
-                                    User.getInstance().setNewPoints(user.getInt("points"));
+                                    User.getInstance().setPoints(user.getInt("points"));
+                                    User.getInstance().setRides();
                                     finish();
                                 } else {
                                     Toast.makeText(
