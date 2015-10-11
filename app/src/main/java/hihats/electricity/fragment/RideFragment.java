@@ -53,6 +53,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
     Button findBusButton;
+    Button stopRideButton;
     ViewGroup container;
 
     MapView mapView;

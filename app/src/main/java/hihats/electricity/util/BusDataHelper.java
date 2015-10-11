@@ -165,24 +165,24 @@ public class BusDataHelper {
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
             // Ignore stupid test bus for now
+            DatedPosition loc;
+            float bearing = 0f;
+            try {
+                loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
+            } catch (IllegalArgumentException e) {
+                loc = null;
+            }
             if (!id.equals("Vin_Num_001")) {
-                DatedPosition loc;
-                float bearing;
-                try {
-                    loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
-                } catch (IllegalArgumentException e) {
-                    loc = null;
-                }
                 try {
                     bearing = RmcConverter.rmcToBearing(o.getValue());
                 } catch (IllegalArgumentException e) {
                     bearing = 0f;
                 }
-                Bus bus = new Bus("Ericsson$" + id);
-                bus.setDatedPosition(loc);
-                bus.setBearing(bearing);
-                buses.add(bus);
             }
+            Bus bus = new Bus("Ericsson$" + id);
+            bus.setDatedPosition(loc);
+            bus.setBearing(bearing);
+            buses.add(bus);
         }
         return buses;
     }

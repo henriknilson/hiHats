@@ -56,8 +56,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stop Ride"
-            android:id="@+id/button"
+            android:text="@string/stop_ride"
+            android:id="@+id/stopRideButton"
             android:layout_column="0"
             android:layout_span="3"
             android:background="@color/stop"
