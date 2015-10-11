@@ -6,8 +6,7 @@ import com.parse.ParseObject;
 @ParseClassName("ParseDealHelper")
 public class ParseDealHelper extends ParseObject {
 
-    public ParseDealHelper() {
-    }
+    public ParseDealHelper() { super(); }
 
     public String getObjectId() {
         return getString("objectId");
