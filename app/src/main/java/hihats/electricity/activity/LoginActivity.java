@@ -15,6 +15,7 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import hihats.electricity.R;
+import hihats.electricity.model.User;
 
 /**
  * Created by henriknilson on 18/09/15.
@@ -62,6 +63,11 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),
                                             "Successfully Logged in",
                                             Toast.LENGTH_LONG).show();
+                                    //Create local user
+                                    User.getInstance().setUserName(user.getUsername());
+                                    User.getInstance().setUserId(user.getObjectId());
+                                    User.getInstance().setPoints(user.getInt("points"));
+                                    User.getInstance().setRides();
                                     finish();
                                 } else {
                                     Toast.makeText(

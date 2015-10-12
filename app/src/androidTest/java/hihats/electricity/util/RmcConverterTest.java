@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import java.util.Date;
 
-import hihats.electricity.model.Location;
+import hihats.electricity.model.DatedPosition;
 
 /**
  * Created by fredrikkindstrom on 01/10/15.
@@ -16,7 +16,7 @@ public class RmcConverterTest extends TestCase {
 
         // Test1
         try {
-            RmcConverter.rmcToLocation("$GPGSV,2,1,08", "100");
+            RmcConverter.rmcToPosition("$GPGSV,2,1,08", "100");
         } catch (IllegalArgumentException e) {
             if (e.getMessage().equals("Input must be in GPRMC format")) {
                 thrown = true;
@@ -27,7 +27,7 @@ public class RmcConverterTest extends TestCase {
 
         // Test2
         try {
-            RmcConverter.rmcToLocation("$GPRMC,2,1,08", "100");
+            RmcConverter.rmcToPosition("$GPRMC,2,1,08", "100");
         } catch (IllegalArgumentException e) {
             if (e.getMessage().equals("Illegal GPRMC format: $GPRMC,2,1,08")) {
                 thrown = true;
@@ -38,7 +38,7 @@ public class RmcConverterTest extends TestCase {
         // Test3
         Long millis = System.currentTimeMillis();
         Date date = new Date(millis);
-        Location loc = RmcConverter.rmcToLocation("$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A", millis.toString());
+        DatedPosition loc = RmcConverter.rmcToPosition("$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A", millis.toString());
         assertEquals(48.117300, loc.getLatitude());
         assertEquals(11.516666666666667, loc.getLongitude());
         assertEquals(date, loc.getDate());
