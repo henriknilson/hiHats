@@ -5,22 +5,54 @@
     android:id="@+id/dashboardFragment"
     tools:context="hihats.electricity.fragment.DashboardFragment">
 
+    <LinearLayout
+        android:id="@+id/profilePic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top">
+
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1.00"
-            android:src="@drawable/profile"
             android:layout_centerHorizontal="true"
-            android:gravity="top"/>
+            android:src="@drawable/profile" />
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profilePic"
+        android:paddingTop="10dp"
+        android:layout_centerHorizontal="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Henrik Nilson"
-            android:textColor="@color/primary"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/imageView1"/>
-
+            android:textColor="@color/primary" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TableLayout
+        android:layout_below="@+id/profileName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:stretchColumns="*"
+        android:elevation="2dp" >
+        <TableRow>
+            <TextView
+                android:text="Henrik Nilson"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/primary" />
+        </TableRow>
+        </TableLayout>
+    </LinearLayout>
     <TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="fill_parent"
