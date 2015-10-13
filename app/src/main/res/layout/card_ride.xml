@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="@+id/rideDate"
+        android:layout_height="" />
+
+    <TextView
+        android:layout_width="@+id/rideName"
+        android:layout_height="" />
+
+    <TextView
+        android:layout_width="@+id/rideBusStopFrom"
+        android:layout_height="" />
+
+    <TextView
+        android:layout_width="@+id/rideBusStopToo"
+        android:layout_height="" />
+
+    <TextView
+        android:layout_width="@+id/ridePoints"
+        android:layout_height="" />
+
+    <TextView
+        android:layout_width="@+id/rideDistance"
+        android:layout_height="" />
+
+</LinearLayout>
