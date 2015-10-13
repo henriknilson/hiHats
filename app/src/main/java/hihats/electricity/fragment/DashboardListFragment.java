@@ -2,39 +2,41 @@ package hihats.electricity.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.parse.ParseUser;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
-import hihats.electricity.model.Ride;
-import hihats.electricity.util.ParseRideHelper;
 
 /**
  * Created by axel on 2015-10-13.
  */
 public class DashboardListFragment extends Fragment {
 
+    private static String TAG = "DashBoardListFragment";
+
     SimpleAdapter rideAdapter;
-    ArrayList<Ride> rides;
-    List<HashMap<String,String>> hashRides;
-    ParseRideHelper rideHelper;
+    List<HashMap<String, String>> rides;
     ListView rideListView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        rides = rideHelper.getRides(ParseUser.getCurrentUser().toString());
-        hashRides = new ArrayList<>();
-        setHashRides();
+
+        rides = new ArrayList<>();
+        fetchRides();
     }
 
     @Override
@@ -60,7 +62,7 @@ public class DashboardListFragment extends Fragment {
                 R.id.rideDistance,
         };
 
-        rideAdapter = new SimpleAdapter(getContext(), hashRides, R.layout.card_ride, from, to);
+        rideAdapter = new SimpleAdapter(getContext(), rides, R.layout.card_ride, from, to);
 
         rideListView = (ListView) view.findViewById(R.id.ridesListView);
         rideListView.setAdapter(rideAdapter);
@@ -68,6 +70,7 @@ public class DashboardListFragment extends Fragment {
         return view;
     }
 
+    /*
     public void setHashRides(){
         for(Ride ride : rides){
             HashMap<String, String> hashRide = new HashMap<>();
@@ -80,5 +83,44 @@ public class DashboardListFragment extends Fragment {
             hashRides.add(hashRide);
         }
         rideAdapter.notifyDataSetChanged();
+    }*/
+
+    public void fetchRides() {
+
+        Log.i(TAG, "fetchRides()");
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> parseDeals, ParseException e) {
+                if (e == null) {
+
+                    Log.d(TAG, "Retrieved " + parseDeals.size() + " deals");
+
+                    for (ParseObject parseObject : parseDeals) {
+                        HashMap<String, String> ride = new HashMap<>();
+
+                        // Create Deal HashMaps from the parse objects
+                        ride.put("date", parseObject.getString("date"));
+                        ride.put("busStopFrom", parseObject.getString("busStopFrom"));
+                        ride.put("busStopTo", parseObject.getString("busStopTo"));
+                        ride.put("points", Integer.toString(parseObject.getNumber("points").intValue()));
+                        ride.put("distance", Double.toString(
+                                        parseObject.getNumber("distance").intValue()
+                                )
+                        );
+
+                        rides.add(ride);
+
+                        // Notify the ListViews SimpleAdapter adapter to update UI
+                        rideAdapter.notifyDataSetChanged();
+                    }
+
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                }
+            }
+        });
+
     }
+
 }
