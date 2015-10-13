@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment {
     List<HashMap<String, String>> rides;
     ListView rideListView;
     private LineChartView mChartOne;
-    private final String[] mLabelsOne= {"", "Januari", "", "Februari", "", "Mars", "", "April", "", "Maj", ""};
+    private final String[] mLabelsOne= {"", "Januari", "", "Mars", "", "Maj", "", "Oktober", "", "December", ""};
     private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f}};
 
     public static DashboardFragment newInstance() {
@@ -150,7 +150,7 @@ public class DashboardFragment extends Fragment {
                 .setAxisBorderValues(0, 10, 1)
                 .setXLabels(AxisController.LabelPosition.INSIDE)
                 .setYLabels(AxisController.LabelPosition.NONE)
-                .setLabelsColor(Color.parseColor("#4CAF50"))
+                .setLabelsColor(Color.parseColor("#1B5E20"))
                 .setXAxis(false)
                 .setYAxis(false);
         chart.show();
