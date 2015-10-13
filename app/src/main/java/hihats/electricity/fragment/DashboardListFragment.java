@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.parse.Parse;
@@ -27,6 +28,7 @@ public class DashboardListFragment extends Fragment {
     ArrayList<Ride> rides;
     List<HashMap<String,String>> hashRides;
     ParseRideHelper rideHelper;
+    ListView rideListView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -60,8 +62,12 @@ public class DashboardListFragment extends Fragment {
                 R.id.rideDistance,
         };
 
-        this.rideAdapter = new SimpleAdapter(getContext(), hashRides, R.layout.card_ride, from, to)
+        rideAdapter = new SimpleAdapter(getContext(), hashRides, R.layout.card_ride, from, to);
 
+        rideListView = (ListView) view.findViewById(R.id.ridesListView);
+        rideListView.setAdapter(rideAdapter);
+
+        return view;
     }
 
     public void setHashRides(){
