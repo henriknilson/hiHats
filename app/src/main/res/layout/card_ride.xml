@@ -25,7 +25,8 @@
                 android:layout_gravity="fill_horizontal" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:paddingTop="5dp">
             <TextView
                 android:id="@+id/rideBusStopFrom"
                 android:layout_gravity="fill_horizontal"
@@ -36,7 +37,8 @@
                 android:textColor="@color/background" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:paddingTop="5dp">
             <TextView
                 android:text="Distance"
                 android:textSize="12sp"
@@ -49,7 +51,9 @@
                 android:layout_gravity="fill_horizontal" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
             <TextView
                 android:id="@+id/rideDistance"
                 android:layout_gravity="fill_horizontal"
