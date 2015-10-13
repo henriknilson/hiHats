@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Looper;
@@ -35,6 +36,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -180,16 +186,23 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         for (BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
-                            .icon(BitmapDescriptorFactory.defaultMarker(359))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop))
                             .title(i.getName())
             );
         }
 
-        // Draw a line between the bus stops
-        PolylineOptions options = new PolylineOptions().width(16).color(getResources().getColor(R.color.primary)).geodesic(true);
-        for (BusStop i : busStops){
-            LatLng point = i.getLatLng();
-            options.add(point);
+        // Draw a line along the bus path
+        PolylineOptions options = new PolylineOptions().width(15).color(getResources().getColor(R.color.primary)).geodesic(true);
+        line = googleMap.addPolyline(options);
+        AssetManager am = getContext().getAssets();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(am.open("stops.txt")))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] s = line.split(" ");
+                options.add(new LatLng(Double.parseDouble(s[0].substring(4)), Double.parseDouble(s[1].substring(5))));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         line = googleMap.addPolyline(options);
     }
