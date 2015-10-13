@@ -8,9 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
+import android.widget.TextView;
+import com.parse.ParseUser;
 import hihats.electricity.R;
 
 public class DashboardFragment extends Fragment {
+
+    TextView usernametxt;
 
     public static DashboardFragment newInstance() {
         DashboardFragment fragment = new DashboardFragment();
@@ -41,6 +45,9 @@ public class DashboardFragment extends Fragment {
 
         View buttonGroupView = layoutInflater.inflate(R.layout.buttongroup_dashboard, container, false);
         buttonGroupView.setLayoutParams(params);
+
+        usernametxt = (TextView) view.findViewById(R.id.username);
+        usernametxt.setText(ParseUser.getCurrentUser().getUsername());
 
         //dashBoardFragment.addView(buttonGroupView,1);
 

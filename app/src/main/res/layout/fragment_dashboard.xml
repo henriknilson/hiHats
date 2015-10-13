@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/dashboardFragment"
-    tools:context="hihats.electricity.fragment.DashboardFragment">
+    tools:context=".activity.MainActivity">
 
     <LinearLayout
         android:id="@+id/profilePic"
@@ -14,10 +14,11 @@
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
+            android:padding="5dp"
             android:layout_height="match_parent"
             android:layout_weight="1.00"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/profile" />
+            android:src="@drawable/profilepic" />
 
 
 
@@ -32,7 +33,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Henrik Nilson"
+            android:textSize="24sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:id="@id/username"
+            android:text="username"
             android:textColor="@color/primary" />
     </LinearLayout>
     <LinearLayout
@@ -47,19 +52,23 @@
         android:padding="8dp"
         android:stretchColumns="*"
         android:elevation="2dp" >
-        <TableRow>
+        <TableRow
+            android:gravity="center_vertical">
             <TextView
-                android:text="Henrik Nilson"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/primary" />
+                android:text="@string/dashboard_title_green"
+                android:textSize="12sp"
+                android:textColor="@color/caption"
+                android:layout_gravity="fill_horizontal" />
             <TextView
-                android:text="Henrik Nilson"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/primary" />
+                android:text="@string/dashboard_title_rides"
+                android:textSize="12sp"
+                android:textColor="@color/caption"
+                android:layout_gravity="fill_horizontal" />
             <TextView
-                android:text="Henrik Nilson"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/primary" />
+                android:text="@string/dashboard_title_km"
+                android:textSize="12sp"
+                android:textColor="@color/caption"
+                android:layout_gravity="fill_horizontal" />
         </TableRow>
         </TableLayout>
     </LinearLayout>
@@ -74,17 +83,21 @@
             android:padding="16dp"
             android:stretchColumns="*"
             android:elevation="2dp" >
-            <TableRow>
+            <TableRow
+                android:gravity="center_vertical">
                 <TextView
-                    android:text="Henrik Nilson"
+                    android:text="35"
+                    android:textSize="24sp"
                     android:layout_gravity="fill_horizontal"
                     android:textColor="@color/primary" />
                 <TextView
-                    android:text="Henrik Nilson"
+                    android:text="15"
+                    android:textSize="24sp"
                     android:layout_gravity="fill_horizontal"
                     android:textColor="@color/primary" />
                 <TextView
-                    android:text="Henrik Nilson"
+                    android:text="28"
+                    android:textSize="24sp"
                     android:layout_gravity="fill_horizontal"
                     android:textColor="@color/primary" />
             </TableRow>
