@@ -230,7 +230,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     .tilt(70)
                     .bearing(activeBus.getBearing())
                     .build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1500, null);
         }
 
         // Start looking for new bus positions and update the map when received
@@ -245,7 +245,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .tilt(70)
                 .bearing(activeBus.getBearing())
                 .build();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
     private void stopRideMode() {
         ((ViewGroup) view).removeView(statusBarView);
@@ -260,11 +260,19 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .tilt(0)
                 .bearing(0)
                 .build();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1500, null);
 
         // Stop looking for new bus positions
         getActivity().unregisterReceiver(broadcastReceiver);
         getActivity().stopService(serviceIntent);
+    }
+
+    /*
+    Action methods for ride object
+     */
+
+    private void createRideObject() {
+
     }
 
     /*
@@ -352,7 +360,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             Looper.myLooper().quit();
         }
     }
-
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -366,7 +373,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             updateMap();
         }
     };
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
