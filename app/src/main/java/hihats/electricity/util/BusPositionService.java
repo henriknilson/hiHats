@@ -2,14 +2,22 @@ package hihats.electricity.util;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import hihats.electricity.model.Bus;
+import hihats.electricity.net.AccessErrorException;
+import hihats.electricity.net.NoDataException;
+
 public class BusPositionService extends Service {
 
-    private static String TAG = BusPositionService.class.getSimpleName();
-    private ServiceThread serviceThread;
-    private BusDataHelper busDataHelper = new BusDataHelper();
+    private static final String TAG = BusPositionService.class.getSimpleName();
+    private static final String BROADCAST_ACTION = "hihats.electricity.util.buspositionservice";
+    private static final Handler handler = new Handler();
+    private static final BusDataHelper busDataHelper = new BusDataHelper();
+    private Intent intent;
+    private Bus bus;
     public boolean isRunning = false;
 
     @Override
@@ -21,49 +29,34 @@ public class BusPositionService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
-        serviceThread = new ServiceThread();
-    }
-
-    @Override
-    public synchronized void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy");
-        if(!isRunning){
-            serviceThread.interrupt();
-            serviceThread.stop();
-        }
+        intent = new Intent(BROADCAST_ACTION);
     }
 
     @Override
     public synchronized void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-        Log.d(TAG, "onStart");
-        if (!isRunning){
-            serviceThread.start();
-            isRunning = true;
-        }
+        String busId = intent.getStringExtra("busID");
+        bus = new Bus(busId);
+        handler.removeCallbacks(sendUpdatesToUI);
+        handler.postDelayed(sendUpdatesToUI, 1000);
     }
 
-    public void readBusPosition() {
-
-    }
-
-    class ServiceThread extends Thread {
-        static final long DELAY = 3000;
+    private Runnable sendUpdatesToUI = new Runnable() {
         @Override
-        public void run(){
-            while(isRunning){
-                Log.d(TAG,"Running");
-                try {
-                    readBusPosition();
-                    Thread.sleep(DELAY);
-                } catch (InterruptedException e) {
-                    isRunning = false;
-                    e.printStackTrace();
-                }
-            }
+        public void run() {
+            getNewData();
+            handler.postDelayed(this, 5000);
         }
+    };
 
+    private void getNewData() {
+        try {
+            busDataHelper.updateDataForBus(bus);
+        } catch (AccessErrorException | NoDataException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra("newLat", bus.getDatedPosition().getLatitude());
+        intent.putExtra("newLong", bus.getDatedPosition().getLongitude());
+        intent.putExtra("newBearing", bus.getBearing());
+        sendBroadcast(intent);
     }
-
 }
