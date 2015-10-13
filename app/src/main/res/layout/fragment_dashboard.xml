@@ -37,12 +37,14 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <TableLayout
+        android:layout_height="wrap_content"
         android:layout_below="@+id/profileName"
+        android:id="@+id/titles"
+        android:background="@color/primaryText">
+    <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="8dp"
         android:stretchColumns="*"
         android:elevation="2dp" >
         <TableRow>
@@ -50,7 +52,42 @@
                 android:text="Henrik Nilson"
                 android:layout_gravity="fill_horizontal"
                 android:textColor="@color/primary" />
+            <TextView
+                android:text="Henrik Nilson"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/primary" />
+            <TextView
+                android:text="Henrik Nilson"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/primary" />
         </TableRow>
+        </TableLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titles"
+        android:background="@color/primaryText">
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:stretchColumns="*"
+            android:elevation="2dp" >
+            <TableRow>
+                <TextView
+                    android:text="Henrik Nilson"
+                    android:layout_gravity="fill_horizontal"
+                    android:textColor="@color/primary" />
+                <TextView
+                    android:text="Henrik Nilson"
+                    android:layout_gravity="fill_horizontal"
+                    android:textColor="@color/primary" />
+                <TextView
+                    android:text="Henrik Nilson"
+                    android:layout_gravity="fill_horizontal"
+                    android:textColor="@color/primary" />
+            </TableRow>
         </TableLayout>
     </LinearLayout>
     <TableLayout
