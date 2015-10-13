@@ -42,7 +42,7 @@ public class BusDataHelper {
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-    private final float BUS_DISTANCE_METERS = 800.0f;
+    private final float BUS_DISTANCE_METERS = 8000.0f;
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
@@ -165,24 +165,24 @@ public class BusDataHelper {
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
             // Ignore stupid test bus for now
+            DatedPosition loc;
+            float bearing = 0f;
+            try {
+                loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
+            } catch (IllegalArgumentException e) {
+                loc = null;
+            }
             if (!id.equals("Vin_Num_001")) {
-                DatedPosition loc;
-                float bearing;
-                try {
-                    loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
-                } catch (IllegalArgumentException e) {
-                    loc = null;
-                }
                 try {
                     bearing = RmcConverter.rmcToBearing(o.getValue());
                 } catch (IllegalArgumentException e) {
                     bearing = 0f;
                 }
-                Bus bus = new Bus("Ericsson$" + id);
-                bus.setDatedPosition(loc);
-                bus.setBearing(bearing);
-                buses.add(bus);
             }
+            Bus bus = new Bus("Ericsson$" + id);
+            bus.setDatedPosition(loc);
+            bus.setBearing(bearing);
+            buses.add(bus);
         }
         return buses;
     }

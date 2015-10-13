@@ -1,7 +1,6 @@
 package hihats.electricity.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Looper;
@@ -24,7 +23,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -53,6 +51,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
     Button findBusButton;
+    Button stopRideButton;
     ViewGroup container;
 
     MapView mapView;
