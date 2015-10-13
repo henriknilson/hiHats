@@ -51,22 +51,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         rides = new ArrayList<>();
         fetchRides();
-
-        //HashMap<String, String> ride = new HashMap<>();
-
-        /*
-        // Create Ride HashMaps from the parse objects
-        ride.put("date", "date");
-        ride.put("busStopFrom", "busStopFrom");
-        ride.put("busStopTo", "busStopTo");
-        ride.put("points", "points");
-        ride.put("distance", "distance");
-        */
-
-        //rides.add(ride);
     }
 
     @Override
@@ -96,9 +82,7 @@ public class DashboardFragment extends Fragment {
 
         // Init first chart
         mChartOne = (LineChartView) layout.findViewById(R.id.linechart1);
-
-
-        RelativeLayout dashBoardFragment = (RelativeLayout) layout.findViewById(R.id.dashboardFragment);
+        produceOne(mChartOne);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 TableLayout.LayoutParams.WRAP_CONTENT,
@@ -112,10 +96,6 @@ public class DashboardFragment extends Fragment {
 
         usernametxt = (TextView) layout.findViewById(R.id.username);
         usernametxt.setText(ParseUser.getCurrentUser().getUsername());
-
-        //dashBoardFragment.addView(buttonGroupView,1);
-        produceOne(mChartOne);
-
 
         return layout;
     }
@@ -175,5 +155,4 @@ public class DashboardFragment extends Fragment {
                 .setYAxis(false);
         chart.show();
     }
-
 }
