@@ -49,10 +49,13 @@ import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
-    View view;
+    LayoutInflater inflater;
+    ViewGroup container;
+    View fragmentView;
+    RelativeLayout fragmentViewLayout;
+
     Button findBusButton;
     Button stopRideButton;
-    ViewGroup container;
 
     MapView mapView;
     GoogleMap googleMap;
@@ -79,17 +82,20 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
-        // Create the whole fragment view
-        view = inflater.inflate(R.layout.fragment_ride, container, false);
+        this.inflater = inflater;
         this.container = container;
 
+        // Create the whole fragment fragmentView
+        fragmentView = inflater.inflate(R.layout.fragment_ride, container, false);
+        fragmentViewLayout = (RelativeLayout) fragmentView.findViewById(R.id.rideFragment);
+
         // Create the map view and fetch the map from Google
-        mapView = (MapView) view.findViewById(R.id.mapView);
+        mapView = (MapView) fragmentView.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
         // Create the "Find My Bus" button and set its properties
-        findBusButton = (Button) view.findViewById(R.id.findBusButton);
+        findBusButton = (Button) fragmentView.findViewById(R.id.findBusButton);
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -100,8 +106,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         fetchBusStops();
 
-        // Return the finished view
-        return view;
+        // Return the finished fragmentView
+        return fragmentView;
     }
     @Override
     public void onPause() {
@@ -187,9 +193,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      */
 
     private void engageRidingMode() {
-        ((ViewGroup) findBusButton.getParent()).removeView(findBusButton);
-
-        RelativeLayout rideFragment = (RelativeLayout) view.findViewById(R.id.rideFragment);
+        ((ViewGroup) fragmentView).removeView(findBusButton);
 
         // Inflate the status bar view and set the correct gravity
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -197,14 +201,11 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 TableLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
-        LayoutInflater layoutInflater = (LayoutInflater)
-                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View statusBarView = layoutInflater.inflate(R.layout.statusbar_ride, container, false);
+        View statusBarView = inflater.inflate(R.layout.statusbar_ride, container, false);
         statusBarView.setLayoutParams(params);
 
-        // Add the status bar view to ride fragment
-        rideFragment.addView(statusBarView, 1);
+        // Add the status bar fragmentView to ride fragment
+        fragmentViewLayout.addView(statusBarView, 1);
 
         // Zoom in the camera on the active bus
         if (mapReady && busStopsReady && googleMap != null) {
