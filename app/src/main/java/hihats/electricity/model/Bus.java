@@ -15,7 +15,7 @@ public class Bus {
     private String regNr;
     private String systemId;
     private BusType busType;
-    private SimpleLocation simpleLocation;
+    private DatedPosition datedPosition;
     private float speed;
     private float bearing;
 
@@ -176,8 +176,8 @@ public class Bus {
     public BusType getBusType() {
         return busType;
     }
-    public SimpleLocation getSimpleLocation() {
-        return simpleLocation;
+    public DatedPosition getDatedPosition() {
+        return datedPosition;
     }
     public float getSpeed() {
         return speed;
@@ -190,8 +190,8 @@ public class Bus {
     Setters
      */
 
-    public void setSimpleLocation(SimpleLocation simpleLocation) {
-        this.simpleLocation = simpleLocation;
+    public void setDatedPosition(DatedPosition datedPosition) {
+        this.datedPosition = datedPosition;
     }
     public void setSpeed(float speed) {
         this.speed = speed;

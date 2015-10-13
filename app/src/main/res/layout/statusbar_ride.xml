@@ -4,10 +4,13 @@
     android:id="@+id/statusLayout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:stretchColumns="*"
     android:elevation="2dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="12dp">
 
     <TableRow>
         <TextView
@@ -29,7 +32,7 @@
             android:layout_gravity="fill_horizontal" />
     </TableRow>
 
-    <TableRow>
+    <TableRow android:paddingBottom="8dp">
         <TextView
             android:text="EOL 355"
             android:textColor="@color/background"
@@ -44,6 +47,23 @@
             android:text="3"
             android:textColor="@color/primary"
             android:textSize="18sp"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stop_ride_button_text"
+            android:textSize="14sp"
+            android:id="@+id/stop_ride_button"
+            android:layout_column="0"
+            android:layout_span="3"
+            android:background="@color/stop"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="top" />
     </TableRow>
 
 </TableLayout>

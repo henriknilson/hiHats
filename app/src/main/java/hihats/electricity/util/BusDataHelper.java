@@ -25,7 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import hihats.electricity.model.Bus;
-import hihats.electricity.model.SimpleLocation;
+import hihats.electricity.model.DatedPosition;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.HttpHandler;
 import hihats.electricity.net.NoDataException;
@@ -42,8 +42,8 @@ public class BusDataHelper {
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-
-    private final float BUS_DISTANCE_METERS = 800.0f;
+    private final float BUS_DISTANCE_METERS = 8000.0f;
+    private final String ICOMERA = "https://ombord.info/api/xml/system/";
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
@@ -61,7 +61,7 @@ public class BusDataHelper {
      */
     public boolean isBusAtStop(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, AT_STOP, 30000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         System.out.println(rawData.size());
         ApiDataObject data = rawData.get(0);
@@ -75,12 +75,22 @@ public class BusDataHelper {
         }
     }
 
+    /**
+     * Returns if the device is connected to a wifi network or not.
+     * @param context The context of the application, get this from MainActivity.
+     * @return True if the device is connected to wifi, false if not
+     */
     public boolean isConnectedToWifi(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifiNetwork != null && wifiNetwork.isConnected();
     }
 
+    /**
+     * Returns if the device is able to use the GPS or not.
+     * @param context The context of the application, get this from MainActivity.
+     * @return True if the device is able to use GPS, false if not
+     */
     public boolean isGPSEnabled(Context context) {
         LocationManager locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         return locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -90,9 +100,17 @@ public class BusDataHelper {
     Get data methods
      */
 
+    /**
+     * Returns a Bus object that matches a System Id obtained from the bus onboard network API.
+     * This method can only be successful when the device is connected to the bus onboard wifi.
+     * @return A bus matching the SystemId if its valid, null if not.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
     public Bus getBusFromSystemId() throws AccessErrorException, NoDataException {
-        String response = httpHandler.getResponse("http://feeds.feedburner.com/entrepreneur/startingabusiness.rss");
+        String response = httpHandler.getResponse(ICOMERA, false);
         String result = parseFromXML(response);
+        System.out.println(response);
         if (result != null) {
             try {
                 return new Bus(result);
@@ -104,14 +122,24 @@ public class BusDataHelper {
         }
     }
 
+    /**
+     * Returns a Bus object that is closest to the given location.
+     * Calls the API to get all the active buses and then compare distances
+     * to obtain the bus that is closest to the given location.
+     * This will probably be the bus the user is riding.
+     * @param location A location to compare to all the buses in the system.
+     * @return A bus object if there is any buses within 20 meters from the given location, null if not.
+     * @throws AccessErrorException When the http request failed and the data can not be obtained.
+     * @throws NoDataException When the http request was successful but no data was found.
+     */
     public Bus getBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
         ArrayList<Bus> allBuses = getLastDataForAllBuses();
         for (Bus bus : allBuses) {
-            if (bus.getSimpleLocation() != null && location != null) {
+            if (bus.getDatedPosition() != null && location != null) {
                 float[] distanceBetweenBuses = new float[1];
                 Location.distanceBetween(
-                        bus.getSimpleLocation().getLatitude(),
-                        bus.getSimpleLocation().getLongitude(),
+                        bus.getDatedPosition().getLatitude(),
+                        bus.getDatedPosition().getLongitude(),
                         location.getLatitude(),
                         location.getLongitude(),
                         distanceBetweenBuses);
@@ -132,38 +160,48 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public ArrayList<Bus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(null, null, GPS_RMC, 10000);
-        String response = httpHandler.getResponse(url);
+        String url = urlRetriever.getUrl(null, null, GPS_RMC, 8000);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
-            SimpleLocation loc;
+            // Ignore stupid test bus for now
+            DatedPosition loc;
+            float bearing = 0f;
             try {
-                loc = RmcConverter.rmcToLocation(o.getValue(), o.getTimestamp());
+                loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
             } catch (IllegalArgumentException e) {
                 loc = null;
             }
+            if (!id.equals("Vin_Num_001")) {
+                try {
+                    bearing = RmcConverter.rmcToBearing(o.getValue());
+                } catch (IllegalArgumentException e) {
+                    bearing = 0f;
+                }
+            }
             Bus bus = new Bus("Ericsson$" + id);
-            bus.setSimpleLocation(loc);
+            bus.setDatedPosition(loc);
+            bus.setBearing(bearing);
             buses.add(bus);
         }
         return buses;
     }
 
     /**
-     * Returns the last known location for a certain bus.
+     * Returns the last known position for a certain bus.
      * @param bus The bus you want to get data for.
-     * @return The most recent location for said bus as a SimpleLocation object.
+     * @return The most recent location for said bus as a DatedPosition object.
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public SimpleLocation getLastLocationForBus(Bus bus) throws AccessErrorException, NoDataException {
+    public DatedPosition getLastPositionForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
-        return RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
+        return RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
     }
 
     /**
@@ -176,7 +214,7 @@ public class BusDataHelper {
     public String getNextStopForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, NEXT_STOP, 15000);
         System.out.println(url);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         return data.getValue();
@@ -191,7 +229,7 @@ public class BusDataHelper {
      */
     public int getTotalDistanceForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, TOTAL_VEHICLE_DISTANCE, 10000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         int data = Integer.parseInt(rawData.get(0).getValue());
         return data * 5;
@@ -209,13 +247,13 @@ public class BusDataHelper {
      */
     public void updateDataForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
-        SimpleLocation loc = RmcConverter.rmcToLocation(data.getValue(), data.getTimestamp());
+        DatedPosition loc = RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
         float speed = RmcConverter.rmcToSpeed(data.getValue());
         float bearing = RmcConverter.rmcToBearing(data.getValue());
-        bus.setSimpleLocation(loc);
+        bus.setDatedPosition(loc);
         bus.setSpeed(speed);
         bus.setBearing(bearing);
     }

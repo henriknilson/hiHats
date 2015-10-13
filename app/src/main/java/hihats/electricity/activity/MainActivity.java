@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import hihats.electricity.R;
+import hihats.electricity.adapter.TabsAdapter;
 
 /**
  * Created by henriknilson on 18/09/15.
