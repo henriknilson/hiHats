@@ -56,13 +56,13 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/stop_ride"
-            android:id="@+id/stopRideButton"
+            android:text="@string/stop_ride_button_text"
+            android:textSize="14sp"
+            android:id="@+id/stop_ride_button"
             android:layout_column="0"
             android:layout_span="3"
             android:background="@color/stop"
             android:layout_marginTop="4dp"
-            android:singleLine="false"
             android:layout_gravity="top" />
     </TableRow>
 

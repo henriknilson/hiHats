@@ -53,6 +53,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     ViewGroup container;
     View fragmentView;
     RelativeLayout fragmentViewLayout;
+    View statusBarView;
 
     Button findBusButton;
     Button stopRideButton;
@@ -95,7 +96,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
 
         // Create the "Find My Bus" button and set its properties
-        findBusButton = (Button) fragmentView.findViewById(R.id.findBusButton);
+        findBusButton = (Button) fragmentView.findViewById(R.id.find_bus_button);
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -200,12 +201,19 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 TableLayout.LayoutParams.WRAP_CONTENT,
                 TableLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-
-        View statusBarView = inflater.inflate(R.layout.statusbar_ride, container, false);
-        statusBarView.setLayoutParams(params);
+        statusBarView = inflater.inflate(R.layout.statusbar_ride, container, false);
 
         // Add the status bar fragmentView to ride fragment
-        fragmentViewLayout.addView(statusBarView, 1);
+        fragmentViewLayout.addView(statusBarView, params);
+
+        // Create the "Stop Ride" button and set its properties
+        stopRideButton = (Button) fragmentView.findViewById(R.id.stop_ride_button);
+        stopRideButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View arg0) {
+                System.out.println("PRESSED");
+            }
+        });
 
         // Zoom in the camera on the active bus
         if (mapReady && busStopsReady && googleMap != null) {
