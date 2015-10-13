@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -55,7 +54,6 @@ public class DashboardListFragment extends Fragment {
 
         int[] to = {
                 R.id.rideDate,
-                R.id.rideName,
                 R.id.rideBusStopFrom,
                 R.id.rideBusStopToo,
                 R.id.ridePoints,
