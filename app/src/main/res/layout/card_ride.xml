@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*"
+    android:layout_gravity="center"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="12dp">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/primary" />
+
+        <TableRow
+            android:background="#00FF90"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp"
+            >
+            <TextView
+                android:id="@+id/rideDate"
+                android:paddingLeft="20dp"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/background"
+                android:text="Date"/>
+
+
+            <TextView
+                android:id="@+id/rideBusStopFrom"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/background"
+                android:text="Start"/>
+
+            <TextView
+                android:id="@+id/rideBusStopToo"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/background"
+                android:text="Stop"/>
+
+            <TextView
+                android:id="@+id/ridePoints"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/background"
+                android:text="Points"/>
+
+            <TextView
+                android:id="@+id/rideDistance"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/background"
+                android:text="Distance"/>
+        </TableRow>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/primary" />
+</TableLayout>
