@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Looper;
@@ -35,6 +36,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -180,16 +186,23 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         for (BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
-                            .icon(BitmapDescriptorFactory.defaultMarker(359))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop))
                             .title(i.getName())
             );
         }
 
-        // Draw a line between the bus stops
-        PolylineOptions options = new PolylineOptions().width(16).color(getResources().getColor(R.color.primary)).geodesic(true);
-        for (BusStop i : busStops){
-            LatLng point = i.getLatLng();
-            options.add(point);
+        // Draw a line along the bus path
+        PolylineOptions options = new PolylineOptions().width(15).color(getResources().getColor(R.color.primary)).geodesic(true);
+        line = googleMap.addPolyline(options);
+        AssetManager am = getContext().getAssets();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(am.open("stops.txt")))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] s = line.split(" ");
+                options.add(new LatLng(Double.parseDouble(s[0].substring(4)), Double.parseDouble(s[1].substring(5))));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         line = googleMap.addPolyline(options);
     }
@@ -230,7 +243,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     .tilt(70)
                     .bearing(activeBus.getBearing())
                     .build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1500, null);
         }
 
         // Start looking for new bus positions and update the map when received
@@ -245,7 +258,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .tilt(70)
                 .bearing(activeBus.getBearing())
                 .build();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 3000, null);
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
     private void stopRideMode() {
         ((ViewGroup) view).removeView(statusBarView);
@@ -260,11 +273,19 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .tilt(0)
                 .bearing(0)
                 .build();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1500, null);
 
         // Stop looking for new bus positions
         getActivity().unregisterReceiver(broadcastReceiver);
         getActivity().stopService(serviceIntent);
+    }
+
+    /*
+    Action methods for ride object
+     */
+
+    private void createRideObject() {
+
     }
 
     /*
@@ -352,7 +373,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             Looper.myLooper().quit();
         }
     }
-
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -366,7 +386,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             updateMap();
         }
     };
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
