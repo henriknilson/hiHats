@@ -1,26 +1,25 @@
 package hihats.electricity.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
-import android.widget.TextView;
-
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
+import com.db.chart.Tools;
+import com.db.chart.model.LineSet;
+import com.db.chart.view.AxisController;
+import com.db.chart.view.LineChartView;
 import hihats.electricity.R;
 
 public class DashboardFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private TextView t;
+    private LineChartView mChartOne;
+    private final String[] mLabelsOne= {"", "Januari", "", "Februari", "", "Mars", "", "April", "", "Maj", ""};
+    private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f}};
 
     public static DashboardFragment newInstance() {
         DashboardFragment fragment = new DashboardFragment();
@@ -38,26 +37,15 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        int oldTtlDistance = 15;
-        int newTtlDistance = 30;
 
-        t = (TextView) view.findViewById(R.id.co2);
-        t.setText("You have saved " + Double.toString(calcCo2(getRideDistance(oldTtlDistance, newTtlDistance))) + " kg CO2 today!");
+        View layout = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        GraphView graph = (GraphView) view.findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-           new DataPoint (0,1),
-           new DataPoint (1,5),
-           new DataPoint (2,3),
-           new DataPoint (3,2),
-           new DataPoint (4,6),
-        });
+        // Init first chart
+        mChartOne = (LineChartView) layout.findViewById(R.id.linechart1);
 
-        graph.addSeries(series);
 
-        RelativeLayout dashBoardFragment = (RelativeLayout) view.findViewById(R.id.dashboardFragment);
+        RelativeLayout dashBoardFragment = (RelativeLayout) layout.findViewById(R.id.dashboardFragment);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 TableLayout.LayoutParams.WRAP_CONTENT,
@@ -70,27 +58,31 @@ public class DashboardFragment extends Fragment {
         buttonGroupView.setLayoutParams(params);
 
         dashBoardFragment.addView(buttonGroupView,1);
+        produceOne(mChartOne);
 
 
-        return view;
+        return layout;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
+    public void produceOne(LineChartView chart){
 
-    public int getRideDistance(int busPreviousTtlDistance, int busNewTtlDistance){
-        return busNewTtlDistance - busPreviousTtlDistance;
-    }
+        LineSet dataset = new LineSet(mLabelsOne, mValuesOne[0]);
+        dataset.setColor(Color.parseColor("#4CAF50"))
+                .setFill(Color.parseColor("#A5D6A7"))
+                .setSmooth(true);
+        chart.addData(dataset);
 
-    public double calcCo2(int distance){
-        double co2 = 0.3;
-        return distance * co2;
+        chart.setTopSpacing(Tools.fromDpToPx(15))
+                .setBorderSpacing(Tools.fromDpToPx(0))
+                .setAxisBorderValues(0, 10, 1)
+                .setXLabels(AxisController.LabelPosition.INSIDE)
+                .setYLabels(AxisController.LabelPosition.NONE)
+                .setLabelsColor(Color.parseColor("#4CAF50"))
+                .setXAxis(false)
+                .setYAxis(false);
+        chart.show();
+
+
     }
 }
