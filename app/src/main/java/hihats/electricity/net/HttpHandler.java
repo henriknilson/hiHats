@@ -24,12 +24,18 @@ public class HttpHandler {
      * Returns a String with data if the request was successful, null if not.
      * This can be XML or JSON so parsing is needed later.
      * @param url The url query to access the api with.
+     * @param keyEnabled
      * @return A raw String with data when successful, null if not successful.
      * @throws AccessErrorException If there was an error connection to the server.
      */
-    public String getResponse(String url) throws AccessErrorException {
+    public String getResponse(String url, boolean keyEnabled) throws AccessErrorException {
         try {
-            HttpURLConnection connection = establishConnection(url, KEY);
+            HttpURLConnection connection;
+            if (keyEnabled) {
+                connection = establishConnection(url, KEY);
+            } else {
+                connection = establishConnection(url, null);
+            }
             if (connectionWasSuccessful(connection)) {
                 return getResponseFromStream(connection);
             } else {
