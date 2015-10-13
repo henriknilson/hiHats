@@ -245,7 +245,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .tilt(70)
                 .bearing(activeBus.getBearing())
                 .build();
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 3000, null);
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
     }
     private void stopRideMode() {
         ((ViewGroup) view).removeView(statusBarView);
