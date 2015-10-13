@@ -80,6 +80,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/data"
         android:layout_below="@+id/titles"
         android:background="@color/primaryText">
         <TableLayout
@@ -110,6 +111,23 @@
                     android:textColor="@color/primary" />
             </TableRow>
         </TableLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/data">
+        <ListView
+            android:id="@+id/ridesListView"
+            android:layout_below="@+id/titles"
+            android:layout_margin="8dp"
+            android:divider="@null"
+            android:dividerHeight="8dp"
+            android:listSelector="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:headerDividersEnabled="true"
+            android:footerDividersEnabled="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
     <TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
