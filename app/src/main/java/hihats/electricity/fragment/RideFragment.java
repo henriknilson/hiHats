@@ -1,6 +1,9 @@
 package hihats.electricity.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Looper;
@@ -35,6 +38,7 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import hihats.electricity.R;
@@ -45,6 +49,7 @@ import hihats.electricity.model.DatedPosition;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
+import hihats.electricity.util.BusPositionService;
 import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
@@ -54,6 +59,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     View view;
     RelativeLayout fragmentViewLayout;
     View statusBarView;
+    Intent serviceIntent;
 
     Button findBusButton;
     Button stopRideButton;
@@ -65,7 +71,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     ArrayList<BusStop> busStops;
 
     Bus activeBus;
-    DatedPosition activeBusPosition;
 
     // Promise/async variables
     private GoogleApiClient googleApiClient;
@@ -79,6 +84,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        serviceIntent = new Intent(getActivity(), BusPositionService.class);
         googleApiClient = ((MainActivity)getActivity()).googleApiClient;
     }
     @Override
@@ -219,15 +225,28 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         if (mapReady && busStopsReady && googleMap != null) {
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(activeBusPosition.getLatitude(), activeBusPosition.getLongitude()))
+                    .target(new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude()))
                     .zoom(17)
                     .tilt(70)
                     .bearing(activeBus.getBearing())
                     .build();
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
         }
+
+        // Start looking for new bus positions and update the map when received
+        serviceIntent.putExtra("busDgw", activeBus.getDgw());
+        getActivity().startService(serviceIntent);
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BusPositionService.BROADCAST_ACTION));
     }
-    private void updateMap() {}
+    private void updateMap() {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude()))
+                .zoom(17)
+                .tilt(70)
+                .bearing(activeBus.getBearing())
+                .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 3000, null);
+    }
     private void stopRideMode() {
         ((ViewGroup) view).removeView(statusBarView);
 
@@ -242,6 +261,10 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .bearing(0)
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000, null);
+
+        // Stop looking for new bus positions
+        getActivity().unregisterReceiver(broadcastReceiver);
+        getActivity().stopService(serviceIntent);
     }
 
     /*
@@ -317,7 +340,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 System.out.println("NO NEARBY BUS FOUND");
             } else {
                 activeBus = bus;
-                activeBusPosition = bus.getDatedPosition();
                 engageRideMode();
             }
         }
@@ -330,6 +352,20 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             Looper.myLooper().quit();
         }
     }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long time = intent.getLongExtra("newTime", activeBus.getDatedPosition().getDate().getTime());
+            double latitude = intent.getDoubleExtra("newLat", activeBus.getDatedPosition().getLatitude());
+            double longitude = intent.getDoubleExtra("newLong", activeBus.getDatedPosition().getLongitude());
+            float bearing = intent.getFloatExtra("newBearing", activeBus.getBearing());
+            DatedPosition newPos = new DatedPosition(latitude, longitude, new Date(time));
+            activeBus.setDatedPosition(newPos);
+            activeBus.setBearing(bearing);
+            updateMap();
+        }
+    };
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

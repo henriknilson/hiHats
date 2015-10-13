@@ -22,8 +22,6 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/profilepic" />
 
-
-
     </LinearLayout>
     <LinearLayout
         android:id="@+id/profileName"
@@ -115,7 +113,17 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/chart"
         android:layout_below="@id/data">
+        <com.db.chart.view.LineChartView
+            android:id="@+id/linechart1"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chart">
         <ListView
             android:id="@+id/ridesListView"
             android:layout_below="@+id/titles"

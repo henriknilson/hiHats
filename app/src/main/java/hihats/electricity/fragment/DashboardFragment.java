@@ -1,6 +1,7 @@
 package hihats.electricity.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,16 +13,19 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import com.db.chart.Tools;
+import com.db.chart.model.LineSet;
+import com.db.chart.view.AxisController;
+import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
 
@@ -33,6 +37,9 @@ public class DashboardFragment extends Fragment {
     SimpleAdapter rideAdapter;
     List<HashMap<String, String>> rides;
     ListView rideListView;
+    private LineChartView mChartOne;
+    private final String[] mLabelsOne= {"", "Januari", "", "Februari", "", "Mars", "", "April", "", "Maj", ""};
+    private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f}};
 
     public static DashboardFragment newInstance() {
         DashboardFragment fragment = new DashboardFragment();
@@ -66,9 +73,6 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-
-
         String[] from = {
                 "date",
                 "busStopFrom",
@@ -84,14 +88,17 @@ public class DashboardFragment extends Fragment {
                 R.id.ridePoints,
                 R.id.rideDistance,
         };
-
+        View layout = inflater.inflate(R.layout.fragment_dashboard, container, false);
         rideAdapter = new SimpleAdapter(getContext(), rides, R.layout.card_ride, from, to);
 
-        rideListView = (ListView) view.findViewById(R.id.ridesListView);
+        rideListView = (ListView) layout.findViewById(R.id.ridesListView);
         rideListView.setAdapter(rideAdapter);
 
+        // Init first chart
+        mChartOne = (LineChartView) layout.findViewById(R.id.linechart1);
 
-        RelativeLayout dashBoardFragment = (RelativeLayout) view.findViewById(R.id.dashboardFragment);
+
+        RelativeLayout dashBoardFragment = (RelativeLayout) layout.findViewById(R.id.dashboardFragment);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 TableLayout.LayoutParams.WRAP_CONTENT,
@@ -103,13 +110,14 @@ public class DashboardFragment extends Fragment {
         View buttonGroupView = layoutInflater.inflate(R.layout.buttongroup_dashboard, container, false);
         buttonGroupView.setLayoutParams(params);
 
-        usernametxt = (TextView) view.findViewById(R.id.username);
+        usernametxt = (TextView) layout.findViewById(R.id.username);
         usernametxt.setText(ParseUser.getCurrentUser().getUsername());
 
         //dashBoardFragment.addView(buttonGroupView,1);
+        produceOne(mChartOne);
 
 
-        return view;
+        return layout;
     }
 
     public void fetchRides() {
@@ -147,7 +155,25 @@ public class DashboardFragment extends Fragment {
                 }
             }
         });
+    }
 
+    public void produceOne(LineChartView chart){
+
+        LineSet dataset = new LineSet(mLabelsOne, mValuesOne[0]);
+        dataset.setColor(Color.parseColor("#4CAF50"))
+                .setFill(Color.parseColor("#A5D6A7"))
+                .setSmooth(true);
+        chart.addData(dataset);
+
+        chart.setTopSpacing(Tools.fromDpToPx(15))
+                .setBorderSpacing(Tools.fromDpToPx(0))
+                .setAxisBorderValues(0, 10, 1)
+                .setXLabels(AxisController.LabelPosition.INSIDE)
+                .setYLabels(AxisController.LabelPosition.NONE)
+                .setLabelsColor(Color.parseColor("#4CAF50"))
+                .setXAxis(false)
+                .setYAxis(false);
+        chart.show();
     }
 
 }
