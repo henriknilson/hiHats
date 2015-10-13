@@ -30,6 +30,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -77,6 +78,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     ArrayList<BusStop> busStops;
 
     Bus activeBus;
+    LatLng activeBusPosition;
+    Marker activeBusMarker;
 
     // Promise/async variables
     private GoogleApiClient googleApiClient;
@@ -166,7 +169,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         });
     }
     private void setupMap() {
-
         // Set map center to start and zoom level
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(startMapOverview, 13);
         googleMap.moveCamera(update);
@@ -182,14 +184,16 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapUi.setZoomGesturesEnabled(false);
     }
     private void setupBusStops() {
+        /*
         // Place the bus stops on the map
         for (BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop_small))
                             .title(i.getName())
             );
         }
+        */
 
         // Draw a line along the bus path
         PolylineOptions options = new PolylineOptions().width(15).color(getResources().getColor(R.color.primary)).geodesic(true);
@@ -236,9 +240,15 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Zoom in the camera on the active bus
         if (mapReady && busStopsReady && googleMap != null) {
+            activeBusPosition = new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude());
+
+            activeBusMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(activeBusPosition)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus))
+                    .title(activeBus.getRegNr()));
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude()))
+                    .target(activeBusPosition)
                     .zoom(17)
                     .tilt(70)
                     .bearing(activeBus.getBearing())
@@ -252,6 +262,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BusPositionService.BROADCAST_ACTION));
     }
     private void updateMap() {
+        activeBusMarker.setPosition(activeBusPosition);
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude()))
                 .zoom(17)
@@ -274,6 +285,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .bearing(0)
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1500, null);
+        activeBusMarker.remove();
 
         // Stop looking for new bus positions
         getActivity().unregisterReceiver(broadcastReceiver);
@@ -383,6 +395,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             DatedPosition newPos = new DatedPosition(latitude, longitude, new Date(time));
             activeBus.setDatedPosition(newPos);
             activeBus.setBearing(bearing);
+            activeBusPosition = new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude());
             updateMap();
         }
     };
