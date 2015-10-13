@@ -12,6 +12,10 @@
     <string name="title_section2">Profile</string>
     <string name="title_section3">Deals</string>
 
+    <string name="dashboard_title_green">Green Points</string>
+    <string name="dashboard_title_rides">Number of rides</string>
+    <string name="dashboard_title_km">Kilometers on bus</string>
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="find_bus_button_text">Find my bus</string>
     <string name="stop_ride_button_text">Stop ride</string>
