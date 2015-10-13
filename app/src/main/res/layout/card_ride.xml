@@ -1,61 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:stretchColumns="*"
-    android:layout_gravity="center"
+    android:elevation="2dp"
+    android:background="@color/white"
     android:paddingLeft="16dp"
     android:paddingTop="16dp"
     android:paddingRight="16dp"
     android:paddingBottom="12dp">
 
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/primary" />
+        <TableRow>
+            <TextView
+                android:text="From"
+                android:textSize="12sp"
+                android:textColor="@color/caption"
+                android:layout_gravity="fill_horizontal" />
+            <TextView
+                android:text="To"
+                android:textSize="12sp"
+                android:textColor="@color/caption"
+                android:layout_gravity="fill_horizontal" />
+        </TableRow>
 
         <TableRow
-            android:background="#00FF90"
-            android:paddingTop="10dp"
-            android:paddingBottom="20dp"
-            >
-            <TextView
-                android:id="@+id/rideDate"
-                android:paddingLeft="20dp"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:text="Date"/>
-
-
+            android:paddingTop="5dp">
             <TextView
                 android:id="@+id/rideBusStopFrom"
                 android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:text="Start"/>
-
+                android:textColor="@color/background" />
             <TextView
                 android:id="@+id/rideBusStopToo"
                 android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:text="Stop"/>
+                android:textColor="@color/background" />
+        </TableRow>
 
+        <TableRow
+            android:paddingTop="5dp">
             <TextView
-                android:id="@+id/ridePoints"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:text="Points"/>
+                android:text="Distance"
+                android:textSize="12sp"
+                android:textColor="@color/caption"
+                android:layout_gravity="fill_horizontal" />
+            <TextView
+                android:text="Points"
+                android:textSize="12sp"
+                android:textColor="@color/caption"
+                android:layout_gravity="fill_horizontal" />
+        </TableRow>
 
+        <TableRow
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
             <TextView
                 android:id="@+id/rideDistance"
                 android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:text="Distance"/>
+                android:textColor="@color/background"/>
+            <TextView
+                android:id="@+id/ridePoints"
+                android:layout_gravity="fill_horizontal"
+                android:textColor="@color/background" />
         </TableRow>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/primary" />
 </TableLayout>
