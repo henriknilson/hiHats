@@ -55,7 +55,7 @@ public class DashboardListFragment extends Fragment {
         };
 
         int[] to = {
-                R.id.rideDate,
+                //R.id.rideDate,
                 R.id.rideBusStopFrom,
                 R.id.rideBusStopToo,
                 R.id.ridePoints,
