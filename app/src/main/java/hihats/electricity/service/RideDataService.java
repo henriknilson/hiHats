@@ -59,7 +59,7 @@ public class RideDataService extends Service {
             intent.putExtra("totalDistance", totalDistance);
             sendBroadcast(intent);
         } catch (AccessErrorException | NoDataException e) {
-            e.printStackTrace();
+            Log.d(TAG, "Network error");
         }
     }
 

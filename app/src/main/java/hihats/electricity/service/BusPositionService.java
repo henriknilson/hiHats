@@ -58,7 +58,7 @@ public class BusPositionService extends Service {
             intent.putExtra("newBearing", bus.getBearing());
             sendBroadcast(intent);
         } catch (AccessErrorException | NoDataException e) {
-            e.printStackTrace();
+            Log.d(TAG, "Network error");
         }
     }
 
