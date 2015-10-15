@@ -26,7 +26,7 @@
         <activity android:name=".activity.MainActivity" >
         </activity>
 
-        <service android:name=".util.BusPositionService" />
+        <service android:name=".service.BusPositionService" />
 
         <!-- Google maps api key -->
         <meta-data

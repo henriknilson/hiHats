@@ -51,11 +51,10 @@ import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
 import hihats.electricity.model.DatedPosition;
-import hihats.electricity.model.Ride;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
-import hihats.electricity.util.BusPositionService;
+import hihats.electricity.service.BusPositionService;
 import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
@@ -82,11 +81,17 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Boolean mapReady = false;
     private Boolean busStopsReady = false;
 
-    // Active objects variables
+    // Active bus variables
     private Bus activeBus;
     private LatLng activeBusPosition;
     private Marker activeBusMarker;
-    Ride activeRide;
+
+    // Active ride variables
+    private Date activeRideDate;
+    private String activeRideBusStopFrom;
+    private String activeRideBusStopToo;
+    private int activeRidePoints;
+    private double activeRideDistance;
 
     public static RideFragment newInstance() {
         return new RideFragment();
@@ -298,10 +303,11 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     Action methods for ride object
      */
 
-    private void createRideObject() {
+    private void startLoggingRide() {
+        activeRideDate = new Date(System.currentTimeMillis());
 
     }
-    private void updateRideObject() {
+    private void updateRide() {
 
     }
 
