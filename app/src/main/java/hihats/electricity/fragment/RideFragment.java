@@ -30,11 +30,13 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -52,11 +54,13 @@ import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
 import hihats.electricity.model.DatedPosition;
+import hihats.electricity.model.Ride;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.util.BusPositionService;
 import hihats.electricity.util.ParseBusStopHelper;
+import hihats.electricity.util.ParseUserHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
@@ -72,11 +76,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     MapView mapView;
     GoogleMap googleMap;
-    final LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
+    LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
     Polyline line;
     ArrayList<BusStop> busStops;
 
     Bus activeBus;
+    LatLng activeBusPosition;
+    Marker activeBusMarker;
+    Ride activeRide;
 
     // Promise/async variables
     private GoogleApiClient googleApiClient;
@@ -166,7 +173,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         });
     }
     private void setupMap() {
-
         // Set map center to start and zoom level
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(startMapOverview, 13);
         googleMap.moveCamera(update);
@@ -182,14 +188,16 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapUi.setZoomGesturesEnabled(false);
     }
     private void setupBusStops() {
+        /*
         // Place the bus stops on the map
         for (BusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop_small))
                             .title(i.getName())
             );
         }
+        */
 
         // Draw a line along the bus path
         PolylineOptions options = new PolylineOptions().width(15).color(getResources().getColor(R.color.primary)).geodesic(true);
@@ -236,9 +244,15 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Zoom in the camera on the active bus
         if (mapReady && busStopsReady && googleMap != null) {
+            activeBusPosition = new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude());
+
+            activeBusMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(activeBusPosition)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus))
+                    .title(activeBus.getRegNr()));
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude()))
+                    .target(activeBusPosition)
                     .zoom(17)
                     .tilt(70)
                     .bearing(activeBus.getBearing())
@@ -252,8 +266,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(BusPositionService.BROADCAST_ACTION));
     }
     private void updateMap() {
+        activeBusMarker.setPosition(activeBusPosition);
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude()))
+                .target(activeBusPosition)
                 .zoom(17)
                 .tilt(70)
                 .bearing(activeBus.getBearing())
@@ -274,6 +289,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 .bearing(0)
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1500, null);
+        activeBusMarker.remove();
 
         // Stop looking for new bus positions
         getActivity().unregisterReceiver(broadcastReceiver);
@@ -285,6 +301,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      */
 
     private void createRideObject() {
+        
+    }
+    private void updateRideObject() {
 
     }
 
@@ -292,6 +311,10 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     Asynchronous tasks
      */
 
+    /**
+     * Finds bus either via Network or via GPS, then sets the 'activeBus'
+     * variable and runs the 'engageRideMode' method
+     */
     private class AsyncFindBusTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
 
         private BusDataHelper helper = new BusDataHelper();
@@ -383,6 +406,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             DatedPosition newPos = new DatedPosition(latitude, longitude, new Date(time));
             activeBus.setDatedPosition(newPos);
             activeBus.setBearing(bearing);
+            activeBusPosition = new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude());
             updateMap();
         }
     };
