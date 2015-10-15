@@ -25,7 +25,7 @@ public class ParseRideHelper extends ParseObject {
     }
 
     public static ParseRideHelper getInstance() {
-        if(rideHelper == null) {
+        if (rideHelper == null) {
             rideHelper = new ParseRideHelper();
         }
         return rideHelper;
@@ -76,8 +76,8 @@ public class ParseRideHelper extends ParseObject {
      *
      * @return distance, from parse
      */
-    public double getDistance(){
-        return getDouble("distance");
+    public int getDistance(){
+        return getInt("distance");
     }
 
     /**
@@ -132,7 +132,7 @@ public class ParseRideHelper extends ParseObject {
      * @param distance The distance covered
      * @param owner The owner of the ride
      */
-    public void uploadRide(Date date, String bsf, String bst, int points, double distance, String owner ){
+    public void uploadRide(Date date, String bsf, String bst, int points, int distance, String owner ){
 
         ParseObject ride = ParseObject.create("ParseRideHelper");
         ride.add("date", date);

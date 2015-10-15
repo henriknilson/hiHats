@@ -63,7 +63,6 @@ public class BusDataHelper {
         String url = urlRetriever.getUrl(bus.getDgw(), null, AT_STOP, 30000);
         String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
-        System.out.println(rawData.size());
         ApiDataObject data = rawData.get(0);
         switch (data.getValue()) {
             case "true":
@@ -213,7 +212,6 @@ public class BusDataHelper {
      */
     public String getNextStopForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, NEXT_STOP, 15000);
-        System.out.println(url);
         String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
