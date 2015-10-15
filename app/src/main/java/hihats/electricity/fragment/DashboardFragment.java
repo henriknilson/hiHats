@@ -60,7 +60,6 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         String[] from = {
-                "date",
                 "busStopFrom",
                 "busStopToo",
                 "points",
@@ -68,7 +67,6 @@ public class DashboardFragment extends Fragment {
         };
 
         int[] to = {
-                //R.id.rideDate,
                 R.id.rideBusStopFrom,
                 R.id.rideBusStopToo,
                 R.id.ridePoints,
@@ -115,12 +113,11 @@ public class DashboardFragment extends Fragment {
                         HashMap<String, String> ride = new HashMap<>();
 
                         // Create Ride HashMaps from the parse objects
-                        ride.put("date", parseObject.getString("date"));
                         ride.put("busStopFrom", parseObject.getString("busStopFrom"));
-                        ride.put("busStopTo", parseObject.getString("busStopTo"));
+                        ride.put("busStopToo", parseObject.getString("busStopToo"));
                         ride.put("points", Integer.toString(parseObject.getNumber("points").intValue()));
                         ride.put("distance", Double.toString(
-                                        parseObject.getNumber("distance").intValue()
+                                        parseObject.getNumber("distance").doubleValue()
                                 )
                         );
 

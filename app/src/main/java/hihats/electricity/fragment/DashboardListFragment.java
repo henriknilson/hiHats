@@ -46,7 +46,6 @@ public class DashboardListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dlistview, container, false);
 
         String[] from = {
-                "date",
                 "busStopFrom",
                 "busStopToo",
                 "points",
@@ -55,7 +54,6 @@ public class DashboardListFragment extends Fragment {
         };
 
         int[] to = {
-                //R.id.rideDate,
                 R.id.rideBusStopFrom,
                 R.id.rideBusStopToo,
                 R.id.ridePoints,
