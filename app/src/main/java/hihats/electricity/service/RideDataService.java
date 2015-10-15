@@ -1,4 +1,4 @@
-package hihats.electricity.util;
+package hihats.electricity.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,11 +8,12 @@ import android.util.Log;
 import hihats.electricity.model.Bus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
+import hihats.electricity.util.BusDataHelper;
 
-public class BusPositionService extends Service {
+public class RideDataService extends Service {
 
-    public static final String TAG = BusPositionService.class.getSimpleName();
-    public static final String BROADCAST_ACTION = "hihats.electricity.util.BusPositionService";
+    public static final String TAG = RideDataService.class.getSimpleName();
+    public static final String BROADCAST_ACTION = "hihats.electricity.service.RideDataService";
     private static final BusDataHelper busDataHelper = new BusDataHelper();
     private MyThread thread;
     private boolean isRunning = false;
@@ -50,23 +51,24 @@ public class BusPositionService extends Service {
 
     private void getNewData() {
         try {
-            busDataHelper.updateDataForBus(bus);
-            intent.putExtra("newTime", bus.getDatedPosition().getDate().getTime());
-            intent.putExtra("newLat", bus.getDatedPosition().getLatitude());
-            intent.putExtra("newLong", bus.getDatedPosition().getLongitude());
-            intent.putExtra("newBearing", bus.getBearing());
+            boolean isBusAtStop = busDataHelper.isBusAtStop(bus);
+            String nextStop = busDataHelper.getNextStopForBus(bus);
+            int totalDistance = busDataHelper.getTotalDistanceForBus(bus);
+            intent.putExtra("isBusAtStop", isBusAtStop);
+            intent.putExtra("nextStop", nextStop);
+            intent.putExtra("totalDistance", totalDistance);
             sendBroadcast(intent);
         } catch (AccessErrorException | NoDataException e) {
-            e.printStackTrace();
+            Log.d(TAG, "Network error");
         }
     }
 
     class MyThread extends Thread {
-        static final long DELAY = 5000;
+        static final long DELAY = 10000;
         @Override
         public void run(){
             while (isRunning){
-                Log.d(TAG,"Running");
+                Log.d(TAG,"Updating ride data...");
                 try {
                     getNewData();
                     Thread.sleep(DELAY);

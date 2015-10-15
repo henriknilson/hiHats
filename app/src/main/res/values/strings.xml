@@ -19,5 +19,8 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="find_bus_button_text">Find my bus</string>
     <string name="stop_ride_button_text">Stop ride</string>
+    <string name="statusbar_riding_bus">Riding bus</string>
+    <string name="statusbar_next_stop">Next stop</string>
+    <string name="statusbar_points">Points</string>
 
 </resources>
