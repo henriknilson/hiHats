@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -53,11 +54,13 @@ import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
 import hihats.electricity.model.DatedPosition;
+import hihats.electricity.model.Ride;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.util.BusPositionService;
 import hihats.electricity.util.ParseBusStopHelper;
+import hihats.electricity.util.ParseUserHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
@@ -73,13 +76,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     MapView mapView;
     GoogleMap googleMap;
-    final LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
+    LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
     Polyline line;
     ArrayList<BusStop> busStops;
 
     Bus activeBus;
     LatLng activeBusPosition;
     Marker activeBusMarker;
+    Ride activeRide;
 
     // Promise/async variables
     private GoogleApiClient googleApiClient;
@@ -264,7 +268,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private void updateMap() {
         activeBusMarker.setPosition(activeBusPosition);
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(activeBus.getDatedPosition().getLatitude(), activeBus.getDatedPosition().getLongitude()))
+                .target(activeBusPosition)
                 .zoom(17)
                 .tilt(70)
                 .bearing(activeBus.getBearing())
@@ -297,6 +301,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      */
 
     private void createRideObject() {
+        
+    }
+    private void updateRideObject() {
 
     }
 
@@ -304,6 +311,10 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     Asynchronous tasks
      */
 
+    /**
+     * Finds bus either via Network or via GPS, then sets the 'activeBus'
+     * variable and runs the 'engageRideMode' method
+     */
     private class AsyncFindBusTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
 
         private BusDataHelper helper = new BusDataHelper();
