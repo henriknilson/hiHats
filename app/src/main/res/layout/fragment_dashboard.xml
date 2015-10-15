@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/dashboardFragment"
     tools:context=".activity.MainActivity"
-    android:background="@color/primaryLight">
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/profilePic"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profileName"
         android:id="@+id/titles"
-        android:background="@color/primaryText">
+        android:background="@color/white">
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/data"
         android:layout_below="@+id/titles"
-        android:background="@color/primaryText">
+        android:background="@color/white">
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -262,18 +262,18 @@ public class BusDataHelper {
     Help methods
      */
 
-    private String parseFromXML(String xml) {
+    private String parseFromXML(String xml) throws NoDataException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document document = null;
-        final String GROUP = "channel";
-        final String VALUE = "title";
+        final String GROUP = "system";
+        final String VALUE = "system_id";
         String result = null;
         try {
             builder = factory.newDocumentBuilder();
             document = builder.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            throw new NoDataException();
         }
         if (document != null) {
             document.getDocumentElement().normalize();
@@ -290,7 +290,6 @@ public class BusDataHelper {
             return null;
         }
     }
-
     private ArrayList<ApiDataObject> parseFromJSON(String s) throws NoDataException {
         Gson gson = new Gson();
         ApiDataObject[] fromStream = gson.fromJson(s, ApiDataObject[].class);
@@ -302,7 +301,6 @@ public class BusDataHelper {
         }
         return dataObjects;
     }
-
     private class ApiDataObject {
 
         private final String resourceSpec;
