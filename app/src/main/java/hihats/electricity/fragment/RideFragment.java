@@ -36,12 +36,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,35 +57,36 @@ import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.util.BusPositionService;
 import hihats.electricity.util.ParseBusStopHelper;
-import hihats.electricity.util.ParseUserHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
-    LayoutInflater inflater;
-    ViewGroup container;
-    View view;
-    RelativeLayout fragmentViewLayout;
-    View statusBarView;
-    Intent serviceIntent;
-
-    Button findBusButton;
-    Button stopRideButton;
-
-    MapView mapView;
-    GoogleMap googleMap;
-    LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
-    Polyline line;
-    ArrayList<BusStop> busStops;
-
-    Bus activeBus;
-    LatLng activeBusPosition;
-    Marker activeBusMarker;
-    Ride activeRide;
-
-    // Promise/async variables
+    // System variables
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private View view;
+    private RelativeLayout fragmentViewLayout;
+    private View statusBarView;
+    private Intent serviceIntent;
     private GoogleApiClient googleApiClient;
+
+    // Buttons
+    private Button findBusButton;
+    private Button stopRideButton;
+
+    // Map variables
+    private MapView mapView;
+    private GoogleMap googleMap;
+    private final LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
+    private Polyline line;
+    private ArrayList<BusStop> busStops;
     private Boolean mapReady = false;
     private Boolean busStopsReady = false;
+
+    // Active objects variables
+    private Bus activeBus;
+    private LatLng activeBusPosition;
+    private Marker activeBusMarker;
+    Ride activeRide;
 
     public static RideFragment newInstance() {
         return new RideFragment();
@@ -301,7 +299,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      */
 
     private void createRideObject() {
-        
+
     }
     private void updateRideObject() {
 
@@ -317,7 +315,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      */
     private class AsyncFindBusTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
 
-        private BusDataHelper helper = new BusDataHelper();
+        private final BusDataHelper helper = new BusDataHelper();
         private LocationRequest locationRequest;
         private Location location;
 
@@ -396,7 +394,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             Looper.myLooper().quit();
         }
     }
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             long time = intent.getLongExtra("newTime", activeBus.getDatedPosition().getDate().getTime());
