@@ -64,7 +64,7 @@ public class RideDataService extends Service {
     }
 
     class MyThread extends Thread {
-        static final long DELAY = 10000;
+        static final long DELAY = 12000;
         @Override
         public void run(){
             while (isRunning){

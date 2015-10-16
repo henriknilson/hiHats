@@ -279,7 +279,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             cameraPosition = new CameraPosition.Builder()
                     .target(activeBusPosition)
                     .zoom(17)
-                    .tilt(70)
+                    .tilt(70) 
                     .build();
         }
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
@@ -385,7 +385,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         @Override
         protected Bus doInBackground(Void... params) {
-            System.out.println("INSIDE TASK");
+            System.out.println("FIND BUS TASK EXECUTED");
             if (helper.isConnectedToWifi(getContext())) {
                 return getBusFromNetwork();
             } else if (helper.isGPSEnabled(getContext())) {
