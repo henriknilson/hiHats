@@ -5,7 +5,6 @@
     <color name="primaryDark">#1B5E20</color>
     <color name="primaryLight">#A5D6A7</color>
     <color name="accent">#E8F5E9</color>
-    <color name="stop">#F44336</color>
     <color name="primaryText">#ffffff</color>
     <color name="secondaryText">#ffffff</color>
     <color name="baseSheet">#EEEEEE</color>

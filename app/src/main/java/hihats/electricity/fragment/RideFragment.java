@@ -231,6 +231,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Add the status bar view to ride fragment
         fragmentViewLayout.addView(statusBarView, params);
+        statusBarBusLabel.setText(activeBus.getRegNr());
 
         // Create the "Stop Ride" button and set its properties
         stopRideButton = (Button) view.findViewById(R.id.stop_ride_button);
@@ -291,7 +292,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
     private void updateStatusBar() {
-        statusBarBusLabel.setText(activeBus.getRegNr());
         statusBarNextStopLabel.setText(activeBusNextStop);
         statusBarPointsLabel.setText(String.format("%,d", rideDistance));
     }
