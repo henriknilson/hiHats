@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.res.AssetManager;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.dd.processbutton.iml.ActionProcessButton;
+import com.dd.processbutton.iml.SubmitProcessButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -46,6 +49,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
@@ -72,7 +77,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private GoogleApiClient googleApiClient;
 
     // Buttons
-    private Button findBusButton;
+    private ActionProcessButton findBusButton;
     private Button stopRideButton;
 
     // Status bar view
@@ -133,7 +138,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
 
         // Create the "Find My Bus" button and set its properties
-        findBusButton = (Button) view.findViewById(R.id.find_bus_button);
+        findBusButton = (ActionProcessButton) view.findViewById(R.id.find_bus_button);
+        findBusButton.setMode(ActionProcessButton.Mode.ENDLESS);
         findBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
@@ -225,6 +231,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Add the status bar view to ride fragment
         fragmentViewLayout.addView(statusBarView, params);
+        statusBarBusLabel.setText(activeBus.getRegNr());
 
         // Create the "Stop Ride" button and set its properties
         stopRideButton = (Button) view.findViewById(R.id.stop_ride_button);
@@ -279,13 +286,12 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             cameraPosition = new CameraPosition.Builder()
                     .target(activeBusPosition)
                     .zoom(17)
-                    .tilt(70) 
+                    .tilt(70)
                     .build();
         }
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
     private void updateStatusBar() {
-        statusBarBusLabel.setText(activeBus.getRegNr());
         statusBarNextStopLabel.setText(activeBusNextStop);
         statusBarPointsLabel.setText(String.format("%,d", rideDistance));
     }
@@ -377,6 +383,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            findBusButton.setProgress(50);
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
@@ -420,10 +427,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     return bus;
                 }
             } catch (AccessErrorException e) {
-                //TODO GUI Alert
                 System.out.println("NO INTERNET CONNECTION");
             } catch (NoDataException e) {
-                //TODO GUI Alert
                 System.out.println("ELECTRICITY SERVER DOWN");
             }
             return null;
@@ -433,9 +438,19 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         protected void onPostExecute(Bus bus) {
             super.onPostExecute(bus);
             if (bus == null) {
-                //TODO GUI Alert
                 System.out.println("NO NEARBY BUS FOUND");
+                findBusButton.setProgress(-1);
+                findBusButton.setText(R.string.error_no_bus_found);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        findBusButton.setProgress(0);
+                        findBusButton.setText(R.string.find_bus_button_text);
+                    }
+                }, 2000);
             } else {
+                findBusButton.setProgress(0);
                 activeBus = bus;
                 engageRideMode();
             }
