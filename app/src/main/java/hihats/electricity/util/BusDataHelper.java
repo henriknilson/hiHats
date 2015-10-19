@@ -42,7 +42,8 @@ public class BusDataHelper {
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-    private final float BUS_DISTANCE_METERS = 8000.0f;
+    private final float BUS_DISTANCE_METERS = 800.0f;
+    private final String ICOMERA = "https://ombord.info/api/xml/system/";
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
@@ -60,9 +61,8 @@ public class BusDataHelper {
      */
     public boolean isBusAtStop(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, AT_STOP, 30000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
-        System.out.println(rawData.size());
         ApiDataObject data = rawData.get(0);
         switch (data.getValue()) {
             case "true":
@@ -107,8 +107,9 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public Bus getBusFromSystemId() throws AccessErrorException, NoDataException {
-        String response = httpHandler.getResponse("http://feeds.feedburner.com/entrepreneur/startingabusiness.rss");
+        String response = httpHandler.getResponse(ICOMERA, false);
         String result = parseFromXML(response);
+        System.out.println(response);
         if (result != null) {
             try {
                 return new Bus(result);
@@ -159,30 +160,30 @@ public class BusDataHelper {
      */
     public ArrayList<Bus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(null, null, GPS_RMC, 8000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ArrayList<Bus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
             // Ignore stupid test bus for now
-            DatedPosition loc;
-            float bearing = 0f;
-            try {
-                loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
-            } catch (IllegalArgumentException e) {
-                loc = null;
-            }
             if (!id.equals("Vin_Num_001")) {
+                DatedPosition loc;
+                float bearing = 0f;
+                try {
+                    loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
+                } catch (IllegalArgumentException e) {
+                    loc = null;
+                }
                 try {
                     bearing = RmcConverter.rmcToBearing(o.getValue());
                 } catch (IllegalArgumentException e) {
                     bearing = 0f;
                 }
+                Bus bus = new Bus("Ericsson$" + id);
+                bus.setDatedPosition(loc);
+                bus.setBearing(bearing);
+                buses.add(bus);
             }
-            Bus bus = new Bus("Ericsson$" + id);
-            bus.setDatedPosition(loc);
-            bus.setBearing(bearing);
-            buses.add(bus);
         }
         return buses;
     }
@@ -196,7 +197,7 @@ public class BusDataHelper {
      */
     public DatedPosition getLastPositionForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         return RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
@@ -211,8 +212,7 @@ public class BusDataHelper {
      */
     public String getNextStopForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, NEXT_STOP, 15000);
-        System.out.println(url);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         return data.getValue();
@@ -227,7 +227,7 @@ public class BusDataHelper {
      */
     public int getTotalDistanceForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, TOTAL_VEHICLE_DISTANCE, 10000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         int data = Integer.parseInt(rawData.get(0).getValue());
         return data * 5;
@@ -245,7 +245,7 @@ public class BusDataHelper {
      */
     public void updateDataForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
-        String response = httpHandler.getResponse(url);
+        String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         DatedPosition loc = RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
@@ -260,18 +260,18 @@ public class BusDataHelper {
     Help methods
      */
 
-    private String parseFromXML(String xml) {
+    private String parseFromXML(String xml) throws NoDataException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document document = null;
-        final String GROUP = "channel";
-        final String VALUE = "title";
+        final String GROUP = "system";
+        final String VALUE = "system_id";
         String result = null;
         try {
             builder = factory.newDocumentBuilder();
             document = builder.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            throw new NoDataException();
         }
         if (document != null) {
             document.getDocumentElement().normalize();
@@ -288,7 +288,6 @@ public class BusDataHelper {
             return null;
         }
     }
-
     private ArrayList<ApiDataObject> parseFromJSON(String s) throws NoDataException {
         Gson gson = new Gson();
         ApiDataObject[] fromStream = gson.fromJson(s, ApiDataObject[].class);
@@ -300,7 +299,6 @@ public class BusDataHelper {
         }
         return dataObjects;
     }
-
     private class ApiDataObject {
 
         private final String resourceSpec;

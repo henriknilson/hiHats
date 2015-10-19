@@ -14,19 +14,19 @@
 
     <TableRow>
         <TextView
-            android:text="Riding bus"
+            android:text="@string/statusbar_riding_bus"
             android:textSize="12sp"
             android:textColor="@color/caption"
             android:layout_gravity="fill_horizontal" />
 
         <TextView
-            android:text="Next stop"
+            android:text="@string/statusbar_next_stop"
             android:textSize="12sp"
             android:textColor="@color/caption"
             android:layout_gravity="fill_horizontal" />
 
         <TextView
-            android:text="Points"
+            android:text="@string/statusbar_points"
             android:textSize="12sp"
             android:textColor="@color/caption"
             android:layout_gravity="fill_horizontal" />
@@ -34,17 +34,20 @@
 
     <TableRow android:paddingBottom="8dp">
         <TextView
-            android:text="EOL 355"
+            android:id="@+id/statusview_current_bus"
+            android:text="Loading..."
             android:textColor="@color/background"
             android:textSize="18sp"/>
 
         <TextView
-            android:text="Johanneberg"
+            android:id="@+id/statusview_current_next_stop"
+            android:text="Loading...                   "
             android:textColor="@color/background"
             android:textSize="18sp"/>
 
         <TextView
-            android:text="3"
+            android:id="@+id/statusview_current_points"
+            android:text="0"
             android:textColor="@color/primary"
             android:textSize="18sp"/>
     </TableRow>
@@ -56,13 +59,13 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/stop_ride"
-            android:id="@+id/stopRideButton"
+            android:text="@string/stop_ride_button_text"
+            android:textSize="14sp"
+            android:id="@+id/stop_ride_button"
             android:layout_column="0"
             android:layout_span="3"
-            android:background="@color/stop"
+            android:background="@color/red_error"
             android:layout_marginTop="4dp"
-            android:singleLine="false"
             android:layout_gravity="top" />
     </TableRow>
 

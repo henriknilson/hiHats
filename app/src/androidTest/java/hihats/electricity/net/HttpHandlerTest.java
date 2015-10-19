@@ -17,7 +17,7 @@ public class HttpHandlerTest extends TestCase {
     public void testGetResponseNoAccess() throws Exception {
         boolean thrown = false;
         try {
-            tester.getResponse("bad url");
+            tester.getResponse("bad url", true);
         } catch (AccessErrorException e) {
             thrown = true;
         }

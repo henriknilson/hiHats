@@ -22,7 +22,7 @@
                 android:id="@+id/txtlogintitle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/LogInTitle"
+                android:text="@string/login_title"
                 android:textColor="@color/primaryText"
                 android:padding="5dp"
                 android:layout_marginTop="40dp"/>
@@ -39,7 +39,7 @@
                 android:id="@+id/txtusername"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Username"
+                android:text="@string/username"
                 android:textColor="@color/textLabel" />
 
             <EditText
@@ -55,7 +55,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/username"
-                android:text="@string/Password"
+                android:text="@string/password"
                 android:textColor="@color/textLabel" />
 
             <EditText
@@ -76,7 +76,7 @@
                     android:id="@+id/login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/LoginBtn"
+                    android:text="@string/login_button_text"
                     android:background="@color/primary"
                     android:layout_gravity="left"
                     android:layout_weight="0.5"
@@ -86,7 +86,7 @@
                     android:id="@+id/signup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/SignupBtn"
+                    android:text="@string/signup_button_text"
                     android:background="@color/primary"
                     android:layout_marginTop="16dp"
                     android:layout_weight="0.5"
