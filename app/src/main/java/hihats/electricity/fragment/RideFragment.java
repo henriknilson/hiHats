@@ -1,5 +1,7 @@
 package hihats.electricity.fragment;
 
+import android.animation.TypeEvaluator;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -288,8 +290,24 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
     private void updateStatusBar() {
+        /*
         statusBarNextStopLabel.setText(activeBusNextStop);
         statusBarPointsLabel.setText(String.format("%,d", rideDistance));
+        */
+        ValueAnimator animator = new ValueAnimator();
+        animator.setObjectValues(0, 10000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                statusBarPointsLabel.setText(String.valueOf(animation.getAnimatedValue()));
+            }
+        });
+        animator.setEvaluator(new TypeEvaluator<Integer>() {
+            public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+                return Math.round(startValue + (endValue - startValue) * fraction);
+            }
+        });
+        animator.setDuration(20000);
+        animator.start();
     }
     private void stopRideMode() {
         ((ViewGroup) view).removeView(statusBarView);
