@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         tabLayout.setupWithViewPager(viewPager);
 
         // Locate Button in activity_main.xml
-        logout = (Button) findViewById(R.id.logout);
+       // logout = (Button) findViewById(R.id.logout);
 
         // Logout Button Click Listener
         logout.setOnClickListener(new View.OnClickListener() {
