@@ -20,7 +20,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.dd.processbutton.iml.ActionProcessButton;
-import com.dd.processbutton.iml.SubmitProcessButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -49,15 +48,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
 import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
 import hihats.electricity.model.DatedPosition;
-import hihats.electricity.model.Ride;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
@@ -326,7 +322,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      */
 
     private void startLoggingRide() {
-        rideDate = new Date(System.currentTimeMillis());
+        rideDate = activeBus.getDatedPosition().getDate();
         rideBusStopFrom = getClosestBusStop();
         rideBusStopToo = null;
         ridePoints = 0;
