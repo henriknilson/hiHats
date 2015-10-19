@@ -410,7 +410,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         protected Bus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
             Bus bus = new Bus("Ericsson$100021");
-            DatedPosition pos = new DatedPosition(57.70679833333333, 11.937838333333334, new Date(System.currentTimeMillis()));
+            DatedPosition pos = new DatedPosition(57.689256666666665, 11.973361666666667, new Date(System.currentTimeMillis()));
             bus.setDatedPosition(pos);
             return bus;
         }
