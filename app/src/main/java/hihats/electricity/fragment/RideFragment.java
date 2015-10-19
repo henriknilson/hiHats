@@ -143,6 +143,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View arg0) {
                 AsyncFindBusTask task = new AsyncFindBusTask();
                 task.execute();
+
             }
         });
 
@@ -294,8 +295,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         statusBarNextStopLabel.setText(activeBusNextStop);
         statusBarPointsLabel.setText(String.format("%,d", rideDistance));
         */
+        statusBarNextStopLabel.setText("Lindholmsplatsen");
         ValueAnimator animator = new ValueAnimator();
-        animator.setObjectValues(0, 10000);
+        animator.setObjectValues(0, 2000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 statusBarPointsLabel.setText(String.valueOf(animation.getAnimatedValue()));
@@ -306,7 +308,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 return Math.round(startValue + (endValue - startValue) * fraction);
             }
         });
-        animator.setDuration(20000);
+        animator.setDuration(30000);
         animator.start();
     }
     private void stopRideMode() {
@@ -407,67 +409,21 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         @Override
         protected Bus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
-            if (helper.isConnectedToWifi(getContext())) {
-                return getBusFromNetwork();
-            } else if (helper.isGPSEnabled(getContext())) {
-                return getBusFromLocation();
-            }
-            return null;
-        }
-
-        private Bus getBusFromNetwork() {
+            Bus bus = new Bus("Ericsson$100021");
             try {
-                return helper.getBusFromSystemId();
+                helper.updateDataForBus(bus);
             } catch (AccessErrorException | NoDataException e) {
-                //TODO GUI Alert
-                if (helper.isGPSEnabled(getContext())) {
-                    return getBusFromLocation();
-                }
+                e.printStackTrace();
             }
-            return null;
-        }
-        private Bus getBusFromLocation() {
-            // Request GPS updates
-            if (Looper.myLooper() == null) {
-                Looper.prepare();
-            }
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            // Start waiting... when this is done, we'll have the location in this.location.
-            Looper.loop();
-            // Now go use the location to load some data.
-            try {
-                Bus bus = helper.getBusNearestLocation(location);
-                if (bus != null) {
-                    return bus;
-                }
-            } catch (AccessErrorException e) {
-                System.out.println("NO INTERNET CONNECTION");
-            } catch (NoDataException e) {
-                System.out.println("ELECTRICITY SERVER DOWN");
-            }
-            return null;
+            return bus;
         }
 
         @Override
         protected void onPostExecute(Bus bus) {
             super.onPostExecute(bus);
-            if (bus == null) {
-                System.out.println("NO NEARBY BUS FOUND");
-                findBusButton.setProgress(-1);
-                findBusButton.setText(R.string.error_no_bus_found);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        findBusButton.setProgress(0);
-                        findBusButton.setText(R.string.find_bus_button_text);
-                    }
-                }, 2000);
-            } else {
-                findBusButton.setProgress(0);
-                activeBus = bus;
-                engageRideMode();
-            }
+            findBusButton.setProgress(0);
+            activeBus = bus;
+            engageRideMode();
         }
 
         @Override
