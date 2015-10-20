@@ -72,10 +72,14 @@ public class ProfileFragment extends Fragment {
                 R.id.ridePoints,
                 R.id.rideDistance,
         };
-        View layout = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        View layout = inflater.inflate(R.layout.fragment_dlistview, container, false);
+        View header = inflater.inflate(R.layout.fragment_dashboard, null, false);
+
         rideAdapter = new SimpleAdapter(getContext(), rides, R.layout.card_ride, from, to);
 
         rideListView = (ListView) layout.findViewById(R.id.ridesListView);
+        rideListView.addHeaderView(header);
         rideListView.setAdapter(rideAdapter);
 
         // Init first chart
