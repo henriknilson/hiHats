@@ -1,10 +1,14 @@
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:id="@+id/dashboardFragment"
     tools:context=".activity.MainActivity"
-    android:background="@color/white">
+    android:background="@color/baseSheet">
 
     <LinearLayout
         android:id="@+id/profilePic"
@@ -43,9 +47,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profileName"
+        android:layout_below="@+id/chart"
         android:id="@+id/titles"
-        android:background="@color/white">
+        android:background="@color/baseSheet">
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -76,11 +80,21 @@
         </TableLayout>
     </LinearLayout>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chart"
+        android:layout_below="@id/profileName">
+        <com.db.chart.view.LineChartView
+            android:id="@+id/linechart1"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"/>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/data"
         android:layout_below="@+id/titles"
-        android:background="@color/white">
+        android:background="@color/baseSheet">
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -113,20 +127,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/chart"
         android:layout_below="@id/data">
-        <com.db.chart.view.LineChartView
-            android:id="@+id/linechart1"
-            android:layout_width="match_parent"
-            android:layout_height="210dp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/chart">
         <ListView
             android:id="@+id/ridesListView"
-            android:layout_below="@+id/titles"
+            android:layout_below="@+id/data"
             android:layout_margin="8dp"
             android:divider="@null"
             android:dividerHeight="8dp"
@@ -137,4 +141,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
+
 </RelativeLayout>
+</ScrollView>
