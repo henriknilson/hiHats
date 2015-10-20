@@ -7,7 +7,6 @@
 
     <ListView
         android:id="@+id/dealsListView"
-        android:layout_margin="8dp"
         android:divider="@null"
         android:dividerHeight="8dp"
         android:listSelector="@android:color/transparent"
