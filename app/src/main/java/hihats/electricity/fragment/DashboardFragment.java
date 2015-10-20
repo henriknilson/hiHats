@@ -142,7 +142,7 @@ public class DashboardFragment extends Fragment {
                 .setSmooth(true);
         chart.addData(dataset);
 
-        chart.setTopSpacing(Tools.fromDpToPx(15))
+        chart.setTopSpacing(Tools.fromDpToPx(10))
                 .setBorderSpacing(Tools.fromDpToPx(0))
                 .setAxisBorderValues(0, 10, 1)
                 .setXLabels(AxisController.LabelPosition.INSIDE)
