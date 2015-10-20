@@ -2,88 +2,91 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:layout_height="120dp"
+    android:background="@color/baseSheet"
+    android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="112dp"
-        android:background="@drawable/map" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:background="@drawable/card"
+        android:layout_margin="8dp"
+        android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:background="@drawable/bild" />
 
-    <TableLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:stretchColumns="*"
-        android:background="@color/white"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="12dp" >
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_weight="1.0"
+            android:stretchColumns="*"
+            android:background="@color/white"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
-        <TableRow
-            android:paddingTop="3dp">
-            <TextView
-                android:text="From"
-                android:textSize="12sp"
-                android:textColor="@color/caption"
-                android:layout_gravity="fill_horizontal" />
+            <TableRow
+                android:paddingTop="6dp">
+                <TextView
+                    android:text="From"
+                    android:textSize="12sp"
+                    android:textColor="@color/caption"
+                    android:layout_gravity="fill_horizontal" />
 
-            <TextView
-                android:text="To"
-                android:textSize="12sp"
-                android:textColor="@color/caption"
-                android:layout_gravity="fill_horizontal" />
-        </TableRow>
+                <TextView
+                    android:text="To"
+                    android:textSize="12sp"
+                    android:textColor="@color/caption"
+                    android:layout_gravity="fill_horizontal" />
+            </TableRow>
 
-        <TableRow
-            android:paddingTop="3dp">
-            <TextView
-                android:id="@+id/rideBusStopFrom"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:textSize="18sp"/>
+            <TableRow
+                android:paddingTop="6dp">
+                <TextView
+                    android:id="@+id/rideBusStopFrom"
+                    android:layout_gravity="fill_horizontal"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"/>
 
-            <TextView
-                android:id="@+id/rideBusStopToo"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:textSize="18sp"/>
-        </TableRow>
+                <TextView
+                    android:id="@+id/rideBusStopToo"
+                    android:layout_gravity="fill_horizontal"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"/>
+            </TableRow>
 
-        <TableRow
-            android:paddingTop="3dp">
+            <TableRow
+                android:paddingTop="6dp">
+                <TextView
+                    android:text="Points"
+                    android:textSize="12sp"
+                    android:textColor="@color/caption"
+                    android:layout_gravity="fill_horizontal" />
+                <TextView
+                    android:text="Distance"
+                    android:textSize="12sp"
+                    android:textColor="@color/caption"
+                    android:layout_gravity="fill_horizontal" />
+            </TableRow>
 
-            <TextView
-                android:text="Points"
-                android:textSize="12sp"
-                android:textColor="@color/caption"
-                android:layout_gravity="fill_horizontal" />
-            <TextView
-                android:text="Distance"
-                android:textSize="12sp"
-                android:textColor="@color/caption"
-                android:layout_gravity="fill_horizontal" />
-
-        </TableRow>
-
-        <TableRow
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp">
-
-            <TextView
-                android:id="@+id/ridePoints"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:textSize="18sp"/>
-            <TextView
-                android:id="@+id/rideDistance"
-                android:layout_gravity="fill_horizontal"
-                android:textColor="@color/background"
-                android:textSize="18sp"/>
-        </TableRow>
-    </TableLayout>
+            <TableRow
+                android:paddingTop="6dp">
+                <TextView
+                    android:id="@+id/ridePoints"
+                    android:layout_gravity="fill_horizontal"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/rideDistance"
+                    android:layout_gravity="fill_horizontal"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"/>
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
 </LinearLayout>
