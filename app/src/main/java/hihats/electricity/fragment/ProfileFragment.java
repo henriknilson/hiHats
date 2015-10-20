@@ -38,8 +38,8 @@ public class ProfileFragment extends Fragment {
     List<HashMap<String, String>> rides;
     ListView rideListView;
     private LineChartView mChartOne;
-    private final String[] mLabelsOne= {"", "Januari", "", "Mars", "", "Maj", "", "Oktober", "", "December", ""};
-    private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f}};
+    private final String[] mLabelsOne= {"", "", "Januari", "",  "", "Mars", "", "", "Maj", "", "", "Oktober", "",  "", "December", "", ""};
+    private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f, 3.3f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f, 7.0f, 6.6f, 7.1f, 8.5f}};
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
@@ -141,12 +141,13 @@ public class ProfileFragment extends Fragment {
     public void produceOne(LineChartView chart){
 
         LineSet dataset = new LineSet(mLabelsOne, mValuesOne[0]);
-        dataset.setColor(Color.parseColor("#4CAF50"))
-                .setFill(Color.parseColor("#A5D6A7"))
-                .setSmooth(true);
+        dataset.setColor(this.getResources().getColor(R.color.primary))
+                .setFill(this.getResources().getColor(R.color.accent))
+                .setSmooth(true)
+                .setThickness(2);
         chart.addData(dataset);
 
-        chart.setTopSpacing(Tools.fromDpToPx(10))
+        chart.setTopSpacing(Tools.fromDpToPx(16))
                 .setBorderSpacing(Tools.fromDpToPx(0))
                 .setAxisBorderValues(0, 10, 1)
                 .setXLabels(AxisController.LabelPosition.INSIDE)
