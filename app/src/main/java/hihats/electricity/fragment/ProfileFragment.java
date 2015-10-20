@@ -29,7 +29,7 @@ import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
 
-public class DashboardFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     private static String TAG = "DashBoardFragment";
 
@@ -41,12 +41,12 @@ public class DashboardFragment extends Fragment {
     private final String[] mLabelsOne= {"", "Januari", "", "Mars", "", "Maj", "", "Oktober", "", "December", ""};
     private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f}};
 
-    public static DashboardFragment newInstance() {
-        DashboardFragment fragment = new DashboardFragment();
+    public static ProfileFragment newInstance() {
+        ProfileFragment fragment = new ProfileFragment();
         return fragment;
     }
 
-    public DashboardFragment() {}
+    public ProfileFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
