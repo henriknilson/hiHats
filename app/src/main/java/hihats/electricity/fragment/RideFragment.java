@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -238,7 +239,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         stopRideButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                System.out.println("PRESSED");
+                System.out.println("STOP RIDE");
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                new SuccessFragment().show(transaction, "");
                 stopRideMode();
             }
         });
@@ -291,6 +294,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
+
     private void updateStatusBar() {
         statusBarNextStopLabel.setText(activeBusNextStop);
         statusBarPointsLabel.setText(String.format("%,d", rideDistance));
