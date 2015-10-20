@@ -42,7 +42,7 @@ public class BusDataHelper {
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-    private final float BUS_DISTANCE_METERS = 8000.0f;
+    private final float BUS_DISTANCE_METERS = 800.0f;
     private final String ICOMERA = "https://ombord.info/api/xml/system/";
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
@@ -63,7 +63,6 @@ public class BusDataHelper {
         String url = urlRetriever.getUrl(bus.getDgw(), null, AT_STOP, 30000);
         String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
-        System.out.println(rawData.size());
         ApiDataObject data = rawData.get(0);
         switch (data.getValue()) {
             case "true":
@@ -213,7 +212,6 @@ public class BusDataHelper {
      */
     public String getNextStopForBus(Bus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, NEXT_STOP, 15000);
-        System.out.println(url);
         String response = httpHandler.getResponse(url, true);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);

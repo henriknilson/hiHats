@@ -14,7 +14,7 @@ public class Ride {
     private String busStopFrom;
     private String busStopToo;
     private int points;
-    private double distance;
+    private int distance;
     private String owner;
 
     /**
@@ -26,7 +26,7 @@ public class Ride {
      * @param points The number of points the ride generated
      */
     public Ride(Date date, String busStopFrom, String busStopToo,
-                int points, double distance, String userId){
+                int points, int distance, String userId){
         this.date = date;
         this.busStopFrom = busStopFrom;
         this.busStopToo = busStopToo;
@@ -76,7 +76,7 @@ public class Ride {
      *
      * @return distance
      */
-    public double getDistance() {
+    public int getDistance() {
         return distance;
     }
 
@@ -150,6 +150,7 @@ public class Ride {
                 ", busStopFrom=" + busStopFrom +
                 ", busStopToo=" + busStopToo +
                 ", points=" + points +
+                ", distance=" + distance +
                 '}';
     }
 }
