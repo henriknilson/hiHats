@@ -140,7 +140,11 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View arg0) {
                 AsyncFindBusTask task = new AsyncFindBusTask();
-                task.execute();
+                if (task.getStatus().equals(AsyncTask.Status.RUNNING)) {
+                    task.cancel(true);
+                } else {
+                    task.execute();
+                }
             }
         });
 
