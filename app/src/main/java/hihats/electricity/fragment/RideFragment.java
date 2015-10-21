@@ -397,12 +397,10 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         @Override
         protected Bus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
-            if (helper.isConnectedToWifi(getContext())) {
-                return getBusFromNetwork();
-            } else if (helper.isGPSEnabled(getContext())) {
-                return getBusFromLocation();
-            }
-            return null;
+            Bus bus = new Bus("Ericsson$100021");
+            DatedPosition pos = new DatedPosition(57.7146, 11.9669, new Date(System.currentTimeMillis()));
+            bus.setDatedPosition(pos);
+            return bus;
         }
 
         private Bus getBusFromNetwork() {
