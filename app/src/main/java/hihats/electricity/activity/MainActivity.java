@@ -58,16 +58,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
        // logout = (Button) findViewById(R.id.logout);
 
         // Logout Button Click Listener
-        logout.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                // Logout current user
-                ParseUser.logOut();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        // logout.setOnClickListener(new View.OnClickListener() {
+        //    public void onClick(View arg0) {
+        //        // Logout current user
+        //        ParseUser.logOut();
+        //        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        //        startActivity(intent);
+        //        finish();
+        //    }
+        // });
     }
 
     @Override
