@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), MainActivity.this));
+        viewPager.setOffscreenPageLimit(3);
 
         // Create the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar); // Attaching the layout to the toolbar object

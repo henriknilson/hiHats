@@ -23,7 +23,7 @@ import hihats.electricity.R;
 /**
  * Created by axel on 2015-10-13.
  */
-public class DashboardListFragment extends Fragment {
+public class ProfileListFragment extends Fragment {
 
     private static String TAG = "DashBoardListFragment";
 

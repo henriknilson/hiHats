@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import hihats.electricity.fragment.DashboardFragment;
+import hihats.electricity.fragment.ProfileFragment;
 import hihats.electricity.fragment.DealsFragment;
 import hihats.electricity.fragment.RideFragment;
 
@@ -14,7 +14,7 @@ import hihats.electricity.fragment.RideFragment;
  */
 public class TabsAdapter extends FragmentPagerAdapter {
 
-    private String tabTitles[] = new String[] { "Ride", "Dashboard", "Deals" };
+    private String tabTitles[] = new String[] { "Ride", "Profile", "Deals" };
     private Context context;
 
     public TabsAdapter(FragmentManager fm, Context context) {
@@ -34,7 +34,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
             case 0:
                 return RideFragment.newInstance();
             case 1:
-                return DashboardFragment.newInstance();
+                return ProfileFragment.newInstance();
             case 2:
                 return DealsFragment.newInstance();
             default:
