@@ -4,10 +4,4 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary"
         android:titleTextColor="@color/white">
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:text="Logout"
-        android:layout_gravity="right"
-        android:id="@+id/logout"/>
     </android.support.v7.widget.Toolbar>

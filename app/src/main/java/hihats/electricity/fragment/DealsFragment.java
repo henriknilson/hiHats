@@ -2,7 +2,6 @@ package hihats.electricity.fragment;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +32,12 @@ public class DealsFragment extends Fragment {
      */
     List<HashMap<String, String>> deals;
 
+    int[] dealImages = new int[] {
+            R.drawable.forest,
+            R.drawable.mountain,
+            R.drawable.bananas
+    };
+
     public static DealsFragment newInstance() {
         DealsFragment fragment = new DealsFragment();
         return fragment;
@@ -59,7 +64,8 @@ public class DealsFragment extends Fragment {
                 "name",
                 "author",
                 "description",
-                "points"
+                "points",
+                "image"
         };
 
         // "... and put their values in these places..."
@@ -67,7 +73,8 @@ public class DealsFragment extends Fragment {
                 R.id.dealName,
                 R.id.dealAuthor,
                 R.id.dealDescription,
-                R.id.dealPoints
+                R.id.dealPoints,
+                R.id.dealImage
         };
 
         // ...and use these arrays arrays to build a ListView adapter.
@@ -104,7 +111,11 @@ public class DealsFragment extends Fragment {
                         deal.put("description", parseObject.getString("description"));
                         deal.put("points", Integer.toString(
                                         parseObject.getNumber("points").intValue()
-                                )
+                                ) + " GreenPoints"
+                        );
+                        deal.put("image", Integer.toString(
+                                dealImages[Integer.parseInt(parseObject.getString("image"))]
+                            )
                         );
 
                         deals.add(deal);

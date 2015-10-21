@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), MainActivity.this));
+        viewPager.setOffscreenPageLimit(3);
 
         // Create the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
@@ -54,19 +55,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         tabLayout.setupWithViewPager(viewPager);
 
         // Locate Button in activity_main.xml
-        logout = (Button) findViewById(R.id.logout);
+       // logout = (Button) findViewById(R.id.logout);
 
         // Logout Button Click Listener
-        logout.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View arg0) {
-                // Logout current user
-                ParseUser.logOut();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        // logout.setOnClickListener(new View.OnClickListener() {
+        //    public void onClick(View arg0) {
+        //        // Logout current user
+        //        ParseUser.logOut();
+        //        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        //        startActivity(intent);
+        //        finish();
+        //    }
+        // });
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,8 +143,11 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View arg0) {
                 AsyncFindBusTask task = new AsyncFindBusTask();
-                task.execute();
-
+                if (task.getStatus().equals(AsyncTask.Status.RUNNING)) {
+                    task.cancel(true);
+                } else {
+                    task.execute();
+                }
             }
         });
 
@@ -237,7 +241,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         stopRideButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                System.out.println("PRESSED");
+                System.out.println("STOP RIDE");
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                new SuccessFragment().show(transaction, "");
                 stopRideMode();
             }
         });
@@ -290,6 +296,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
+
     private void updateStatusBar() {
         /*
         statusBarNextStopLabel.setText(activeBusNextStop);
@@ -410,9 +417,43 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         protected Bus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
             Bus bus = new Bus("Ericsson$100021");
-            DatedPosition pos = new DatedPosition(57.689256666666665, 11.973361666666667, new Date(System.currentTimeMillis()));
+
+            DatedPosition pos = new DatedPosition(57.7146, 11.9669, new Date(System.currentTimeMillis()));
             bus.setDatedPosition(pos);
             return bus;
+        }
+
+        private Bus getBusFromNetwork() {
+            try {
+                return helper.getBusFromSystemId();
+            } catch (AccessErrorException | NoDataException e) {
+                //TODO GUI Alert
+                if (helper.isGPSEnabled(getContext())) {
+                    return getBusFromLocation();
+                }
+            }
+            return null;
+        }
+        private Bus getBusFromLocation() {
+            // Request GPS updates
+            if (Looper.myLooper() == null) {
+                Looper.prepare();
+            }
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+            // Start waiting... when this is done, we'll have the location in this.location.
+            Looper.loop();
+            // Now go use the location to load some data.
+            try {
+                Bus bus = helper.getBusNearestLocation(location);
+                if (bus != null) {
+                    return bus;
+                }
+            } catch (AccessErrorException e) {
+                System.out.println("NO INTERNET CONNECTION");
+            } catch (NoDataException e) {
+                System.out.println("ELECTRICITY SERVER DOWN");
+            }
+            return null;
         }
 
         @Override

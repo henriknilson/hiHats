@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/dashboardFragment"
+    tools:context=".activity.MainActivity"
+    android:background="@color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:padding="5dp">
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="fitCenter"
+                android:paddingBottom="5dp"
+                android:src="@drawable/profilepic" />
+            <TextView
+                android:layout_below="@id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_horizontal"
+                android:textSize="24sp"
+                android:id="@id/username"
+                android:text="username"
+                android:textColor="@color/primary" />
+        </LinearLayout>
+        <TableLayout
+            android:gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginTop="55dp"
+            android:background="@color/white"
+            android:stretchColumns="*"
+            android:elevation="2dp">
+
+            <TableRow>
+                <TextView
+                    android:text="@string/dashboard_title_green"
+                    android:layout_width="0dp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/caption"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="@string/dashboard_title_rides"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/caption"
+                    android:gravity="center_horizontal" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="@string/dashboard_title_km"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/caption"
+                    android:gravity="center_horizontal" />
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="35"
+                    android:textSize="30sp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/primary" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="15"
+                    android:textSize="30sp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/primary" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:text="28"
+                    android:textSize="30sp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/primary" />
+            </TableRow>
+
+        </TableLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/chart">
+            <com.db.chart.view.LineChartView
+                android:id="@+id/linechart1"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
