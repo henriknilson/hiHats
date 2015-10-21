@@ -36,26 +36,26 @@
                     android:text="From"
                     android:textSize="12sp"
                     android:textColor="@color/caption"
-                    android:layout_gravity="fill_horizontal" />
+                    android:layout_gravity="start" />
 
                 <TextView
                     android:text="To"
                     android:textSize="12sp"
                     android:textColor="@color/caption"
-                    android:layout_gravity="fill_horizontal" />
+                    android:layout_gravity="end" />
             </TableRow>
 
             <TableRow
                 android:paddingTop="6dp">
                 <TextView
                     android:id="@+id/rideBusStopFrom"
-                    android:layout_gravity="fill_horizontal"
+                    android:layout_gravity="start"
                     android:textColor="@color/background"
                     android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/rideBusStopToo"
-                    android:layout_gravity="fill_horizontal"
+                    android:layout_gravity="end"
                     android:textColor="@color/background"
                     android:textSize="18sp"/>
             </TableRow>
@@ -66,24 +66,24 @@
                     android:text="Points"
                     android:textSize="12sp"
                     android:textColor="@color/caption"
-                    android:layout_gravity="fill_horizontal" />
+                    android:layout_gravity="start" />
                 <TextView
                     android:text="Distance"
                     android:textSize="12sp"
                     android:textColor="@color/caption"
-                    android:layout_gravity="fill_horizontal" />
+                    android:layout_gravity="end" />
             </TableRow>
 
             <TableRow
                 android:paddingTop="6dp">
                 <TextView
                     android:id="@+id/ridePoints"
-                    android:layout_gravity="fill_horizontal"
+                    android:layout_gravity="start"
                     android:textColor="@color/background"
                     android:textSize="18sp"/>
                 <TextView
                     android:id="@+id/rideDistance"
-                    android:layout_gravity="fill_horizontal"
+                    android:layout_gravity="end"
                     android:textColor="@color/background"
                     android:textSize="18sp"/>
             </TableRow>
