@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DisBusCounts</string>
+    <string name="app_name">BusCounts</string>
     <string name="action_settings">Settings</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
