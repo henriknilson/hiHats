@@ -74,7 +74,7 @@ public class ProfileFragment extends Fragment {
         };
 
         View layout = inflater.inflate(R.layout.fragment_dlistview, container, false);
-        View header = inflater.inflate(R.layout.fragment_dashboard, null, false);
+        View header = inflater.inflate(R.layout.fragment_profile, null, false);
 
         rideAdapter = new SimpleAdapter(getContext(), rides, R.layout.card_ride, from, to);
 

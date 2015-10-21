@@ -9,12 +9,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_marginTop="36dp"
-        android:text="Ride success!"
-        android:textSize="36dp"
+        android:id="@+id/splash_title"
+        android:layout_marginTop="35dp"
+        android:text="Ride completed!"
+        android:textSize="32dp"
+        android:textColor="#FFFFFF"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/textView" />
 
     <Button
         android:layout_width="fill_parent"
@@ -29,4 +30,90 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/outline" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_marginTop="36dp"
+        android:text="43 Green Points"
+        android:textSize="40dp"
+        android:layout_below="@+id/splash_title"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_marginTop="30dp"
+        android:text="Ride details"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:text="By riding the bus instead of taking"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView6"
+        android:layout_alignStart="@+id/textView6" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:text="the car you have saved 102g CO2"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/textView6" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:text="Lindholmen to Johanneberg"
+        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:text="5,3 km 10 min and 23 sek"
+        android:textSize="18sp"
+        android:layout_below="@+id/textView5"
+        android:layout_alignStart="@+id/textView5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7"
+        android:layout_marginTop="31dp"
+        android:text="Thank you"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/textView4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView8"
+        android:text="For making the world a better place!"
+        android:textSize="18sp"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/textView7"
+        android:layout_alignStart="@+id/textView7" />
 </RelativeLayout>
