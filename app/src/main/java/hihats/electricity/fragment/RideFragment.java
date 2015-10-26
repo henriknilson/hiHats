@@ -140,7 +140,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         getOnBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                AsyncFindBusTask task = new AsyncFindBusTask();
+                AsyncFindBusFromLocationTask task = new AsyncFindBusFromLocationTask();
                 if (task.getStatus().equals(AsyncTask.Status.RUNNING)) {
                     task.cancel(true);
                 } else {
@@ -378,12 +378,16 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      * Finds bus either via Network or via GPS, then sets the 'activeBus'
      * variable and runs the 'engageRideMode' method
      */
-    private class AsyncFindBusTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
+    private class AsyncFindBusFromLocationTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
 
         private final BusDataHelper helper = new BusDataHelper();
         private LocationRequest locationRequest;
         private Location location;
 
+        /**
+         * Sets the "get on my bus" button status to loading and prepares
+         * the LocationRequest that will be used during the task execution.
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -397,43 +401,25 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         @Override
         protected Bus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
-            if (helper.isConnectedToWifi(getContext())) {
-                return getBusFromNetwork();
-            } else if (helper.isGPSEnabled(getContext())) {
-                return getBusFromLocation();
-            }
-            return null;
-        }
-
-        private Bus getBusFromNetwork() {
-            try {
-                return helper.getBusFromSystemId();
-            } catch (AccessErrorException | NoDataException e) {
-                //TODO GUI Alert
-                if (helper.isGPSEnabled(getContext())) {
-                    return getBusFromLocation();
+            if (helper.isGPSEnabled(getContext())) {
+                // Request GPS updates
+                if (Looper.myLooper() == null) {
+                    Looper.prepare();
                 }
-            }
-            return null;
-        }
-        private Bus getBusFromLocation() {
-            // Request GPS updates
-            if (Looper.myLooper() == null) {
-                Looper.prepare();
-            }
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            // Start waiting... when this is done, we'll have the location in this.location.
-            Looper.loop();
-            // Now go use the location to load some data.
-            try {
-                Bus bus = helper.getBusNearestLocation(location);
-                if (bus != null) {
-                    return bus;
+                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+                // Start waiting... when this is done, we'll have the location in this.location.
+                Looper.loop();
+                // Now go use the location to load some data.
+                try {
+                    Bus bus = helper.getBusNearestLocation(location);
+                    if (bus != null) {
+                        return bus;
+                    }
+                } catch (AccessErrorException e) {
+                    System.out.println("NO INTERNET CONNECTION");
+                } catch (NoDataException e) {
+                    System.out.println("ELECTRICITY SERVER DOWN");
                 }
-            } catch (AccessErrorException e) {
-                System.out.println("NO INTERNET CONNECTION");
-            } catch (NoDataException e) {
-                System.out.println("ELECTRICITY SERVER DOWN");
             }
             return null;
         }
