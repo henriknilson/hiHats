@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,6 @@ import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
-import hihats.electricity.util.ParseBusStopHelper;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
@@ -503,28 +503,35 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         setupMap();
     }
     private void fetchBusStops() {
-        ParseQuery<ParseBusStopHelper> stops = ParseQuery.getQuery(ParseBusStopHelper.class);
-        stops.findInBackground(new FindCallback<ParseBusStopHelper>() {
+        ParseQuery<BusStop> stops = ParseQuery.getQuery(BusStop.class);
+        stops.findInBackground(new FindCallback<BusStop>() {
             @Override
-            public void done(List<ParseBusStopHelper> objects, com.parse.ParseException e) {
+            public void done(List<BusStop> busStops, com.parse.ParseException e) {
+                if(e == null) {
+                    Collections.sort(busStops, new Comparator<BusStop>() {
+                        @Override
+                        public int compare(BusStop stop1, BusStop stop2) {
+                            return stop1.compareTo(stop2);
+                        }
+                    });
 
-                busStops = new ArrayList<>();
-                for (ParseBusStopHelper i : objects) {
-                    //Add all to list of stops
-                    BusStop stop = new BusStop(i.getLat(), i.getLng(), i.getStopName(), i.getOrder());
-                    busStops.add(stop);
+                    busStopsReady = true;
+                    setupBusStops();
+                } else {
+                    Log.d("BusStop", "Error: " + e.getMessage());
                 }
 
-                // Sorts bus stops in right order
-                Collections.sort(busStops, new Comparator<BusStop>() {
-                    @Override
-                    public int compare(BusStop stop1, BusStop stop2) {
-                        return stop1.compareTo(stop2);
-                    }
-                });
+//                busStops = new ArrayList<>();
+//                for (BusStop busStop : objects) {
+//                    //Add all to list of stops
+//                    BusStop stop = new BusStop(
+//                            busStop.getName()
+//                    );
+//                    busStops.add(stop);
+//                }
 
-                busStopsReady = true;
-                setupBusStops();
+                // Sorts bus stops in right order
+
             }
         });
     }
