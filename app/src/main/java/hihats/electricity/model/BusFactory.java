@@ -5,142 +5,163 @@ package hihats.electricity.model;
  */
 public class BusFactory {
 
-    public Bus getBus(String dgwOrSystemId) {
+    private BusFactory instance;
 
+    private BusFactory(){}
+
+    public BusFactory getInstance() {
+        if (instance == null) {
+            return new BusFactory();
+        } else {
+            return instance;
+        }
+    }
+
+    public static Bus getBus(String dgwOrSystemId) {
+        String dgw;
+        String vin;
+        String regNr;
+        String systemId;
+        Bus.BusType busType;
         if (dgwOrSystemId.startsWith("Ericsson")) {
-            this.dgw = dgwOrSystemId;
+            dgw = dgwOrSystemId;
             switch (dgwOrSystemId) {
                 case "Ericsson$100020":
-                    this.vin = "YV3U0V222FA100020";
-                    this.regNr = "EPO 131";
-                    this.systemId = "2501069301";
-                    this.busType = BusType.ELECTRIC;
+                    vin = "YV3U0V222FA100020";
+                    regNr = "EPO 131";
+                    systemId = "2501069301";
+                    busType = Bus.BusType.ELECTRIC;
                     break;
                 case "Ericsson$100021":
-                    this.vin = "YV3U0V222FA100021";
-                    this.regNr = "EPO 136";
-                    this.systemId = "2501069758";
-                    this.busType = BusType.ELECTRIC;
+                    vin = "YV3U0V222FA100021";
+                    regNr = "EPO 136";
+                    systemId = "2501069758";
+                    busType = Bus.BusType.ELECTRIC;
                     break;
                 case "Ericsson$100022":
-                    this.vin = "YV3U0V222FA100022";
-                    this.regNr = "EPO 143";
-                    this.systemId = "2501131248";
-                    this.busType = BusType.ELECTRIC;
+                    vin = "YV3U0V222FA100022";
+                    regNr = "EPO 143";
+                    systemId = "2501131248";
+                    busType = Bus.BusType.ELECTRIC;
                     break;
                 case "Ericsson$171164":
-                    this.vin = "YV3T1U22XF1171164";
-                    this.regNr = "EOG 604";
-                    this.systemId = "2501142922";
-                    this.busType = BusType.HYBRID;
+                    vin = "YV3T1U22XF1171164";
+                    regNr = "EOG 604";
+                    systemId = "2501142922";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "Ericsson$171234":
-                    this.vin = "YV3T1U225F1171234";
-                    this.regNr = "EOG 606";
-                    this.systemId = "2501069303";
-                    this.busType = BusType.HYBRID;
+                    vin = "YV3T1U225F1171234";
+                    regNr = "EOG 606";
+                    systemId = "2501069303";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "Ericsson$171235":
-                    this.vin = "YV3T1U227F1171235";
-                    this.regNr = "EOG 616";
-                    this.systemId = "2500825764";
-                    this.busType = BusType.HYBRID;
+                    vin = "YV3T1U227F1171235";
+                    regNr = "EOG 616";
+                    systemId = "2500825764";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "Ericsson$171327":
-                    this.vin = "YV3T1U221F1171327";
-                    this.regNr = "EOG 622";
-                    this.systemId = "2501075606";
-                    this.busType = BusType.HYBRID;
+                    vin = "YV3T1U221F1171327";
+                    regNr = "EOG 622";
+                    systemId = "2501075606";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "Ericsson$171328":
-                    this.vin = "YV3T1U223F1171328";
-                    this.regNr = "EOG 627";
-                    this.systemId = "2501069756";
-                    this.busType = BusType.HYBRID;
+                    vin = "YV3T1U223F1171328";
+                    regNr = "EOG 627";
+                    systemId = "2501069756";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "Ericsson$171329":
-                    this.vin = "YV3T1U225F1171329";
-                    this.regNr = "EOG 631";
-                    this.systemId = "2501131250";
-                    this.busType = BusType.HYBRID;
+                    vin = "YV3T1U225F1171329";
+                    regNr = "EOG 631";
+                    systemId = "2501131250";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "Ericsson$171330":
-                    this.vin = "YV3T1U223F1171330";
-                    this.regNr = "EOG 634";
-                    this.systemId = "2501074720";
-                    this.busType = BusType.HYBRID;
+                    vin = "YV3T1U223F1171330";
+                    regNr = "EOG 634";
+                    systemId = "2501074720";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "Ericsson$Vin_Num_001":
+                    vin = "TEST";
+                    regNr = "TEST";
+                    systemId = "TEST";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 default:
                     throw new IllegalArgumentException("No such bus in database");
             }
         } else {
-            this.systemId = dgwOrSystemId;
+            systemId = dgwOrSystemId;
             switch (dgwOrSystemId) {
                 case "2501069301":
-                    this.dgw = "Ericsson$100020";
-                    this.vin = "YV3U0V222FA100020";
-                    this.regNr = "EPO 131";
-                    this.busType = BusType.ELECTRIC;
+                    dgw = "Ericsson$100020";
+                    vin = "YV3U0V222FA100020";
+                    regNr = "EPO 131";
+                    busType = Bus.BusType.ELECTRIC;
                     break;
                 case "2501069758":
-                    this.dgw = "Ericsson$100021";
-                    this.vin = "YV3U0V222FA100021";
-                    this.regNr = "EPO 136";
-                    this.busType = BusType.ELECTRIC;
+                    dgw = "Ericsson$100021";
+                    vin = "YV3U0V222FA100021";
+                    regNr = "EPO 136";
+                    busType = Bus.BusType.ELECTRIC;
                     break;
                 case "2501131248":
-                    this.dgw = "Ericsson$100022";
-                    this.vin = "YV3U0V222FA100022";
-                    this.regNr = "EPO 143";
-                    this.busType = BusType.ELECTRIC;
+                    dgw = "Ericsson$100022";
+                    vin = "YV3U0V222FA100022";
+                    regNr = "EPO 143";
+                    busType = Bus.BusType.ELECTRIC;
                     break;
                 case "2501142922":
-                    this.dgw = "Ericsson$171164";
-                    this.vin = "YV3T1U22XF1171164";
-                    this.regNr = "EOG 604";
-                    this.busType = BusType.HYBRID;
+                    dgw = "Ericsson$171164";
+                    vin = "YV3T1U22XF1171164";
+                    regNr = "EOG 604";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "2501069303":
-                    this.dgw = "Ericsson$171234";
-                    this.vin = "YV3T1U225F1171234";
-                    this.regNr = "EOG 606";
-                    this.busType = BusType.HYBRID;
+                    dgw = "Ericsson$171234";
+                    vin = "YV3T1U225F1171234";
+                    regNr = "EOG 606";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "2500825764":
-                    this.dgw = "Ericsson$171235";
-                    this.vin = "YV3T1U227F1171235";
-                    this.regNr = "EOG 616";
-                    this.busType = BusType.HYBRID;
+                    dgw = "Ericsson$171235";
+                    vin = "YV3T1U227F1171235";
+                    regNr = "EOG 616";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "2501075606":
-                    this.dgw = "Ericsson$171327";
-                    this.vin = "YV3T1U221F1171327";
-                    this.regNr = "EOG 622";
-                    this.busType = BusType.HYBRID;
+                    dgw = "Ericsson$171327";
+                    vin = "YV3T1U221F1171327";
+                    regNr = "EOG 622";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "2501069756":
-                    this.dgw = "Ericsson$171328";
-                    this.vin = "YV3T1U223F1171328";
-                    this.regNr = "EOG 627";
-                    this.busType = BusType.HYBRID;
+                    dgw = "Ericsson$171328";
+                    vin = "YV3T1U223F1171328";
+                    regNr = "EOG 627";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "2501131250":
-                    this.dgw = "Ericsson$171329";
-                    this.vin = "YV3T1U225F1171329";
-                    this.regNr = "EOG 631";
-                    this.busType = BusType.HYBRID;
+                    dgw = "Ericsson$171329";
+                    vin = "YV3T1U225F1171329";
+                    regNr = "EOG 631";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 case "2501074720":
-                    this.dgw = "Ericsson$171330";
-                    this.vin = "YV3T1U223F1171330";
-                    this.regNr = "EOG 634";
-                    this.busType = BusType.HYBRID;
+                    dgw = "Ericsson$171330";
+                    vin = "YV3T1U223F1171330";
+                    regNr = "EOG 634";
+                    busType = Bus.BusType.HYBRID;
                     break;
                 default:
                     throw new IllegalArgumentException("No such bus in database");
             }
         }
+        return new Bus(dgw, vin, regNr, systemId, busType);
     }
 }

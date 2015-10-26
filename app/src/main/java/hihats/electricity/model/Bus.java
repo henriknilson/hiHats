@@ -6,7 +6,7 @@ package hihats.electricity.model;
 
 public class Bus {
 
-    private enum BusType {
+    protected enum BusType {
         ELECTRIC, HYBRID
     }
 

@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import hihats.electricity.model.Bus;
+import hihats.electricity.model.BusFactory;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.HttpHandler;
@@ -112,7 +113,7 @@ public class BusDataHelper {
         System.out.println(response);
         if (result != null) {
             try {
-                return new Bus(result);
+                return BusFactory.getBus(result);
             } catch (IllegalArgumentException e) {
                 throw new NoDataException();
             }
@@ -179,7 +180,7 @@ public class BusDataHelper {
                 } catch (IllegalArgumentException e) {
                     bearing = 0f;
                 }
-                Bus bus = new Bus("Ericsson$" + id);
+                Bus bus = BusFactory.getBus("Ericsson$" + id);
                 bus.setDatedPosition(loc);
                 bus.setBearing(bearing);
                 buses.add(bus);
