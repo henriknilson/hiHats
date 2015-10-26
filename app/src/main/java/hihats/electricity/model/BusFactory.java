@@ -5,11 +5,11 @@ package hihats.electricity.model;
  */
 public class BusFactory {
 
-    private BusFactory instance;
+    private static BusFactory instance;
 
     private BusFactory(){}
 
-    public BusFactory getInstance() {
+    public static BusFactory getInstance() {
         if (instance == null) {
             return new BusFactory();
         } else {
@@ -17,7 +17,7 @@ public class BusFactory {
         }
     }
 
-    public static Bus getBus(String dgwOrSystemId) {
+    public Bus getBus(String dgwOrSystemId) {
         String dgw;
         String vin;
         String regNr;

@@ -113,7 +113,7 @@ public class BusDataHelper {
         System.out.println(response);
         if (result != null) {
             try {
-                return BusFactory.getBus(result);
+                return BusFactory.getInstance().getBus(result);
             } catch (IllegalArgumentException e) {
                 throw new NoDataException();
             }
@@ -180,7 +180,7 @@ public class BusDataHelper {
                 } catch (IllegalArgumentException e) {
                     bearing = 0f;
                 }
-                Bus bus = BusFactory.getBus("Ericsson$" + id);
+                Bus bus = BusFactory.getInstance().getBus("Ericsson$" + id);
                 bus.setDatedPosition(loc);
                 bus.setBearing(bearing);
                 buses.add(bus);

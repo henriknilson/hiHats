@@ -45,7 +45,7 @@ public class RideDataService extends Service {
     public synchronized void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         String busDgw = intent.getStringExtra("busDgw");
-        bus = BusFactory.getBus(busDgw);
+        bus = BusFactory.getInstance().getBus(busDgw);
         if (!isRunning) {
             thread.start();
             isRunning = true;
