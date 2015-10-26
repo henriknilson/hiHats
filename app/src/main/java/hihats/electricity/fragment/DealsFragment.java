@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
+import hihats.electricity.model.Deal;
 
 public class DealsFragment extends Fragment {
 
@@ -94,27 +95,22 @@ public class DealsFragment extends Fragment {
 
         Log.i(TAG, "fetchDeals()");
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> parseDeals, ParseException e) {
+        ParseQuery<Deal> query = ParseQuery.getQuery(Deal.class);
+        query.findInBackground(new FindCallback<Deal>() {
+            public void done(List<Deal> parseDeals, ParseException e) {
                 if (e == null) {
 
-                    Log.d(TAG, "Retrieved " + parseDeals.size() + " deals");
-
-                    for(ParseObject parseObject : parseDeals) {
+                    for(Deal parseDeal : parseDeals) {
                         HashMap<String, String> deal = new HashMap<String, String>();
 
-                        // Create Deal HashMaps from the parse objects
-                        deal.put("objectId", parseObject.getString("objectId"));
-                        deal.put("name", parseObject.getString("name"));
-                        deal.put("author", parseObject.getString("author"));
-                        deal.put("description", parseObject.getString("description"));
-                        deal.put("points", Integer.toString(
-                                        parseObject.getNumber("points").intValue()
-                                ) + " GreenPoints"
-                        );
+                        // Create HashMaps from the Deals
+                        deal.put("objectId", parseDeal.getObjectId());
+                        deal.put("name", parseDeal.getName());
+                        deal.put("author", parseDeal.getAuthor());
+                        deal.put("description", parseDeal.getDescription());
+                        deal.put("points", parseDeal.getPoints() + " GreenPoints");
                         deal.put("image", Integer.toString(
-                                dealImages[Integer.parseInt(parseObject.getString("image"))]
+                                dealImages[parseDeal.getImage()]
                             )
                         );
 

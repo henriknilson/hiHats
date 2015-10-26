@@ -1,59 +1,44 @@
 package hihats.electricity.model;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.parse.*;
+
+import java.util.Date;
 
 /**
  * Created by axel on 2015-09-24.
  */
-public class Deal {
+@ParseClassName("Deal")
+public class Deal extends ParseObject {
 
-    private String objectId;
-    private String name;
-    private String author;
-    private String description;
-    private int points;
-
-    public Deal(String objectId, String name, String author, String description, int points) {
-        this.objectId = objectId;
-        this.name = name;
-        this.author = author;
-        this.description = description;
-        this.points = points;
-    }
-
-    public String getobjectId() {
-        return objectId;
+    public Deal() {
+        // Default constructor required
     }
 
     public String getName() {
-        return name;
+        return getString("name");
+    }
+
+    public Date getCreatedAt() {
+        return getDate("createdAt");
+    }
+
+    public Date getUpdatedAt() {
+        return getDate("updatedAt");
     }
 
     public String getAuthor() {
-        return author;
+        return getString("author");
     }
 
     public String getDescription() {
-        return description;
+        return getString("description");
     }
 
     public int getPoints() {
-        return points;
+        return getInt("points");
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
+    public int getImage() {
+        return Integer.parseInt(getString("image"));
     }
 }

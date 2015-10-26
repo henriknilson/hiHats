@@ -1,8 +1,10 @@
 package hihats.electricity.model;
 
-import java.util.ArrayList;
+import com.parse.FindCallback;
+import com.parse.ParseQuery;
 
-import hihats.electricity.util.ParseRideHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Pertta on 15-10-07.
@@ -61,11 +63,23 @@ public class User {
     }
 
     public void setRides() {
-        this.rides = ParseRideHelper.getInstance().getRides(this.userName);
+
+        ParseQuery<Ride> parseRides = ParseQuery.getQuery(Ride.class);
+        parseRides.findInBackground(new FindCallback<Ride>() {
+            @Override
+            public void done(List<Ride> objects, com.parse.ParseException e) {
+                rides = new ArrayList<>();
+                for (Ride ride : objects) {
+
+                    if (ride.getUser().equals(userName)) {
+                        rides.add(ride);
+                    }
+                }
+            }
+
+        });
 
     }
-
-
 
 
     @Override

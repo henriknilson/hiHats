@@ -28,6 +28,7 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
+import hihats.electricity.model.Ride;
 
 public class ProfileFragment extends Fragment {
 
@@ -39,7 +40,7 @@ public class ProfileFragment extends Fragment {
     ListView rideListView;
     private LineChartView mChartOne;
     private final String[] mLabelsOne= {"", "", "Januari", "",  "", "Mars", "", "", "Maj", "", "", "Oktober", "",  "", "December", "", ""};
-    private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f, 3.3f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f, 7.0f, 6.6f, 7.1f, 8.5f}};
+    private final float[][] mValuesOne = {{7f, 8.3f, 7.0f, 7.3f, 5f, 3.3f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f, 7.0f, 6.6f, 7.1f, 8.5f}};
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
@@ -106,22 +107,22 @@ public class ProfileFragment extends Fragment {
 
         Log.i(TAG, "fetchRides()");
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseRideHelper");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> parseRides, ParseException e) {
+        ParseQuery<Ride> query = ParseQuery.getQuery(Ride.class);
+        query.findInBackground(new FindCallback<Ride>() {
+            public void done(List<Ride> parseRides, ParseException e) {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
 
-                    for (ParseObject parseObject : parseRides) {
+                    for (Ride parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
 
                         // Create Ride HashMaps from the parse objects
-                        ride.put("busStopFrom", parseObject.getString("busStopFrom"));
-                        ride.put("busStopToo", parseObject.getString("busStopToo"));
-                        ride.put("points", Integer.toString(parseObject.getNumber("points").intValue()));
+                        ride.put("busStopFrom", parseObject.getFrom());
+                        ride.put("busStopToo", parseObject.getTo());
+                        ride.put("points", Integer.toString(parseObject.getPoints()));
                         ride.put("distance", Double.toString(
-                                        parseObject.getNumber("distance").doubleValue()
+                                        parseObject.getDistance()
                                 )
                         );
 
