@@ -11,10 +11,9 @@ public class BusFactory {
 
     public static BusFactory getInstance() {
         if (instance == null) {
-            return new BusFactory();
-        } else {
-            return instance;
+            instance = new BusFactory();
         }
+        return instance;
     }
 
     public Bus getBus(String dgwOrSystemId) {
