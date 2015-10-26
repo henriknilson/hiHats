@@ -398,6 +398,16 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     .setFastestInterval(1 * 1000);
         }
 
+        /**
+         * Checks first if the device has location services enabled.
+         * Then starts waiting for a location.
+         * When the location is recieved its used to find a nearby bus via
+         * the BusDataHelper class.
+         * If all goes well it returns a bus object, if not it returns null.
+         * @param params Not used since this is a void method.
+         * @return A bus object with the bus being nearest the device,
+         * null if no nearby bus is found.
+         */
         @Override
         protected Bus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
