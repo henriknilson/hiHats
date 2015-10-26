@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.parse.*;
 
+import hihats.electricity.model.Deal;
 import hihats.electricity.util.ParseBusStopHelper;
 import hihats.electricity.util.ParseRideHelper;
 
@@ -16,6 +17,7 @@ public class LaunchActivity extends Activity {
         Parse.enableLocalDatastore(this);
         ParseObject.registerSubclass(ParseBusStopHelper.class);
         ParseObject.registerSubclass(ParseRideHelper.class);
+        ParseObject.registerSubclass(Deal.class);
         Parse.initialize(this, "w5w8u7YeyDApblFiC9XPn509REPNdFIv1SleClrR", "IxqGzyFnJUENwSpNl4vRajZaW9gPPgPdK3cArFse");
 
         ParseUser.enableAutomaticUser();
