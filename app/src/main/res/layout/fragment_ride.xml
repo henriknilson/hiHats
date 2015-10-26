@@ -17,7 +17,7 @@
         android:id="@+id/find_bus_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/find_bus_button_text"
+        android:text="@string/get_on_bus_button_text"
         android:textSize="18sp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
