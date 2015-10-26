@@ -7,7 +7,7 @@ import com.parse.*;
 
 import hihats.electricity.model.BusStop;
 import hihats.electricity.model.Deal;
-import hihats.electricity.util.ParseRideHelper;
+import hihats.electricity.model.Ride;
 
 public class LaunchActivity extends Activity {
 
@@ -16,7 +16,7 @@ public class LaunchActivity extends Activity {
 
         Parse.enableLocalDatastore(this);
         ParseObject.registerSubclass(BusStop.class);
-        ParseObject.registerSubclass(ParseRideHelper.class);
+        ParseObject.registerSubclass(Ride.class);
         ParseObject.registerSubclass(Deal.class);
         Parse.initialize(this, "w5w8u7YeyDApblFiC9XPn509REPNdFIv1SleClrR", "IxqGzyFnJUENwSpNl4vRajZaW9gPPgPdK3cArFse");
 

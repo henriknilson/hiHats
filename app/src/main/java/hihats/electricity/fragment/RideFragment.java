@@ -508,6 +508,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void done(List<BusStop> busStops, com.parse.ParseException e) {
                 if(e == null) {
+
                     Collections.sort(busStops, new Comparator<BusStop>() {
                         @Override
                         public int compare(BusStop stop1, BusStop stop2) {
@@ -517,20 +518,10 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
                     busStopsReady = true;
                     setupBusStops();
+
                 } else {
-                    Log.d("BusStop", "Error: " + e.getMessage());
+                    Log.d("fetchBusStops()", "Error: " + e.getMessage());
                 }
-
-//                busStops = new ArrayList<>();
-//                for (BusStop busStop : objects) {
-//                    //Add all to list of stops
-//                    BusStop stop = new BusStop(
-//                            busStop.getName()
-//                    );
-//                    busStops.add(stop);
-//                }
-
-                // Sorts bus stops in right order
 
             }
         });

@@ -28,6 +28,7 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
+import hihats.electricity.model.Ride;
 
 public class ProfileFragment extends Fragment {
 
@@ -106,22 +107,22 @@ public class ProfileFragment extends Fragment {
 
         Log.i(TAG, "fetchRides()");
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseRideHelper");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> parseRides, ParseException e) {
+        ParseQuery<Ride> query = ParseQuery.getQuery(Ride.class);
+        query.findInBackground(new FindCallback<Ride>() {
+            public void done(List<Ride> parseRides, ParseException e) {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
 
-                    for (ParseObject parseObject : parseRides) {
+                    for (Ride parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
 
                         // Create Ride HashMaps from the parse objects
-                        ride.put("busStopFrom", parseObject.getString("busStopFrom"));
-                        ride.put("busStopToo", parseObject.getString("busStopToo"));
-                        ride.put("points", Integer.toString(parseObject.getNumber("points").intValue()));
+                        ride.put("busStopFrom", parseObject.getFrom());
+                        ride.put("busStopToo", parseObject.getTo());
+                        ride.put("points", Integer.toString(parseObject.getPoints()));
                         ride.put("distance", Double.toString(
-                                        parseObject.getNumber("distance").doubleValue()
+                                        parseObject.getDistance()
                                 )
                         );
 
