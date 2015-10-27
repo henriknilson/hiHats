@@ -1,6 +1,8 @@
 package hihats.electricity.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 
 import hihats.electricity.util.ParseRideHelper;
 
@@ -65,8 +67,10 @@ public class User {
 
     }
 
-
-
+    /*
+    Helpers
+     */
+    
 
     @Override
     public boolean equals(Object o) {

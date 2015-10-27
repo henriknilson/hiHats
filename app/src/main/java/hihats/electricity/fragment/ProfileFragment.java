@@ -19,6 +19,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,6 +30,8 @@ import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
 
+import static java.util.Calendar.MONTH;
+
 public class ProfileFragment extends Fragment {
 
     private static String TAG = "DashBoardFragment";
@@ -38,8 +41,8 @@ public class ProfileFragment extends Fragment {
     List<HashMap<String, String>> rides;
     ListView rideListView;
     private LineChartView mChartOne;
-    private final String[] mLabelsOne= {"", "", "Januari", "",  "", "Mars", "", "", "Maj", "", "", "Oktober", "",  "", "December", "", ""};
-    private final float[][] mValuesOne = {{3.5f, 4.7f, 4.3f, 8f, 6.5f, 10f, 7f, 8.3f, 7.0f, 7.3f, 5f, 3.3f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f, 7.0f, 6.6f, 7.1f, 8.5f}};
+    private final String[] mLabelsOne = {"",getMonth(7), "", getMonth(6), "",  getMonth(5), "", getMonth(4), "", getMonth(3), "", getMonth(2), "", getMonth(1),  "", getMonth(0), ""};
+    private final float[][] mValuesOne = new float[1][20]; //{{3.5f, 4.7f, 4.3f, 0f, 0f, 0f, 7f, 8.3f, 7.0f, 0f, 0f, 0f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f}};
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
@@ -127,6 +130,7 @@ public class ProfileFragment extends Fragment {
 
                         rides.add(ride);
 
+
                         // Notify the ListViews SimpleAdapter adapter to update UI
                         rideAdapter.notifyDataSetChanged();
                     }
@@ -156,5 +160,49 @@ public class ProfileFragment extends Fragment {
                 .setXAxis(false)
                 .setYAxis(false);
         chart.show();
+    }
+
+    public String getMonth(int i) {
+        int currentMonth = Calendar.MONTH - i;
+
+        if (currentMonth < 0) {
+            currentMonth = currentMonth + 11;
+        }
+
+        if (currentMonth == 0) {
+            return "January";
+        }
+        else if (currentMonth == 1) {
+            return "February";
+        }
+        else if (currentMonth == 2) {
+            return "Mars";
+        }
+        else if (currentMonth == 3) {
+            return "April";
+        }
+        else if (currentMonth == 4) {
+            return "May";
+        }
+        else if (currentMonth == 5) {
+            return "June";
+        }
+        else if (currentMonth == 6) {
+            return "July";
+        }
+        else if (currentMonth == 7) {
+            return "August";
+        }
+        else if (currentMonth == 8) {
+            return "September";
+        }
+        else if (currentMonth == 9) {
+            return "October";
+        }
+        else if (currentMonth == 10) {
+            return "November";
+        } else {
+            return "December";
+        }
     }
 }
