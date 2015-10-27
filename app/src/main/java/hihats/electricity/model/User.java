@@ -70,7 +70,7 @@ public class User {
     /*
     Helpers
      */
-    
+
 
     @Override
     public boolean equals(Object o) {

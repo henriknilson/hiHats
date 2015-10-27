@@ -166,7 +166,7 @@ public class ProfileFragment extends Fragment {
         int currentMonth = Calendar.MONTH - i;
 
         if (currentMonth < 0) {
-            currentMonth = currentMonth + 11;
+            currentMonth = currentMonth + 12;
         }
 
         if (currentMonth == 0) {
