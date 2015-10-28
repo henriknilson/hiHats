@@ -8,9 +8,9 @@ import java.util.Date;
  * Created by axel on 2015-09-24.
  */
 @ParseClassName("Deal")
-public class Deal extends ParseObject {
+public class ParseDeal extends ParseObject implements IDeal {
 
-    public Deal() {
+    public ParseDeal() {
         // Default constructor required
     }
 

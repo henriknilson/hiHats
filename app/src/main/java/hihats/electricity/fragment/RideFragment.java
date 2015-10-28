@@ -53,6 +53,7 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
+import hihats.electricity.model.IBusStop;
 import hihats.electricity.model.ParseBusStop;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
@@ -63,6 +64,8 @@ import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
+
+    private static final String TAG = "RideFragment";
 
     // System variables
     private LayoutInflater inflater;
@@ -88,7 +91,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private final LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
     private Polyline line;
-    private ArrayList<ParseBusStop> parseBusStops;
+    private ArrayList<IBusStop> parseBusStops;
     private Boolean mapReady = false;
     private Boolean busStopsReady = false;
 
@@ -149,7 +152,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        fetchBusStops();
+        fetchParseBusStops();
 
         // Return the finished view
         return view;
@@ -353,7 +356,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     private String getClosestBusStop() {
         float[] distance = new float[1];
-        for (ParseBusStop stop : parseBusStops) {
+        for (IBusStop stop : parseBusStops) {
             Location.distanceBetween(activeBusPosition.latitude, activeBusPosition.longitude, stop.getLatLng().latitude, stop.getLatLng().longitude, distance);
             if (distance[0] < 50.0f) {
                 return stop.getName();
@@ -499,13 +502,13 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapReady = true;
         setupMap();
     }
-    private void fetchBusStops() {
+    private void fetchParseBusStops() {
         ParseQuery<ParseBusStop> stopsParseQuery = ParseQuery.getQuery(ParseBusStop.class);
         stopsParseQuery.findInBackground(new FindCallback<ParseBusStop>() {
             @Override
             public void done(List<ParseBusStop> stopsFromParse, com.parse.ParseException e) {
                 if (e == null) {
-                    Log.d(this.getClass().getSimpleName(), "Retrieved " + stopsFromParse.size() + " bus stops!");
+                    Log.d(TAG, "Retrieved " + stopsFromParse.size() + " bus stops!");
                     Collections.sort(stopsFromParse, new Comparator<ParseBusStop>() {
                         @Override
                         public int compare(ParseBusStop stop1, ParseBusStop stop2) {
@@ -517,7 +520,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                     busStopsReady = true;
                     setupBusStops();
                 } else {
-                    Log.d("fetchBusStops()", "Error: " + e.getMessage());
+                    Log.d(TAG, "fetchParseBusStops() Error: " + e.getMessage());
                 }
 
             }

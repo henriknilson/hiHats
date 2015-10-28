@@ -11,7 +11,6 @@ import android.widget.SimpleAdapter;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -19,11 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
-import hihats.electricity.model.Deal;
+import hihats.electricity.model.ParseDeal;
 
 public class DealsFragment extends Fragment {
 
-    private static String TAG = "DealsFragment";
+    private static final String TAG = "DealsFragment";
     
     ListView dealsListView;
     SimpleAdapter dealsAdapter;
@@ -95,12 +94,12 @@ public class DealsFragment extends Fragment {
 
         Log.i(TAG, "fetchDeals()");
 
-        ParseQuery<Deal> query = ParseQuery.getQuery(Deal.class);
-        query.findInBackground(new FindCallback<Deal>() {
-            public void done(List<Deal> parseDeals, ParseException e) {
+        ParseQuery<ParseDeal> query = ParseQuery.getQuery(ParseDeal.class);
+        query.findInBackground(new FindCallback<ParseDeal>() {
+            public void done(List<ParseDeal> parseDeals, ParseException e) {
                 if (e == null) {
 
-                    for(Deal parseDeal : parseDeals) {
+                    for(ParseDeal parseDeal : parseDeals) {
                         HashMap<String, String> deal = new HashMap<String, String>();
 
                         // Create HashMaps from the Deals

@@ -32,7 +32,7 @@ import hihats.electricity.model.Ride;
 
 public class ProfileFragment extends Fragment {
 
-    private static String TAG = "DashBoardFragment";
+    private static final String TAG = "ProfileFragment";
 
     TextView usernametxt;
     SimpleAdapter rideAdapter;
