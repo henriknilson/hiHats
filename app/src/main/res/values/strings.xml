@@ -22,6 +22,6 @@
     <string name="statusbar_riding_bus">Riding bus</string>
     <string name="statusbar_next_stop">Next stop</string>
     <string name="statusbar_points">Points</string>
-    <string name="error_no_bus_found">No nearby bus found</string>
+    <string name="error_no_bus_found">No bus within 50m found</string>
 
 </resources>

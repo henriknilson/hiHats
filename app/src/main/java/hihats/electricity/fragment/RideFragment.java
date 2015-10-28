@@ -23,8 +23,11 @@ import android.widget.TextView;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -140,7 +143,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         getOnBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                AsyncFindBusTask task = new AsyncFindBusTask();
+                AsyncFindBusFromLocationTask task = new AsyncFindBusFromLocationTask();
                 if (task.getStatus().equals(AsyncTask.Status.RUNNING)) {
                     task.cancel(true);
                 } else {
@@ -378,12 +381,16 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      * Finds bus either via Network or via GPS, then sets the 'activeBus'
      * variable and runs the 'engageRideMode' method
      */
-    private class AsyncFindBusTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
+    private class AsyncFindBusFromLocationTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
 
         private final BusDataHelper helper = new BusDataHelper();
         private LocationRequest locationRequest;
         private Location location;
 
+        /**
+         * Sets the "get on my bus" button status to loading and prepares
+         * the LocationRequest that will be used during the task execution.
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -391,49 +398,42 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
-                    .setFastestInterval(1 * 1000);
+                    .setFastestInterval(1 * 1000)
+                    .setNumUpdates(1);
         }
 
+        /**
+         * Checks first if the device has location services enabled.
+         * Then starts waiting for a location.
+         * When the location is recieved its used to find a nearby bus via
+         * the BusDataHelper class.
+         * If all goes well it returns a bus object, if not it returns null.
+         * @param params Not used since this is a void method.
+         * @return A bus object with the bus being nearest the device,
+         * null if no nearby bus is found.
+         */
         @Override
         protected Bus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
-            if (helper.isConnectedToWifi(getContext())) {
-                return getBusFromNetwork();
-            } else if (helper.isGPSEnabled(getContext())) {
-                return getBusFromLocation();
-            }
-            return null;
-        }
-
-        private Bus getBusFromNetwork() {
-            try {
-                return helper.getBusFromSystemId();
-            } catch (AccessErrorException | NoDataException e) {
-                //TODO GUI Alert
-                if (helper.isGPSEnabled(getContext())) {
-                    return getBusFromLocation();
-                }
-            }
-            return null;
-        }
-        private Bus getBusFromLocation() {
-            // Request GPS updates
-            if (Looper.myLooper() == null) {
+            if (helper.isGPSEnabled(getContext())) {
+                // Request GPS updates
                 Looper.prepare();
-            }
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-            // Start waiting... when this is done, we'll have the location in this.location.
-            Looper.loop();
-            // Now go use the location to load some data.
-            try {
-                Bus bus = helper.getBusNearestLocation(location);
-                if (bus != null) {
-                    return bus;
+                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+                // Start waiting... when this is done, we'll have the location in this.location.
+                Looper.loop();
+                // Now go use the location to load some data.
+                if (location != null) {
+                    try {
+                        Bus bus = helper.getBusNearestLocation(location);
+                        if (bus != null) {
+                            return bus;
+                        }
+                    } catch (AccessErrorException e) {
+                        System.out.println("NO INTERNET CONNECTION");
+                    } catch (NoDataException e) {
+                        System.out.println("ELECTRICITY SERVER DOWN");
+                    }
                 }
-            } catch (AccessErrorException e) {
-                System.out.println("NO INTERNET CONNECTION");
-            } catch (NoDataException e) {
-                System.out.println("ELECTRICITY SERVER DOWN");
             }
             return null;
         }
@@ -503,22 +503,22 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         setupMap();
     }
     private void fetchBusStops() {
-        ParseQuery<BusStop> stops = ParseQuery.getQuery(BusStop.class);
-        stops.findInBackground(new FindCallback<BusStop>() {
+        ParseQuery<BusStop> stopsParseQuery = ParseQuery.getQuery(BusStop.class);
+        stopsParseQuery.findInBackground(new FindCallback<BusStop>() {
             @Override
-            public void done(List<BusStop> busStops, com.parse.ParseException e) {
-                if(e == null) {
-
-                    Collections.sort(busStops, new Comparator<BusStop>() {
+            public void done(List<BusStop> stopsFromParse, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d(this.getClass().getSimpleName(), "Retrieved " + stopsFromParse.size() + " bus stops!");
+                    Collections.sort(stopsFromParse, new Comparator<BusStop>() {
                         @Override
                         public int compare(BusStop stop1, BusStop stop2) {
                             return stop1.compareTo(stop2);
                         }
                     });
-
+                    busStops = new ArrayList<>();
+                    busStops.addAll(stopsFromParse);
                     busStopsReady = true;
                     setupBusStops();
-
                 } else {
                     Log.d("fetchBusStops()", "Error: " + e.getMessage());
                 }
