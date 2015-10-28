@@ -6,10 +6,6 @@ package hihats.electricity.model;
 
 public class Bus {
 
-    protected enum BusType {
-        ELECTRIC, HYBRID
-    }
-
     private String dgw;
     private String vin;
     private String regNr;
