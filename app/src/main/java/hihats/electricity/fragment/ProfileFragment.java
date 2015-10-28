@@ -29,8 +29,8 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
-
-import static java.util.Calendar.MONTH;
+import hihats.electricity.model.Ride;
+import hihats.electricity.model.User;
 
 public class ProfileFragment extends Fragment {
 
@@ -41,21 +41,23 @@ public class ProfileFragment extends Fragment {
     List<HashMap<String, String>> rides;
     ListView rideListView;
     private LineChartView mChartOne;
-    private final String[] mLabelsOne = {"",getMonth(7), "", getMonth(6), "",  getMonth(5), "", getMonth(4), "", getMonth(3), "", getMonth(2), "", getMonth(1),  "", getMonth(0), ""};
-    private final float[][] mValuesOne = new float[1][20]; //{{3.5f, 4.7f, 4.3f, 0f, 0f, 0f, 7f, 8.3f, 7.0f, 0f, 0f, 0f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f}};
+    private final String[] mLabelsOne = {"", getChartMonth(7), getChartMonth(6), getChartMonth(5), getChartMonth(4), getChartMonth(3), getChartMonth(2), getChartMonth(1), getChartMonth(0),""};
+    private final float[][] mValuesOne = new float[1][10]; //{{3.5f, 4.7f, 4.3f, 0f, 0f, 0f, 7f, 8.3f, 7.0f, 0f, 0f, 0f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f}};
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         return fragment;
     }
 
-    public ProfileFragment() {}
+    public ProfileFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rides = new ArrayList<>();
         fetchRides();
+        calculateChartValues();
     }
 
     @Override
@@ -94,7 +96,7 @@ public class ProfileFragment extends Fragment {
                 TableLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
-        LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View buttonGroupView = layoutInflater.inflate(R.layout.buttongroup_dashboard, container, false);
         buttonGroupView.setLayoutParams(params);
@@ -142,7 +144,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public void produceOne(LineChartView chart){
+    public void produceOne(LineChartView chart) {
 
         LineSet dataset = new LineSet(mLabelsOne, mValuesOne[0]);
         dataset.setColor(this.getResources().getColor(R.color.primary))
@@ -162,47 +164,82 @@ public class ProfileFragment extends Fragment {
         chart.show();
     }
 
-    public String getMonth(int i) {
+    /**
+     * This method makes it possible to get for example
+     * the month before the last month
+     * with sending an int of 2 with the call
+     * @param i
+     * @return
+     */
+    public String getChartMonth(int i) {
         int currentMonth = Calendar.MONTH - i;
 
         if (currentMonth < 0) {
             currentMonth = currentMonth + 12;
         }
 
-        if (currentMonth == 0) {
-            return "January";
+        return getMonthString(currentMonth);
+    }
+
+    /**
+     * Month to String
+     * @param currentMonth
+     * @return
+     */
+    public String getMonthString(int currentMonth) {
+
+        switch (currentMonth) {
+            case 0:  return "Jan";
+            case 1:  return "Feb";
+            case 2:  return "Mar";
+            case 3:  return "Apr";
+            case 4:  return "May";
+            case 5:  return "Jun";
+            case 6:  return "Jul";
+            case 7:  return "Aug";
+            case 8:  return "Sep";
+            case 9: return "Oct";
+            case 10: return "Nov";
+            case 11: return "Dec";
+            default: return "Invalid month";
         }
-        else if (currentMonth == 1) {
-            return "February";
+    }
+
+    /**
+     * Sets the values in the chart depending on users rides
+     */
+    public void calculateChartValues() {
+        ArrayList<Ride> rides = User.getInstance().getRides();
+        float[] chartValues = new float[8];
+
+        for (Ride r : rides) {
+            int rideMonth = r.getDate().getMonth();
+            if (r.getDate().getYear() == Calendar.YEAR) {
+                if (getMonthString(rideMonth) == getChartMonth(7)) {
+                    chartValues[0] = chartValues[0] + (float) (r.getDistance() / 10);
+                } else if (getMonthString(rideMonth) == getChartMonth(6)) {
+                    chartValues[1] = chartValues[1] + (float) (r.getDistance() / 10);
+                } else if (getMonthString(rideMonth) == getChartMonth(5)) {
+                    chartValues[2] = chartValues[2] + (float) (r.getDistance() / 10);
+                } else if (getMonthString(rideMonth) == getChartMonth(4)) {
+                    chartValues[3] = chartValues[3] + (float) (r.getDistance() / 10);
+                } else if (getMonthString(rideMonth) == getChartMonth(3)) {
+                    chartValues[4] = chartValues[4] + (float) (r.getDistance() / 10);
+                } else if (getMonthString(rideMonth) == getChartMonth(2)) {
+                    chartValues[5] = chartValues[5] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(1)) {
+                    chartValues[6] = chartValues[6] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(0)) {
+                    chartValues[7] = chartValues[7] + (float) (r.getDistance());
+                }
+            }
         }
-        else if (currentMonth == 2) {
-            return "Mars";
-        }
-        else if (currentMonth == 3) {
-            return "April";
-        }
-        else if (currentMonth == 4) {
-            return "May";
-        }
-        else if (currentMonth == 5) {
-            return "June";
-        }
-        else if (currentMonth == 6) {
-            return "July";
-        }
-        else if (currentMonth == 7) {
-            return "August";
-        }
-        else if (currentMonth == 8) {
-            return "September";
-        }
-        else if (currentMonth == 9) {
-            return "October";
-        }
-        else if (currentMonth == 10) {
-            return "November";
-        } else {
-            return "December";
+        setChartValues(chartValues);
+    }
+
+    public void setChartValues(float[] chartValues) {
+        for (int i = 1; i < 9; i++) {
+            mValuesOne[0][i] = chartValues[(i-1)];
         }
     }
 }
