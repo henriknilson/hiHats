@@ -4,17 +4,13 @@ package hihats.electricity.model;
  * Created by fredrikkindstrom on 01/10/15.
  */
 
-public class Bus {
+public class Bus implements IBus{
 
-    protected enum BusType {
-        ELECTRIC, HYBRID
-    }
-
-    private String dgw;
-    private String vin;
-    private String regNr;
-    private String systemId;
-    private BusType busType;
+    private final String dgw;
+    private final String vin;
+    private final String regNr;
+    private final String systemId;
+    private final BusType busType;
     private DatedPosition datedPosition;
     private float speed;
     private float bearing;

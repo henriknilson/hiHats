@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusFactory;
+import hihats.electricity.model.IBus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
@@ -21,7 +21,7 @@ public class RideDataService extends Service {
     private MyThread thread;
     private boolean isRunning = false;
     private Intent intent;
-    private Bus bus;
+    private IBus bus;
 
     @Override
     public IBinder onBind(Intent arg0) {

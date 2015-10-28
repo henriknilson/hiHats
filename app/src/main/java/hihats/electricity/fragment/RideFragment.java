@@ -23,11 +23,8 @@ import android.widget.TextView;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,9 +53,10 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
-import hihats.electricity.model.Bus;
-import hihats.electricity.model.BusStop;
+import hihats.electricity.model.IBusStop;
+import hihats.electricity.model.ParseBusStop;
 import hihats.electricity.model.DatedPosition;
+import hihats.electricity.model.IBus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
@@ -66,6 +64,8 @@ import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
+
+    private static final String TAG = "RideFragment";
 
     // System variables
     private LayoutInflater inflater;
@@ -91,12 +91,12 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private final LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
     private Polyline line;
-    private ArrayList<BusStop> busStops;
+    private ArrayList<IBusStop> parseBusStops;
     private Boolean mapReady = false;
     private Boolean busStopsReady = false;
 
     // Active bus variables
-    private Bus activeBus;
+    private IBus activeBus;
     private LatLng activeBusPosition;
     private boolean isActiveBusAtStop;
     private String activeBusNextStop;
@@ -152,7 +152,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        fetchBusStops();
+        fetchParseBusStops();
 
         // Return the finished view
         return view;
@@ -191,7 +191,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private void setupBusStops() {
         /*
         // Place the bus stops on the map
-        for (BusStop i : busStops){
+        for (ParseBusStop i : parseBusStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop_small))
@@ -356,7 +356,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     private String getClosestBusStop() {
         float[] distance = new float[1];
-        for (BusStop stop : busStops) {
+        for (IBusStop stop : parseBusStops) {
             Location.distanceBetween(activeBusPosition.latitude, activeBusPosition.longitude, stop.getLatLng().latitude, stop.getLatLng().longitude, distance);
             if (distance[0] < 50.0f) {
                 return stop.getName();
@@ -381,7 +381,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      * Finds bus either via Network or via GPS, then sets the 'activeBus'
      * variable and runs the 'engageRideMode' method
      */
-    private class AsyncFindBusFromLocationTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
+    private class AsyncFindBusFromLocationTask extends AsyncTask<Void, IBus, IBus> implements LocationListener{
 
         private final BusDataHelper helper = new BusDataHelper();
         private LocationRequest locationRequest;
@@ -413,7 +413,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
          * null if no nearby bus is found.
          */
         @Override
-        protected Bus doInBackground(Void... params) {
+        protected IBus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
             if (helper.isGPSEnabled(getContext())) {
                 // Request GPS updates
@@ -424,7 +424,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 // Now go use the location to load some data.
                 if (location != null) {
                     try {
-                        Bus bus = helper.getBusNearestLocation(location);
+                        IBus bus = helper.getBusNearestLocation(location);
                         if (bus != null) {
                             return bus;
                         }
@@ -439,7 +439,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
-        protected void onPostExecute(Bus bus) {
+        protected void onPostExecute(IBus bus) {
             super.onPostExecute(bus);
             if (bus == null) {
                 System.out.println("NO NEARBY BUS FOUND");
@@ -502,25 +502,25 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapReady = true;
         setupMap();
     }
-    private void fetchBusStops() {
-        ParseQuery<BusStop> stopsParseQuery = ParseQuery.getQuery(BusStop.class);
-        stopsParseQuery.findInBackground(new FindCallback<BusStop>() {
+    private void fetchParseBusStops() {
+        ParseQuery<ParseBusStop> stopsParseQuery = ParseQuery.getQuery(ParseBusStop.class);
+        stopsParseQuery.findInBackground(new FindCallback<ParseBusStop>() {
             @Override
-            public void done(List<BusStop> stopsFromParse, com.parse.ParseException e) {
+            public void done(List<ParseBusStop> stopsFromParse, com.parse.ParseException e) {
                 if (e == null) {
-                    Log.d(this.getClass().getSimpleName(), "Retrieved " + stopsFromParse.size() + " bus stops!");
-                    Collections.sort(stopsFromParse, new Comparator<BusStop>() {
+                    Log.d(TAG, "Retrieved " + stopsFromParse.size() + " bus stops!");
+                    Collections.sort(stopsFromParse, new Comparator<ParseBusStop>() {
                         @Override
-                        public int compare(BusStop stop1, BusStop stop2) {
+                        public int compare(ParseBusStop stop1, ParseBusStop stop2) {
                             return stop1.compareTo(stop2);
                         }
                     });
-                    busStops = new ArrayList<>();
-                    busStops.addAll(stopsFromParse);
+                    parseBusStops = new ArrayList<>();
+                    parseBusStops.addAll(stopsFromParse);
                     busStopsReady = true;
                     setupBusStops();
                 } else {
-                    Log.d("fetchBusStops()", "Error: " + e.getMessage());
+                    Log.d(TAG, "fetchParseBusStops() Error: " + e.getMessage());
                 }
 
             }
