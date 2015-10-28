@@ -23,8 +23,11 @@ import android.widget.TextView;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -395,7 +398,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
-                    .setFastestInterval(1 * 1000);
+                    .setFastestInterval(1 * 1000)
+                    .setNumUpdates(1);
         }
 
         /**
@@ -413,22 +417,22 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             System.out.println("FIND BUS TASK EXECUTED");
             if (helper.isGPSEnabled(getContext())) {
                 // Request GPS updates
-                if (Looper.myLooper() == null) {
-                    Looper.prepare();
-                }
+                Looper.prepare();
                 LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
                 // Start waiting... when this is done, we'll have the location in this.location.
                 Looper.loop();
                 // Now go use the location to load some data.
-                try {
-                    Bus bus = helper.getBusNearestLocation(location);
-                    if (bus != null) {
-                        return bus;
+                if (location != null) {
+                    try {
+                        Bus bus = helper.getBusNearestLocation(location);
+                        if (bus != null) {
+                            return bus;
+                        }
+                    } catch (AccessErrorException e) {
+                        System.out.println("NO INTERNET CONNECTION");
+                    } catch (NoDataException e) {
+                        System.out.println("ELECTRICITY SERVER DOWN");
                     }
-                } catch (AccessErrorException e) {
-                    System.out.println("NO INTERNET CONNECTION");
-                } catch (NoDataException e) {
-                    System.out.println("ELECTRICITY SERVER DOWN");
                 }
             }
             return null;
@@ -499,22 +503,22 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         setupMap();
     }
     private void fetchBusStops() {
-        ParseQuery<BusStop> stops = ParseQuery.getQuery(BusStop.class);
-        stops.findInBackground(new FindCallback<BusStop>() {
+        ParseQuery<BusStop> stopsParseQuery = ParseQuery.getQuery(BusStop.class);
+        stopsParseQuery.findInBackground(new FindCallback<BusStop>() {
             @Override
-            public void done(List<BusStop> busStops, com.parse.ParseException e) {
-                if(e == null) {
-
-                    Collections.sort(busStops, new Comparator<BusStop>() {
+            public void done(List<BusStop> stopsFromParse, com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d(this.getClass().getSimpleName(), "Retrieved " + stopsFromParse.size() + " bus stops!");
+                    Collections.sort(stopsFromParse, new Comparator<BusStop>() {
                         @Override
                         public int compare(BusStop stop1, BusStop stop2) {
                             return stop1.compareTo(stop2);
                         }
                     });
-
+                    busStops = new ArrayList<>();
+                    busStops.addAll(stopsFromParse);
                     busStopsReady = true;
                     setupBusStops();
-
                 } else {
                     Log.d("fetchBusStops()", "Error: " + e.getMessage());
                 }
