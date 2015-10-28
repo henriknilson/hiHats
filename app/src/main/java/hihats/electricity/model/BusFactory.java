@@ -3,20 +3,20 @@ package hihats.electricity.model;
 /**
  * Created by fredrikkindstrom on 26/10/15.
  */
-public class ParseBusFactory {
+public class BusFactory {
 
-    private static ParseBusFactory instance;
+    private static BusFactory instance;
 
-    private ParseBusFactory(){}
+    private BusFactory(){}
 
-    public static ParseBusFactory getInstance() {
+    public static BusFactory getInstance() {
         if (instance == null) {
-            instance = new ParseBusFactory();
+            instance = new BusFactory();
         }
         return instance;
     }
 
-    public ParseBus getBus(String dgwOrSystemId) {
+    public Bus getBus(String dgwOrSystemId) {
         String dgw;
         String vin;
         String regNr;
@@ -161,6 +161,6 @@ public class ParseBusFactory {
                     throw new IllegalArgumentException("No such bus in database");
             }
         }
-        return new ParseBus(dgw, vin, regNr, systemId, busType);
+        return new Bus(dgw, vin, regNr, systemId, busType);
     }
 }

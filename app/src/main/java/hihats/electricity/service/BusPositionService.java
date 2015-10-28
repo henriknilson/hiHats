@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import hihats.electricity.model.ParseBusFactory;
+import hihats.electricity.model.BusFactory;
 import hihats.electricity.model.IBus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
@@ -45,7 +45,7 @@ public class BusPositionService extends Service {
     public synchronized void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         String busDgw = intent.getStringExtra("busDgw");
-        bus = ParseBusFactory.getInstance().getBus(busDgw);
+        bus = BusFactory.getInstance().getBus(busDgw);
         if (!isRunning) {
             thread.start();
             isRunning = true;

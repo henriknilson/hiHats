@@ -24,7 +24,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import hihats.electricity.model.ParseBusFactory;
+import hihats.electricity.model.BusFactory;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
 import hihats.electricity.net.AccessErrorException;
@@ -43,7 +43,7 @@ public class BusDataHelper {
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-    private final float BUS_DISTANCE_METERS = 50.0f;
+    private final float BUS_DISTANCE_METERS = 5000.0f;
     private final String ICOMERA = "https://ombord.info/api/xml/system/";
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
@@ -113,7 +113,7 @@ public class BusDataHelper {
         System.out.println(response);
         if (result != null) {
             try {
-                return ParseBusFactory.getInstance().getBus(result);
+                return BusFactory.getInstance().getBus(result);
             } catch (IllegalArgumentException e) {
                 throw new NoDataException();
             }
@@ -180,7 +180,7 @@ public class BusDataHelper {
                 } catch (IllegalArgumentException e) {
                     bearing = 0f;
                 }
-                IBus bus = ParseBusFactory.getInstance().getBus("Ericsson$" + id);
+                IBus bus = BusFactory.getInstance().getBus("Ericsson$" + id);
                 bus.setDatedPosition(loc);
                 bus.setBearing(bearing);
                 buses.add(bus);
