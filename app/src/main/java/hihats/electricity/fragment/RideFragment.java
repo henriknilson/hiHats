@@ -23,11 +23,8 @@ import android.widget.TextView;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,9 +53,9 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
-import hihats.electricity.model.Bus;
 import hihats.electricity.model.BusStop;
 import hihats.electricity.model.DatedPosition;
+import hihats.electricity.model.IBus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
@@ -96,7 +93,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Boolean busStopsReady = false;
 
     // Active bus variables
-    private Bus activeBus;
+    private IBus activeBus;
     private LatLng activeBusPosition;
     private boolean isActiveBusAtStop;
     private String activeBusNextStop;
@@ -381,7 +378,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
      * Finds bus either via Network or via GPS, then sets the 'activeBus'
      * variable and runs the 'engageRideMode' method
      */
-    private class AsyncFindBusFromLocationTask extends AsyncTask<Void, Bus, Bus> implements LocationListener{
+    private class AsyncFindBusFromLocationTask extends AsyncTask<Void, IBus, IBus> implements LocationListener{
 
         private final BusDataHelper helper = new BusDataHelper();
         private LocationRequest locationRequest;
@@ -413,7 +410,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
          * null if no nearby bus is found.
          */
         @Override
-        protected Bus doInBackground(Void... params) {
+        protected IBus doInBackground(Void... params) {
             System.out.println("FIND BUS TASK EXECUTED");
             if (helper.isGPSEnabled(getContext())) {
                 // Request GPS updates
@@ -424,7 +421,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 // Now go use the location to load some data.
                 if (location != null) {
                     try {
-                        Bus bus = helper.getBusNearestLocation(location);
+                        IBus bus = helper.getBusNearestLocation(location);
                         if (bus != null) {
                             return bus;
                         }
@@ -439,7 +436,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
 
         @Override
-        protected void onPostExecute(Bus bus) {
+        protected void onPostExecute(IBus bus) {
             super.onPostExecute(bus);
             if (bus == null) {
                 System.out.println("NO NEARBY BUS FOUND");

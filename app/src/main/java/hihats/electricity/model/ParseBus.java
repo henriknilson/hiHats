@@ -4,7 +4,7 @@ package hihats.electricity.model;
  * Created by fredrikkindstrom on 01/10/15.
  */
 
-public class Bus {
+public class ParseBus implements IBus{
 
     private String dgw;
     private String vin;
@@ -15,7 +15,7 @@ public class Bus {
     private float speed;
     private float bearing;
 
-    public Bus(String dgw, String vin, String regNr, String systemId, BusType busType) {
+    public ParseBus(String dgw, String vin, String regNr, String systemId, BusType busType) {
         this.dgw = dgw;
         this.vin = vin;
         this.regNr = regNr;
