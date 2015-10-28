@@ -6,11 +6,11 @@ package hihats.electricity.model;
 
 public class Bus implements IBus{
 
-    private String dgw;
-    private String vin;
-    private String regNr;
-    private String systemId;
-    private BusType busType;
+    private final String dgw;
+    private final String vin;
+    private final String regNr;
+    private final String systemId;
+    private final BusType busType;
     private DatedPosition datedPosition;
     private float speed;
     private float bearing;

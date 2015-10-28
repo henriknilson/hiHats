@@ -10,23 +10,23 @@ import java.util.List;
  * Created by Pertta on 15-10-07.
  * This class represents the user
  */
-public class User {
+public class CurrentUser {
 
-    private static User user = null;
+    private static CurrentUser instance;
 
     String userName;
     String userId;
     int points;
-    ArrayList<Ride> rides = new ArrayList<>();
+    ArrayList<ParseRide> rides = new ArrayList<>();
 
-    protected User() {
+    protected CurrentUser() {
     }
 
-    public static User getInstance() {
-        if (user == null) {
-            user = new User();
+    public static CurrentUser getInstance() {
+        if (instance == null) {
+            instance = new CurrentUser();
         }
-        return user;
+        return instance;
     }
 
 
@@ -64,12 +64,12 @@ public class User {
 
     public void setRides() {
 
-        ParseQuery<Ride> parseRides = ParseQuery.getQuery(Ride.class);
-        parseRides.findInBackground(new FindCallback<Ride>() {
+        ParseQuery<ParseRide> parseRides = ParseQuery.getQuery(ParseRide.class);
+        parseRides.findInBackground(new FindCallback<ParseRide>() {
             @Override
-            public void done(List<Ride> objects, com.parse.ParseException e) {
+            public void done(List<ParseRide> objects, com.parse.ParseException e) {
                 rides = new ArrayList<>();
-                for (Ride ride : objects) {
+                for (ParseRide ride : objects) {
 
                     if (ride.getUser().equals(userName)) {
                         rides.add(ride);
@@ -85,13 +85,13 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (!(o instanceof CurrentUser)) return false;
 
-        User user = (User) o;
+        CurrentUser currentUser = (CurrentUser) o;
 
-        if (points != user.points) return false;
-        if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
-        return !(rides != null ? !rides.equals(user.rides) : user.rides != null);
+        if (points != currentUser.points) return false;
+        if (userName != null ? !userName.equals(currentUser.userName) : currentUser.userName != null) return false;
+        return !(rides != null ? !rides.equals(currentUser.rides) : currentUser.rides != null);
 
     }
 

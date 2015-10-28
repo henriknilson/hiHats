@@ -1,23 +1,19 @@
 package hihats.electricity.model;
 
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by axel on 2015-10-07.
  */
 @ParseClassName("Ride")
-public class Ride extends ParseObject {
+public class ParseRide extends ParseObject implements IRide {
 
-    public Ride() {
+    public ParseRide() {
 
     }
 

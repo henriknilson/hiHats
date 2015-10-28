@@ -7,16 +7,16 @@ import junit.framework.TestCase;
  * Created by Pertta on 15-10-08.
  */
 
-public class UserTest extends TestCase {
-    private User uone = null, utwo = null;
-    public UserTest(String name) {
+public class CurrentUserTest extends TestCase {
+    private CurrentUser uone = null, utwo = null;
+    public CurrentUserTest(String name) {
         super(name);
     }
     public void setUp() {
-        uone = User.getInstance();
+        uone = CurrentUser.getInstance();
         System.out.println("Created singleton user: " + uone);
         System.out.println(uone.getUserName() + uone.getPoints());
-        utwo = User.getInstance();
+        utwo = CurrentUser.getInstance();
         System.out.println("Created singleton user: " + utwo);
         System.out.println(utwo.getUserName() + utwo.getPoints());
         testUnique();

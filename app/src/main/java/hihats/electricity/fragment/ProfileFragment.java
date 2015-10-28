@@ -15,7 +15,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
-import hihats.electricity.model.Ride;
+import hihats.electricity.model.ParseRide;
 
 public class ProfileFragment extends Fragment {
 
@@ -107,14 +106,14 @@ public class ProfileFragment extends Fragment {
 
         Log.i(TAG, "fetchRides()");
 
-        ParseQuery<Ride> query = ParseQuery.getQuery(Ride.class);
-        query.findInBackground(new FindCallback<Ride>() {
-            public void done(List<Ride> parseRides, ParseException e) {
+        ParseQuery<ParseRide> query = ParseQuery.getQuery(ParseRide.class);
+        query.findInBackground(new FindCallback<ParseRide>() {
+            public void done(List<ParseRide> parseRides, ParseException e) {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
 
-                    for (Ride parseObject : parseRides) {
+                    for (ParseRide parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
 
                         // Create Ride HashMaps from the parse objects
