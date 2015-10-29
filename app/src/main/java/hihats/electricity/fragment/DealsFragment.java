@@ -18,7 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
+import hihats.electricity.database.IDataHandler;
+import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.database.ParseDeal;
+import hihats.electricity.model.IDeal;
 
 public class DealsFragment extends Fragment {
 
@@ -26,6 +29,8 @@ public class DealsFragment extends Fragment {
     
     ListView dealsListView;
     SimpleAdapter dealsAdapter;
+
+    IDataHandler dataHandler = ParseDataHandler.getInstance();
 
     /**
      * The data container for the ListView
@@ -51,7 +56,30 @@ public class DealsFragment extends Fragment {
 
         this.deals = new ArrayList<>();
 
-        fetchDeals();
+        dataHandler.getDeals(new IDataHandler.Callback<IDeal>() {
+            @Override
+            public void callback(List<IDeal> data) {
+                for (IDeal parseDeal : data) {
+                    HashMap<String, String> deal = new HashMap<String, String>();
+
+                    // Create HashMaps from the Deals
+                    deal.put("name", parseDeal.getName());
+                    deal.put("author", parseDeal.getAuthor());
+                    deal.put("description", parseDeal.getDescription());
+                    deal.put("points", parseDeal.getPoints() + " GreenPoints");
+                    deal.put("image", Integer.toString(
+                                    dealImages[parseDeal.getImage()]
+                            )
+                    );
+
+                    deals.add(deal);
+
+                    // Notify the ListViews SimpleAdapter adapter to update UI
+                    dealsAdapter.notifyDataSetChanged();
+
+                }
+            }
+        });
     }
 
     @Override
@@ -90,6 +118,7 @@ public class DealsFragment extends Fragment {
     /**
      * Fetches Deals from Parse and adds the returned deals to the UI (via the deals array).
      */
+
     public void fetchDeals() {
 
         Log.i(TAG, "fetchDeals()");
@@ -99,26 +128,7 @@ public class DealsFragment extends Fragment {
             public void done(List<ParseDeal> parseDeals, ParseException e) {
                 if (e == null) {
 
-                    for(ParseDeal parseDeal : parseDeals) {
-                        HashMap<String, String> deal = new HashMap<String, String>();
 
-                        // Create HashMaps from the Deals
-                        deal.put("objectId", parseDeal.getObjectId());
-                        deal.put("name", parseDeal.getName());
-                        deal.put("author", parseDeal.getAuthor());
-                        deal.put("description", parseDeal.getDescription());
-                        deal.put("points", parseDeal.getPoints() + " GreenPoints");
-                        deal.put("image", Integer.toString(
-                                dealImages[parseDeal.getImage()]
-                            )
-                        );
-
-                        deals.add(deal);
-
-                        // Notify the ListViews SimpleAdapter adapter to update UI
-                        dealsAdapter.notifyDataSetChanged();
-
-                    }
 
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
