@@ -73,7 +73,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Intent positionServiceIntent;
     private Intent rideServiceIntent;
     private GoogleApiClient googleApiClient;
-    private IDataHandler dataHandler = ParseDataHandler.getInstance();
+    private final IDataHandler dataHandler = ParseDataHandler.getInstance();
 
     // Buttons
     private ActionProcessButton getOnBusButton;
@@ -441,14 +441,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
-                    .setFastestInterval(1 * 1000)
+                    .setFastestInterval(1000)
                     .setNumUpdates(1);
         }
 
         /**
          * Checks first if the device has location services enabled.
          * Then starts waiting for a location.
-         * When the location is recieved its used to find a nearby bus via
+         * When the location is received its used to find a nearby bus via
          * the BusDataHelper class.
          * If all goes well it returns a bus object, if not it returns null.
          * @param params Not used since this is a void method.
