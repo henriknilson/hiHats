@@ -28,7 +28,7 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
-import hihats.electricity.model.User;
+import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.ParseRide;
 
 public class ProfileFragment extends Fragment {
@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment {
     List<HashMap<String, String>> rides;
     ListView rideListView;
     private LineChartView mChartOne;
-    private final String[] mLabelsOne = {"", getChartMonth(0), getChartMonth(0), getChartMonth(0), getChartMonth(0), getChartMonth(0), getChartMonth(0), getChartMonth(0), getChartMonth(0),""};
+    private final String[] mLabelsOne = {"", getChartMonth(7), getChartMonth(6), getChartMonth(5), getChartMonth(4), getChartMonth(3), getChartMonth(2), getChartMonth(1), getChartMonth(0),""};
     private final float[][] mValuesOne = new float[1][10]; //{{3.5f, 4.7f, 4.3f, 0f, 0f, 0f, 7f, 8.3f, 7.0f, 0f, 0f, 0f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f}};
 
     public static ProfileFragment newInstance() {
@@ -208,7 +208,7 @@ public class ProfileFragment extends Fragment {
      * Sets the values in the chart depending on users rides
      */
     public void calculateChartValues() {
-        ArrayList<ParseRide> rides = User.getInstance().getRides();
+        ArrayList<ParseRide> rides = CurrentUser.getInstance().getRides();
         float[] chartValues = new float[8];
 
         for (ParseRide r : rides) {
