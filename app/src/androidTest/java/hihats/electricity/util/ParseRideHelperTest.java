@@ -26,20 +26,12 @@ public class ParseRideHelperTest extends ActivityInstrumentationTestCase2<LoginA
 
         LoginActivity activity = getActivity();
 
-        ParseObject.registerSubclass(ParseRideHelper.class);
+        ParseObject.registerSubclass(ParseRide.class);
         Parse.initialize(activity, "w5w8u7YeyDApblFiC9XPn509REPNdFIv1SleClrR", "IxqGzyFnJUENwSpNl4vRajZaW9gPPgPdK3cArFse");
 
-        final ParseRide ride = new ParseRide(new Date(), "SvenHultin", "ChalmersPlatsen", 10, 5, "axel");
-        final ParseRideHelper helper = new ParseRideHelper();
+        final ParseRide ride = new ParseRide();
 
-
-        helper.uploadRide(
-                ride.getDate(),
-                ride.getBusStopFrom(),
-                ride.getBusStopFrom(),
-                ride.getPoints(),
-                ride.getDistance(),
-                ride.getOwner());
+        helper.uploadRide(new Date(), "SvenHultin", "ChalmersPlatsen", 10, 5, "axel");
 
         Timer timer = new Timer();
 

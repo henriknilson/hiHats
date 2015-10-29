@@ -53,10 +53,13 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
+import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
+import hihats.electricity.model.IRide;
 import hihats.electricity.model.ParseBusStop;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
+import hihats.electricity.model.Ride;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
@@ -348,6 +351,13 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
     private void stopLoggingRide() {
         activeBusTotalDistance = 0;
+        Ride ride = new Ride(
+                rideDate,
+                rideBusStopFrom,
+                rideBusStopToo,
+                ridePoints,
+                rideDistance,
+                CurrentUser.getInstance().getUserName());
     }
 
     /*

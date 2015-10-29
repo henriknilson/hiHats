@@ -67,9 +67,7 @@ public class ParseRide extends ParseObject implements IRide {
         ride.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null) {
-
-                } else {
+                if (e != null) {
                     e.printStackTrace();
                 }
             }
