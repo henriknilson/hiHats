@@ -11,10 +11,10 @@ public class Ride implements IRide {
     private String stopFrom;
     private String stopTo;
     private int points;
-    private double distance;
+    private int distance;
     private String user;
 
-    public Ride(Date date, String stopFrom, String stopTo, int points, double distance, String user) {
+    public Ride(Date date, String stopFrom, String stopTo, int points, int distance, String user) {
         this.date = date;
         this.stopFrom = stopFrom;
         this.stopTo = stopTo;
@@ -39,7 +39,7 @@ public class Ride implements IRide {
         return points;
     }
 
-    public double getDistance() {
+    public int getDistance() {
         return distance;
     }
 

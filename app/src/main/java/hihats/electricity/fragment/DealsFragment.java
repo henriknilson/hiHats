@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
-import hihats.electricity.model.ParseDeal;
+import hihats.electricity.database.ParseDeal;
 
 public class DealsFragment extends Fragment {
 
@@ -49,7 +49,7 @@ public class DealsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.deals = new ArrayList<HashMap<String, String>>();
+        this.deals = new ArrayList<>();
 
         fetchDeals();
     }

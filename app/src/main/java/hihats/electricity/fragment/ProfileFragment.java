@@ -27,7 +27,7 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
-import hihats.electricity.model.ParseRide;
+import hihats.electricity.database.ParseRide;
 
 public class ProfileFragment extends Fragment {
 

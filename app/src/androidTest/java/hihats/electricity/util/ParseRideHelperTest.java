@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import hihats.electricity.activity.LoginActivity;
-import hihats.electricity.model.ParseRide;
+import hihats.electricity.database.ParseRide;
 
 /**
  * Created by axel on 2015-10-08.
