@@ -18,7 +18,7 @@ See User manual in docs folder
 or
 checkout the two videos explaining the concept and the prototype
 
-[Koncept Video](https://www.youtube.com/watch?v=fm9I-2A2CJM)
+[Concept Video](https://www.youtube.com/watch?v=fm9I-2A2CJM)
 
 [Prototype Video](https://www.youtube.com/watch?v=-hmMvpPmy8o)
 
