@@ -52,8 +52,6 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
-import hihats.electricity.database.DBEvent;
-import hihats.electricity.database.DBListener;
 import hihats.electricity.database.ParseDatabase;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
@@ -67,7 +65,7 @@ import hihats.electricity.service.RideDataService;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
 
-public class RideFragment extends Fragment implements DBListener, OnMapReadyCallback {
+public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "RideFragment";
 
@@ -124,7 +122,6 @@ public class RideFragment extends Fragment implements DBListener, OnMapReadyCall
         positionServiceIntent = new Intent(getActivity(), BusPositionService.class);
         rideServiceIntent = new Intent(getActivity(), RideDataService.class);
         googleApiClient = ((MainActivity)getActivity()).googleApiClient;
-        ParseDatabase.getInstance().startListen(this);
     }
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -156,12 +153,15 @@ public class RideFragment extends Fragment implements DBListener, OnMapReadyCall
             }
         });
 
-        fetchParseBusStops();
-
-        /*
-        This makes all crash and crap when you assign the bus stops in onDBAction
-         */
-        ParseDatabase.getInstance().downloadBusStops();
+        ParseDatabase.getInstance().getBusStops(new ParseDatabase.Callback() {
+            @Override
+            public void callback(List data) {
+                busStops = new ArrayList<>();
+                busStops.addAll(data);
+                busStopsReady = true;
+                setupBusStops();
+            }
+        });
 
         // Return the finished view
         return view;
@@ -180,7 +180,6 @@ public class RideFragment extends Fragment implements DBListener, OnMapReadyCall
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ParseDatabase.getInstance().stopListen(this);
     }
 
     /*
@@ -230,7 +229,6 @@ public class RideFragment extends Fragment implements DBListener, OnMapReadyCall
     /*
     Main action methods for UI
      */
-
     private void engageRideMode() {
         ((ViewGroup) view).removeView(getOnBusButton);
 
@@ -533,32 +531,5 @@ public class RideFragment extends Fragment implements DBListener, OnMapReadyCall
         setupMap();
     }
 
-    private void fetchParseBusStops() {
-        ParseQuery<ParseBusStop> stopsParseQuery = ParseQuery.getQuery(ParseBusStop.class);
-        stopsParseQuery.findInBackground(new FindCallback<ParseBusStop>() {
-            @Override
-            public void done(List<ParseBusStop> stopsFromParse, com.parse.ParseException e) {
-                if (e == null) {
-                    Log.d(TAG, "Retrieved " + stopsFromParse.size() + " bus stops!");
-                    Collections.sort(stopsFromParse, new Comparator<ParseBusStop>() {
-                        @Override
-                        public int compare(ParseBusStop stop1, ParseBusStop stop2) {
-                            return stop1.compareTo(stop2);
-                        }
-                    });
-                    busStops = new ArrayList<>();
-                    busStops.addAll(stopsFromParse);
-                    busStopsReady = true;
-                    setupBusStops();
-                } else {
-                    Log.d(TAG, "fetchParseBusStops() Error: " + e.getMessage());
-                }
 
-            }
-        });
-    }
-    @Override
-    public void onDBAction(DBEvent event, Object object) {
-
-    }
 }
