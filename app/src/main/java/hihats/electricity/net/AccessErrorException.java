@@ -1,7 +1,8 @@
 package hihats.electricity.net;
 
 /**
- * Created by fredrikkindstrom on 24/09/15.
+ * This exception is thrown when there is a problem with the
+ * actual http connection to a remote server.
  */
 public class AccessErrorException extends Exception {
 

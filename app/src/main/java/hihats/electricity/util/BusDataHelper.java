@@ -15,7 +15,7 @@ import hihats.electricity.model.IBus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.HttpHandler;
 import hihats.electricity.net.NoDataException;
-import hihats.electricity.net.UrlRetriever;
+import hihats.electricity.net.ElectriCityUrlRetriever;
 
 /**
  * This class converts the data obtained by the net class package
@@ -30,7 +30,7 @@ public class BusDataHelper {
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
     private final float BUS_DISTANCE_METERS = 5000.0f;
 
-    private final UrlRetriever urlRetriever = new UrlRetriever();
+    private final ElectriCityUrlRetriever electriCityUrlRetriever = new ElectriCityUrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
 
     /*
@@ -45,7 +45,7 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public boolean isBusAtStop(IBus bus) throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(bus.getDgw(), null, AT_STOP, 30000);
+        String url = electriCityUrlRetriever.getUrl(bus.getDgw(), null, AT_STOP, 30000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
@@ -111,7 +111,7 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public ArrayList<IBus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(null, null, GPS_RMC, 8000);
+        String url = electriCityUrlRetriever.getUrl(null, null, GPS_RMC, 8000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ArrayList<IBus> buses = new ArrayList<>();
@@ -148,7 +148,7 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public DatedPosition getLastPositionForBus(IBus bus) throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
+        String url = electriCityUrlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
@@ -163,7 +163,7 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public String getNextStopForBus(IBus bus) throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(bus.getDgw(), null, NEXT_STOP, 15000);
+        String url = electriCityUrlRetriever.getUrl(bus.getDgw(), null, NEXT_STOP, 15000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
@@ -178,7 +178,7 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public int getTotalDistanceForBus(IBus bus) throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(bus.getDgw(), null, TOTAL_VEHICLE_DISTANCE, 10000);
+        String url = electriCityUrlRetriever.getUrl(bus.getDgw(), null, TOTAL_VEHICLE_DISTANCE, 10000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         int data = Integer.parseInt(rawData.get(0).getValue());
@@ -196,7 +196,7 @@ public class BusDataHelper {
      * @throws NoDataException When the http request was successful but no data was found.
      */
     public void updateDataForBus(IBus bus) throws AccessErrorException, NoDataException {
-        String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
+        String url = electriCityUrlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
         String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
