@@ -52,6 +52,9 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
+import hihats.electricity.database.DBEvent;
+import hihats.electricity.database.DBListener;
+import hihats.electricity.database.ParseDatabase;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
 import hihats.electricity.database.ParseBusStop;
@@ -64,7 +67,7 @@ import hihats.electricity.service.RideDataService;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
 
-public class RideFragment extends Fragment implements OnMapReadyCallback {
+public class RideFragment extends Fragment implements DBListener, OnMapReadyCallback {
 
     private static final String TAG = "RideFragment";
 
@@ -121,6 +124,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         positionServiceIntent = new Intent(getActivity(), BusPositionService.class);
         rideServiceIntent = new Intent(getActivity(), RideDataService.class);
         googleApiClient = ((MainActivity)getActivity()).googleApiClient;
+        ParseDatabase.getInstance().startListen(this);
     }
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -154,6 +158,11 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         fetchParseBusStops();
 
+        /*
+        This makes all crash and crap when you assign the bus stops in onDBAction
+         */
+        ParseDatabase.getInstance().downloadBusStops();
+
         // Return the finished view
         return view;
     }
@@ -167,6 +176,11 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         super.onResume();
         mapView.onResume();
 
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ParseDatabase.getInstance().stopListen(this);
     }
 
     /*
@@ -542,5 +556,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+    }
+    @Override
+    public void onDBAction(DBEvent event, Object object) {
+
     }
 }
