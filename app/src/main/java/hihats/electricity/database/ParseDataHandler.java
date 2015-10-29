@@ -1,13 +1,10 @@
 package hihats.electricity.database;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.parse.FindCallback;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,39 +12,35 @@ import java.util.List;
 /**
  * Created by filip on 29/10/15.
  */
-public class ParseDatabase {
+public class ParseDataHandler implements IDataHandler {
 
-    private static final ParseDatabase INSTANCE = new ParseDatabase();
+    private static final IDataHandler INSTANCE = new ParseDataHandler();
 
-    public static ParseDatabase getInstance() {
-        return ParseDatabase.INSTANCE;
+    public static IDataHandler getInstance() {
+        return ParseDataHandler.INSTANCE;
     }
 
-    private ParseDatabase() {};
+    private ParseDataHandler() {};
 
-    public static final String TAG = "ParseDatabase";
+    public static final String TAG = "ParseDataHandler";
 
-    public interface Callback {
-        public void callback(List data);
-    }
-
-    public void getRides(Callback callback) {
+    public void getRides(IDataHandler.Callback callback) {
         new ParseTask(callback).fetchRides();
     }
 
-    public void getBusStops(Callback callback) {
+    public void getBusStops(IDataHandler.Callback callback) {
         new ParseTask(callback).fetchBusStops();
     }
 
-    public void getDeals(Callback callback) {
+    public void getDeals(IDataHandler.Callback callback) {
         new ParseTask(callback).fetchDeals();
     }
 
     private class ParseTask {
 
-        final Callback callback;
+        final IDataHandler.Callback callback;
 
-        public ParseTask(Callback callback) {
+        public ParseTask(IDataHandler.Callback callback) {
             this.callback = callback;
         }
 
@@ -84,20 +77,12 @@ public class ParseDatabase {
         }
         protected void fetchRides() {
 
-            ParseQuery<ParseBusStop> stopsParseQuery = ParseQuery.getQuery(ParseBusStop.class);
-            stopsParseQuery.findInBackground(new FindCallback<ParseBusStop>() {
+            ParseQuery<ParseRide> query = ParseQuery.getQuery(ParseRide.class);
+            query.findInBackground(new FindCallback<ParseRide>() {
 
                 @Override
-                public void done(List<ParseBusStop> parseData, com.parse.ParseException e) {
+                public void done(List<ParseRide> parseData, com.parse.ParseException e) {
                     if (e == null) {
-
-                        // Sort
-                        Collections.sort(parseData, new Comparator<ParseBusStop>() {
-                            @Override
-                            public int compare(ParseBusStop stop1, ParseBusStop stop2) {
-                                return stop1.compareTo(stop2);
-                            }
-                        });
 
                         // Callback
                         callback.callback(parseData);
@@ -115,22 +100,13 @@ public class ParseDatabase {
         }
         protected void fetchDeals() {
 
-            ParseQuery<ParseBusStop> stopsParseQuery = ParseQuery.getQuery(ParseBusStop.class);
-            stopsParseQuery.findInBackground(new FindCallback<ParseBusStop>() {
+            ParseQuery<ParseDeal> stopsParseQuery = ParseQuery.getQuery(ParseDeal.class);
+            stopsParseQuery.findInBackground(new FindCallback<ParseDeal>() {
 
                 @Override
-                public void done(List<ParseBusStop> parseData, com.parse.ParseException e) {
+                public void done(List<ParseDeal> parseData, com.parse.ParseException e) {
                     if (e == null) {
 
-                        // Sort
-                        Collections.sort(parseData, new Comparator<ParseBusStop>() {
-                            @Override
-                            public int compare(ParseBusStop stop1, ParseBusStop stop2) {
-                                return stop1.compareTo(stop2);
-                            }
-                        });
-
-                        // Callback
                         callback.callback(parseData);
 
                     } else {

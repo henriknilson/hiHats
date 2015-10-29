@@ -11,8 +11,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,24 +36,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
-import hihats.electricity.database.ParseDatabase;
+import hihats.electricity.database.IDataHandler;
+import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
-import hihats.electricity.database.ParseBusStop;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
 import hihats.electricity.model.Ride;
@@ -77,6 +71,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Intent positionServiceIntent;
     private Intent rideServiceIntent;
     private GoogleApiClient googleApiClient;
+    private IDataHandler dataHandler = ParseDataHandler.getInstance();
 
     // Buttons
     private ActionProcessButton getOnBusButton;
@@ -153,7 +148,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        ParseDatabase.getInstance().getBusStops(new ParseDatabase.Callback() {
+        dataHandler.getBusStops(new IDataHandler.Callback() {
             @Override
             public void callback(List data) {
                 busStops = new ArrayList<>();
@@ -375,7 +370,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 ridePoints,
                 rideDistance,
                 CurrentUser.getInstance().getUserName());
-        //ParseDatabase.uploadRide(ride);
+        //ParseDataHandler.uploadRide(ride);
     }
 
     /*
