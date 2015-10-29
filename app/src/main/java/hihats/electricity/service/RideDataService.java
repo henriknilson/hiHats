@@ -11,6 +11,14 @@ import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
 
+/**
+ * This class repeatedly calls the API for new data for a bus in traffic.
+ * Every 12th second it calls and then broadcasts the data to whatever class that is listening.
+ * The data broadcasted is:
+ * - If the bus in question is at a bus stop.
+ * - The name of the next stop for the bus in question.
+ * - The total distance traveled by the bus in question.
+ */
 public class RideDataService extends Service {
 
     public static final String TAG = RideDataService.class.getSimpleName();

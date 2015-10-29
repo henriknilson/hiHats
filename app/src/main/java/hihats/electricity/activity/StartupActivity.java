@@ -9,7 +9,13 @@ import hihats.electricity.database.ParseBusStop;
 import hihats.electricity.database.ParseDeal;
 import hihats.electricity.database.ParseRide;
 
-public class LaunchActivity extends Activity {
+/**
+ * This is the first activity that gets created when the app is launched.
+ * Here the parse registration is done and also a login check.
+ * If the user is logged in the app moved straight to MainActivity.
+ * If not the user is taken to LoginActivity to log in.
+ */
+public class StartupActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,18 +37,18 @@ public class LaunchActivity extends Activity {
         // Check if user is logged in or not
         if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
             // If user is not logged in send to Log in class
-            Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
+            Intent intent = new Intent(StartupActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         } else {
             // If user is logged in, get username
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (currentUser != null) {
-                Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
+                Intent intent = new Intent(StartupActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
+                Intent intent = new Intent(StartupActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
