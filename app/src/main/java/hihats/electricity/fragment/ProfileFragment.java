@@ -15,7 +15,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import java.util.ArrayList;
@@ -29,12 +28,12 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
-import hihats.electricity.model.Ride;
 import hihats.electricity.model.User;
+import hihats.electricity.model.ParseRide;
 
 public class ProfileFragment extends Fragment {
 
-    private static String TAG = "DashBoardFragment";
+    private static final String TAG = "ProfileFragment";
 
     TextView usernametxt;
     SimpleAdapter rideAdapter;
@@ -111,22 +110,22 @@ public class ProfileFragment extends Fragment {
 
         Log.i(TAG, "fetchRides()");
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseRideHelper");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> parseRides, ParseException e) {
+        ParseQuery<ParseRide> query = ParseQuery.getQuery(ParseRide.class);
+        query.findInBackground(new FindCallback<ParseRide>() {
+            public void done(List<ParseRide> parseRides, ParseException e) {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
 
-                    for (ParseObject parseObject : parseRides) {
+                    for (ParseRide parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
 
                         // Create Ride HashMaps from the parse objects
-                        ride.put("busStopFrom", parseObject.getString("busStopFrom"));
-                        ride.put("busStopToo", parseObject.getString("busStopToo"));
-                        ride.put("points", Integer.toString(parseObject.getNumber("points").intValue()));
+                        ride.put("busStopFrom", parseObject.getFrom());
+                        ride.put("busStopToo", parseObject.getTo());
+                        ride.put("points", Integer.toString(parseObject.getPoints()));
                         ride.put("distance", Double.toString(
-                                        parseObject.getNumber("distance").doubleValue()
+                                        parseObject.getDistance()
                                 )
                         );
 
@@ -209,10 +208,10 @@ public class ProfileFragment extends Fragment {
      * Sets the values in the chart depending on users rides
      */
     public void calculateChartValues() {
-        ArrayList<Ride> rides = User.getInstance().getRides();
+        ArrayList<ParseRide> rides = User.getInstance().getRides();
         float[] chartValues = new float[8];
 
-        for (Ride r : rides) {
+        for (ParseRide r : rides) {
             int rideMonth = r.getDate().getMonth();
             if (r.getDate().getYear() == Calendar.YEAR) {
                 if (getMonthString(rideMonth) == getChartMonth(7)) {

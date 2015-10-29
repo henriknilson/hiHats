@@ -11,7 +11,6 @@ import android.widget.SimpleAdapter;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -19,10 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
+import hihats.electricity.model.ParseDeal;
 
 public class DealsFragment extends Fragment {
 
-    private static String TAG = "DealsFragment";
+    private static final String TAG = "DealsFragment";
     
     ListView dealsListView;
     SimpleAdapter dealsAdapter;
@@ -94,27 +94,22 @@ public class DealsFragment extends Fragment {
 
         Log.i(TAG, "fetchDeals()");
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Deal");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> parseDeals, ParseException e) {
+        ParseQuery<ParseDeal> query = ParseQuery.getQuery(ParseDeal.class);
+        query.findInBackground(new FindCallback<ParseDeal>() {
+            public void done(List<ParseDeal> parseDeals, ParseException e) {
                 if (e == null) {
 
-                    Log.d(TAG, "Retrieved " + parseDeals.size() + " deals");
-
-                    for(ParseObject parseObject : parseDeals) {
+                    for(ParseDeal parseDeal : parseDeals) {
                         HashMap<String, String> deal = new HashMap<String, String>();
 
-                        // Create Deal HashMaps from the parse objects
-                        deal.put("objectId", parseObject.getString("objectId"));
-                        deal.put("name", parseObject.getString("name"));
-                        deal.put("author", parseObject.getString("author"));
-                        deal.put("description", parseObject.getString("description"));
-                        deal.put("points", Integer.toString(
-                                        parseObject.getNumber("points").intValue()
-                                ) + " GreenPoints"
-                        );
+                        // Create HashMaps from the Deals
+                        deal.put("objectId", parseDeal.getObjectId());
+                        deal.put("name", parseDeal.getName());
+                        deal.put("author", parseDeal.getAuthor());
+                        deal.put("description", parseDeal.getDescription());
+                        deal.put("points", parseDeal.getPoints() + " GreenPoints");
                         deal.put("image", Integer.toString(
-                                dealImages[Integer.parseInt(parseObject.getString("image"))]
+                                dealImages[parseDeal.getImage()]
                             )
                         );
 

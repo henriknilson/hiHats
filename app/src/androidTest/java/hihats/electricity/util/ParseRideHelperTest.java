@@ -1,24 +1,17 @@
 package hihats.electricity.util;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityTestCase;
-import android.test.ActivityUnitTestCase;
 
 import com.parse.Parse;
-import com.parse.ParseACL;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-
-import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import hihats.electricity.activity.LaunchActivity;
 import hihats.electricity.activity.LoginActivity;
-import hihats.electricity.model.Ride;
+import hihats.electricity.model.ParseRide;
 
 /**
  * Created by axel on 2015-10-08.
@@ -36,7 +29,7 @@ public class ParseRideHelperTest extends ActivityInstrumentationTestCase2<LoginA
         ParseObject.registerSubclass(ParseRideHelper.class);
         Parse.initialize(activity, "w5w8u7YeyDApblFiC9XPn509REPNdFIv1SleClrR", "IxqGzyFnJUENwSpNl4vRajZaW9gPPgPdK3cArFse");
 
-        final Ride ride = new Ride(new Date(), "SvenHultin", "ChalmersPlatsen", 10, 5, "axel");
+        final ParseRide ride = new ParseRide(new Date(), "SvenHultin", "ChalmersPlatsen", 10, 5, "axel");
         final ParseRideHelper helper = new ParseRideHelper();
 
 
@@ -53,9 +46,9 @@ public class ParseRideHelperTest extends ActivityInstrumentationTestCase2<LoginA
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ArrayList<Ride> rides = helper.getRides("axel");
+                ArrayList<ParseRide> rides = helper.getRides("axel");
                 assertTrue(rides != null);
-                Ride testRide = rides.get(1);
+                ParseRide testRide = rides.get(1);
                 assertTrue(ride.equals(testRide));
             }
         }, 2 * 60 * 100);

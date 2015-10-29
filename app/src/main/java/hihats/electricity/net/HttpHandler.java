@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * This is the backend class for all api http calls.
@@ -14,7 +13,7 @@ import java.util.ArrayList;
  */
 public class HttpHandler {
 
-    private static String KEY = "Basic Z3JwNDU6RlozRWN1TFljag==";
+    private static final String KEY = "Basic Z3JwNDU6RlozRWN1TFljag==";
 
     /*
     Main call method
