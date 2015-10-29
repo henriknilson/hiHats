@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
-<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/primary"
-    android:elevation="0dp"
-    android:id="@+id/toolbar"
-
-    >
-
-</android.support.v7.widget.Toolbar>
-=======
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -18,4 +6,3 @@
         android:titleTextColor="@color/white">
 
     </android.support.v7.widget.Toolbar>
->>>>>>> 4b93c54916db1725a3f6b180991074b4deb36b68

@@ -13,9 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import hihats.electricity.R;
 import hihats.electricity.adapter.TabsAdapter;
 
@@ -60,35 +58,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Locate Button in activity_main.xml
-       // logout = (Button) findViewById(R.id.logout);
-
-        // Logout Button Click Listener
-        // logout.setOnClickListener(new View.OnClickListener() {
-        //    public void onClick(View arg0) {
-        //        // Logout current user
-        //        ParseUser.logOut();
-        //        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        //        startActivity(intent);
-        //        finish();
-        //    }
-        // });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-<<<<<<< HEAD
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-=======
         getMenuInflater().inflate(R.menu.menu, menu);
->>>>>>> 4b93c54916db1725a3f6b180991074b4deb36b68
         return true;
     }
 
     @Override
-<<<<<<< HEAD
-=======
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
@@ -102,10 +81,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 return super.onOptionsItemSelected(item);
 
         }
+        return true;
     }
 
     @Override
->>>>>>> 4b93c54916db1725a3f6b180991074b4deb36b68
     protected void onResume() {
         super.onResume();
         googleApiClient.connect();
