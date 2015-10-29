@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.util.Log;
 import android.widget.Button;
 import hihats.electricity.R;
 import hihats.electricity.adapter.TabsAdapter;
@@ -20,6 +21,8 @@ import hihats.electricity.adapter.TabsAdapter;
  * This holds all fragments and all views related to the app content.
  */
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnected(Bundle bundle) {
         // Connected to Google Play services!
         // The good stuff goes here.
-        System.out.println("GOOGLE API CONNECTED");
+        Log.d(TAG, "GOOGLE API CONNECTED");
     }
 
     @Override

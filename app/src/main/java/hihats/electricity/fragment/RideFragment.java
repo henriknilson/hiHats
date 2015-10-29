@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,17 +42,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
-import hihats.electricity.database.ParseDatabase;
+import hihats.electricity.database.DataHandler;
+import hihats.electricity.database.IDataHandler;
+import hihats.electricity.model.BusStop;
+import hihats.electricity.model.Ride;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
-import hihats.electricity.model.Ride;
+import hihats.electricity.model.IRide;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
@@ -61,7 +67,7 @@ import hihats.electricity.util.GreenPointsCalculator;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final String TAG = "RideFragment";
+    public static final String TAG = RideFragment.class.getSimpleName();
 
     // System variables
     private LayoutInflater inflater;
@@ -71,6 +77,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Intent positionServiceIntent;
     private Intent rideServiceIntent;
     private GoogleApiClient googleApiClient;
+    private final IDataHandler dataHandler = DataHandler.getInstance();
 
     // Buttons
     private ActionProcessButton getOnBusButton;
@@ -150,9 +157,17 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        ParseDatabase.getInstance().getBusStops(new ParseDatabase.Callback() {
+        dataHandler.getBusStops(new IDataHandler.Callback() {
             @Override
             public void callback(List data) {
+
+                Collections.sort(data, new Comparator<IBusStop>() {
+                    @Override
+                    public int compare(IBusStop stop1, IBusStop stop2) {
+                        return stop1.compareTo(stop2);
+                    }
+                });
+
                 busStops = new ArrayList<>();
                 busStops.addAll(data);
                 busStopsReady = true;
@@ -248,7 +263,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         getOffBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                System.out.println("STOP RIDE");
+                Log.d(TAG, "STOP RIDE");
                 stopRideMode();
             }
         });
@@ -331,7 +346,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         // Stop logging the ride data
         stopLoggingRide();
 
-        // Show successdialog for the user
+        // Show success dialog for the user
         showSuccessDialog();
     }
     private void showSuccessDialog() {
@@ -372,14 +387,17 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         activeBusTotalDistance = 0;
         activeBusTotalTime = 0;
         ridePoints = GreenPointsCalculator.getInstance().getPoints(activeRidePoints);
-        Ride ride = new Ride(
-                rideDate,
-                rideBusStopFrom,
-                rideBusStopToo,
-                ridePoints,
-                rideDistance,
-                CurrentUser.getInstance().getUserName());
-        //ParseDatabase.uploadRide(ride);
+
+        IRide ride = new Ride();
+
+        ride.setDate(rideDate);
+        ride.setFrom(rideBusStopFrom);
+        ride.setTo(rideBusStopToo);
+        ride.setPoints(ridePoints);
+        ride.setDistance(rideDistance);
+        ride.setUser(CurrentUser.getInstance().getUserName());
+
+        dataHandler.save(ride);
     }
 
     /*
@@ -438,14 +456,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
-                    .setFastestInterval(1 * 1000)
+                    .setFastestInterval(1000)
                     .setNumUpdates(1);
         }
 
         /**
          * Checks first if the device has location services enabled.
          * Then starts waiting for a location.
-         * When the location is recieved its used to find a nearby bus via
+         * When the location is received its used to find a nearby bus via
          * the BusDataHelper class.
          * If all goes well it returns a bus object, if not it returns null.
          * @param params Not used since this is a void method.
@@ -454,7 +472,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
          */
         @Override
         protected IBus doInBackground(Void... params) {
-            System.out.println("FIND BUS TASK EXECUTED");
+            Log.d(TAG, "GET ON BUS TASK EXECUTED");
             if (helper.isGPSEnabled(getContext())) {
                 // Request GPS updates
                 Looper.prepare();
@@ -469,9 +487,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                             return bus;
                         }
                     } catch (AccessErrorException e) {
-                        System.out.println("NO INTERNET CONNECTION");
+                        Log.d(TAG, "NO INTERNET CONNECTION");
                     } catch (NoDataException e) {
-                        System.out.println("ELECTRICITY SERVER DOWN");
+                        Log.d(TAG, "ELECTRICITY SERVER DOWN");
                     }
                 }
             }
@@ -482,7 +500,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         protected void onPostExecute(IBus bus) {
             super.onPostExecute(bus);
             if (bus == null) {
-                System.out.println("NO NEARBY BUS FOUND");
+                Log.d(TAG, "NO NEARBY BUS FOUND");
                 getOnBusButton.setProgress(-1);
                 getOnBusButton.setText(R.string.error_no_bus_found);
                 Handler handler = new Handler();

@@ -28,12 +28,12 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
-import hihats.electricity.database.ParseRide;
+import hihats.electricity.model.Ride;
 import hihats.electricity.model.CurrentUser;
 
 public class ProfileFragment extends Fragment {
 
-    private static final String TAG = "ProfileFragment";
+    private static final String TAG = ProfileFragment.class.getSimpleName();
 
     TextView usernametxt;
     SimpleAdapter rideAdapter;
@@ -109,15 +109,15 @@ public class ProfileFragment extends Fragment {
 
         Log.i(TAG, "fetchRides()");
 
-        ParseQuery<ParseRide> query = ParseQuery.getQuery(ParseRide.class);
-        query.findInBackground(new FindCallback<ParseRide>() {
-            public void done(List<ParseRide> parseRides, ParseException e) {
+        ParseQuery<Ride> query = ParseQuery.getQuery(Ride.class);
+        query.findInBackground(new FindCallback<Ride>() {
+            public void done(List<Ride> parseRides, ParseException e) {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
                     calculateChartValues(parseRides);
 
-                    for (ParseRide parseObject : parseRides) {
+                    for (Ride parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
 
                         if (CurrentUser.getInstance().getUserName() == parseObject.getUser()) {
@@ -211,12 +211,12 @@ public class ProfileFragment extends Fragment {
     /**
      * Sets the values in the chart depending on users rides
      */
-    public void calculateChartValues(List<ParseRide> list) {
-        //ArrayList<ParseRide> rides = CurrentUser.getInstance().getRides();
+    public void calculateChartValues(List<Ride> list) {
+        //ArrayList<Ride> rides = CurrentUser.getInstance().getRides();
         float[] chartValues = new float[8];
         Calendar cal = Calendar.getInstance();
 
-        for (ParseRide r : list) {
+        for (Ride r : list) {
             int rideMonth = r.getDate().getMonth();
             if (r.getDate().getYear() == cal.get(Calendar.MONTH)) {
                 System.out.print("Samma år iaf");
@@ -245,7 +245,6 @@ public class ProfileFragment extends Fragment {
     }
 
     public void setChartValues(float[] chartValues) {
-        System.out.print("Sätter värden");
         for (int i = 1; i < 9; i++) {
             mValuesOne[0][i] = chartValues[(i-1)];
         }
