@@ -11,6 +11,14 @@ import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.util.BusDataHelper;
 
+/**
+ * This class repeatedly calls the API for a new position for a bus in traffic.
+ * Every 5th second it calls and then broadcasts the new position to whatever class that is listening.
+ * The data broadcasted is:
+ * - The time that the bus in question was at that position.
+ * - The position as latitude and longitude values.
+ * - The bearing of the bus in question.
+ */
 public class BusPositionService extends Service {
 
     public static final String TAG = BusPositionService.class.getSimpleName();
