@@ -3,26 +3,11 @@ package hihats.electricity.util;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import com.google.gson.Gson;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import hihats.electricity.model.BusFactory;
 import hihats.electricity.model.DatedPosition;
@@ -33,8 +18,8 @@ import hihats.electricity.net.NoDataException;
 import hihats.electricity.net.UrlRetriever;
 
 /**
- * This class converts the data obtained by the net class
- * HttpHandler to useful formats to use further up in the application tree.
+ * This class converts the data obtained by the net class package
+ * to useful formats to use further up in the application tree.
  * This is the class that gets called from outside the net/util package.
  */
 public class BusDataHelper {
@@ -44,7 +29,6 @@ public class BusDataHelper {
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
     private final float BUS_DISTANCE_METERS = 5000.0f;
-    private final String ICOMERA = "https://ombord.info/api/xml/system/";
 
     private final UrlRetriever urlRetriever = new UrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
@@ -136,7 +120,7 @@ public class BusDataHelper {
             // Ignore stupid test bus for now
             if (!id.equals("Vin_Num_001")) {
                 DatedPosition loc;
-                float bearing = 0f;
+                float bearing;
                 try {
                     loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
                 } catch (IllegalArgumentException e) {
