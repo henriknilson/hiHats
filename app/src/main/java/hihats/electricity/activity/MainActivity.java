@@ -71,12 +71,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
-                break;
+                return true;
             case R.id.logout:
                 ParseUser.logOut();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 
