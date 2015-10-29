@@ -3,26 +3,25 @@ package hihats.electricity.activity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.parse.ParseUser;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 import hihats.electricity.R;
 import hihats.electricity.adapter.TabsAdapter;
 
 /**
- * Created by henriknilson on 18/09/15.
+ * This is the main activity where all the content in the app is
+ * displayed and the absolute largest part of the application lives.
+ * This holds all fragments and all views related to the app content.
  */
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    Toolbar toolbar;
-    TabLayout tabLayout;
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
     Button logout;
     public GoogleApiClient googleApiClient;
 
