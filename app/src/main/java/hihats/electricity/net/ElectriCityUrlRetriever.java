@@ -6,7 +6,7 @@ package hihats.electricity.net;
 public class ElectriCityUrlRetriever {
 
     public String getUrl(String busId, String sensorId, String resourceId, int time) {
-        long t2 = System.currentTimeMillis();
+        long t2 = System.currentTimeMillis() - (1000 * 60 * 60 * 4);
         long t1 = t2 - time;
         if (busId != null) {
             if (sensorId != null) {

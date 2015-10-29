@@ -11,8 +11,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,23 +36,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
+import hihats.electricity.database.ParseDatabase;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
-import hihats.electricity.database.ParseBusStop;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
 import hihats.electricity.model.Ride;
@@ -63,6 +57,7 @@ import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
 import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
+import hihats.electricity.util.GreenPointsCalculator;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
@@ -102,12 +97,15 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private String activeBusNextStop;
     private int activeBusTotalDistance = 0;
     private int activeBusNewTotalDistance;
+    private long activeBusTotalTime = 0;
+    private long activeBusNewTotalTime;
     private Marker activeBusMarker;
 
     // Active ride variables
     private Date rideDate;
     private String rideBusStopFrom;
     private String rideBusStopToo;
+    private double activeRidePoints;
     private int ridePoints;
     private int rideDistance;
 
@@ -152,7 +150,15 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        fetchParseBusStops();
+        ParseDatabase.getInstance().getBusStops(new ParseDatabase.Callback() {
+            @Override
+            public void callback(List data) {
+                busStops = new ArrayList<>();
+                busStops.addAll(data);
+                busStopsReady = true;
+                setupBusStops();
+            }
+        });
 
         // Return the finished view
         return view;
@@ -167,6 +173,10 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         super.onResume();
         mapView.onResume();
 
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     /*
@@ -216,7 +226,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     /*
     Main action methods for UI
      */
-
     private void engageRideMode() {
         ((ViewGroup) view).removeView(getOnBusButton);
 
@@ -294,7 +303,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
     private void updateStatusBar() {
         statusBarNextStopLabel.setText(activeBusNextStop);
-        statusBarPointsLabel.setText(String.format("%,d", rideDistance));
+        statusBarPointsLabel.setText(String.format("%,d",
+                GreenPointsCalculator.getInstance().getPoints(activeRidePoints)));
     }
     private void stopRideMode() {
         ((ViewGroup) view).removeView(statusBarView);
@@ -345,17 +355,23 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         rideBusStopFrom = getClosestBusStop();
         rideBusStopToo = null;
         ridePoints = 0;
+        activeRidePoints = 0;
         rideDistance = 0;
     }
     private void updateRide() {
         if (isActiveBusAtStop) {
             rideBusStopToo = getClosestBusStop();
         }
-        ridePoints = 0;
+        activeRidePoints +=
+                GreenPointsCalculator.getInstance().getLivePoints(
+                        getTraveledDistance(),
+                        getTraveledTime());
         rideDistance += getTraveledDistance();
     }
     private void stopLoggingRide() {
         activeBusTotalDistance = 0;
+        activeBusTotalTime = 0;
+        ridePoints = GreenPointsCalculator.getInstance().getPoints(activeRidePoints);
         Ride ride = new Ride(
                 rideDate,
                 rideBusStopFrom,
@@ -387,6 +403,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         int distance = activeBusNewTotalDistance - activeBusTotalDistance;
         activeBusTotalDistance = activeBusNewTotalDistance;
         return distance;
+    }
+    private long getTraveledTime() {
+        if (activeBusTotalTime == 0) {
+            activeBusTotalTime = activeBusNewTotalTime;
+        }
+        long time = activeBusNewTotalTime - activeBusTotalTime;
+        activeBusTotalTime = activeBusNewTotalTime;
+        return time;
     }
 
     /*
@@ -508,6 +532,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             isActiveBusAtStop = isBusAtStop;
             activeBusNextStop = nextStop;
             activeBusNewTotalDistance = totalDistance;
+            activeBusNewTotalTime = activeBus.getDatedPosition().getDate().getTime();
             updateRide();
             updateStatusBar();
         }
@@ -519,28 +544,5 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         setupMap();
     }
 
-    private void fetchParseBusStops() {
-        ParseQuery<ParseBusStop> stopsParseQuery = ParseQuery.getQuery(ParseBusStop.class);
-        stopsParseQuery.findInBackground(new FindCallback<ParseBusStop>() {
-            @Override
-            public void done(List<ParseBusStop> stopsFromParse, com.parse.ParseException e) {
-                if (e == null) {
-                    Log.d(TAG, "Retrieved " + stopsFromParse.size() + " bus stops!");
-                    Collections.sort(stopsFromParse, new Comparator<ParseBusStop>() {
-                        @Override
-                        public int compare(ParseBusStop stop1, ParseBusStop stop2) {
-                            return stop1.compareTo(stop2);
-                        }
-                    });
-                    busStops = new ArrayList<>();
-                    busStops.addAll(stopsFromParse);
-                    busStopsReady = true;
-                    setupBusStops();
-                } else {
-                    Log.d(TAG, "fetchParseBusStops() Error: " + e.getMessage());
-                }
 
-            }
-        });
-    }
 }

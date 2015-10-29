@@ -15,7 +15,7 @@ public class ParseBusStop extends ParseObject implements IBusStop, Comparable {
     public ParseBusStop() {}
 
     public LatLng getLatLng() {
-        return new LatLng(getInt("latitude"), getInt("longitude"));
+        return new LatLng(getDouble("latitude"), getDouble("longitude"));
     }
 
     public String getName() {
