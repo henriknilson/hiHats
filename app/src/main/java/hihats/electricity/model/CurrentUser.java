@@ -6,8 +6,6 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-import hihats.electricity.database.ParseRide;
-
 /**
  * Created by Pertta on 15-10-07.
  * This class represents the user
@@ -19,7 +17,7 @@ public class CurrentUser {
     String userName;
     String userId;
     int points;
-    ArrayList<ParseRide> rides = new ArrayList<>();
+    ArrayList<Ride> rides = new ArrayList<>();
 
     protected CurrentUser() {
     }
@@ -66,12 +64,12 @@ public class CurrentUser {
 
     public void setRides() {
 
-        ParseQuery<ParseRide> parseRides = ParseQuery.getQuery(ParseRide.class);
-        parseRides.findInBackground(new FindCallback<ParseRide>() {
+        ParseQuery<Ride> parseRides = ParseQuery.getQuery(Ride.class);
+        parseRides.findInBackground(new FindCallback<Ride>() {
             @Override
-            public void done(List<ParseRide> objects, com.parse.ParseException e) {
+            public void done(List<Ride> objects, com.parse.ParseException e) {
                 rides = new ArrayList<>();
-                for (ParseRide ride : objects) {
+                for (Ride ride : objects) {
 
                     if (ride.getUser().equals(userName)) {
                         rides.add(ride);

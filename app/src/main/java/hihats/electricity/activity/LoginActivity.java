@@ -18,16 +18,17 @@ import hihats.electricity.R;
 import hihats.electricity.model.CurrentUser;
 
 /**
- * Created by henriknilson on 18/09/15.
+ * This is the only usable view outside of the main activity.
+ * Here the user can login or signup to the parse database.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    Button loginbutton;
-    Button signup;
-    String usernametxt;
-    String passwordtxt;
-    EditText password;
-    EditText username;
+    private Button loginbutton;
+    private Button signup;
+    private String usernametxt;
+    private String passwordtxt;
+    private EditText password;
+    private EditText username;
 
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {

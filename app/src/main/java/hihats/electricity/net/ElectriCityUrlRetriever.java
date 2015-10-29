@@ -1,12 +1,12 @@
 package hihats.electricity.net;
 
 /**
- * Created by fredrikkindstrom on 30/09/15.
+ * This class creates a url to use with the Electricity API request.
  */
-public class UrlRetriever {
+public class ElectriCityUrlRetriever {
 
     public String getUrl(String busId, String sensorId, String resourceId, int time) {
-        long t2 = System.currentTimeMillis();
+        long t2 = System.currentTimeMillis() - (1000 * 60 * 60 * 4);
         long t1 = t2 - time;
         if (busId != null) {
             if (sensorId != null) {

@@ -1,49 +1,77 @@
 package hihats.electricity.model;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 import java.util.Date;
 
+import hihats.electricity.model.IRide;
+
 /**
- * Created by fredrikkindstrom on 29/10/15.
+ * Created by axel on 2015-10-07.
  */
-public class Ride implements IRide {
+@ParseClassName("Ride")
+public class Ride extends ParseObject implements IRide {
 
-    private Date date;
-    private String stopFrom;
-    private String stopTo;
-    private int points;
-    private int distance;
-    private String user;
+    public Ride() {
 
-    public Ride(Date date, String stopFrom, String stopTo, int points, int distance, String user) {
-        this.date = date;
-        this.stopFrom = stopFrom;
-        this.stopTo = stopTo;
-        this.points = points;
-        this.distance = distance;
-        this.user = user;
     }
 
     public Date getDate() {
-        return date;
+        return getDate("date");
     }
 
     public String getFrom() {
-        return stopFrom;
+        return getString("from");
     }
 
     public String getTo() {
-        return stopTo;
+        return getString("to");
     }
 
     public int getPoints() {
-        return points;
+        return getInt("points");
     }
 
     public int getDistance() {
-        return distance;
+        return getInt("distance");
     }
 
     public String getUser() {
-        return user;
+        return getString("user");
     }
+
+
+
+
+
+    public void setDate(Date date) {
+        put("date", date);
+    }
+
+    public void setFrom(String from) {
+        if (from == null) {
+            from = "";
+        }
+        put("from", from); }
+
+    public void setTo(String to) {
+        if (to == null) {
+            to = "";
+        }
+        put("to", to); }
+
+    public void setPoints(int points) {
+        put("points", points); }
+
+    public void setDistance(int distance) {
+        put("distance", distance); }
+
+    public void setUser(String user) {
+        if (user == null) {
+            user = "";
+        }
+        put("user", user); }
+
+
 }

@@ -10,16 +10,15 @@ import hihats.electricity.fragment.DealsFragment;
 import hihats.electricity.fragment.RideFragment;
 
 /**
- * Created by filip on 28/09/15.
+ * This is the tab adapter that keeps the status and order of the
+ * three fragment tabs that make up the entire main application.
  */
 public class TabsAdapter extends FragmentPagerAdapter {
 
-    private String tabTitles[] = new String[] { "Ride", "Profile", "Deals" };
-    private Context context;
+    private final String[] tabTitles = new String[] { "Ride", "Profile", "Deals" };
 
-    public TabsAdapter(FragmentManager fm, Context context) {
+    public TabsAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
     }
 
     @Override
