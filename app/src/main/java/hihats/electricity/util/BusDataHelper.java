@@ -3,6 +3,7 @@ package hihats.electricity.util;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -23,6 +24,8 @@ import hihats.electricity.net.ElectriCityUrlRetriever;
  * This is the class that gets called from outside the net/util package.
  */
 public class BusDataHelper {
+
+    public static final String TAG = BusDataHelper.class.getSimpleName();
 
     private final String GPS_RMC = "Ericsson$RMC_Value";
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
@@ -94,9 +97,9 @@ public class BusDataHelper {
                         location.getLatitude(),
                         location.getLongitude(),
                         distanceBetweenBuses);
-                System.out.println("Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
+                Log.d(TAG, "Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
                 if (distanceBetweenBuses[0] < BUS_DISTANCE_METERS) {
-                    System.out.println("FOUND BUS '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters away");
+                    Log.d(TAG, "FOUND BUS '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters away");
                     return bus;
                 }
             }

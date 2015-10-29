@@ -33,7 +33,7 @@ import hihats.electricity.model.CurrentUser;
 
 public class ProfileFragment extends Fragment {
 
-    private static final String TAG = "ProfileFragment";
+    private static final String TAG = ProfileFragment.class.getSimpleName();
 
     TextView usernametxt;
     SimpleAdapter rideAdapter;
@@ -245,7 +245,6 @@ public class ProfileFragment extends Fragment {
     }
 
     public void setChartValues(float[] chartValues) {
-        System.out.print("Sätter värden");
         for (int i = 1; i < 9; i++) {
             mValuesOne[0][i] = chartValues[(i-1)];
         }

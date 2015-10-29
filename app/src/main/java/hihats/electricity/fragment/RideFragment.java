@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,7 @@ import hihats.electricity.util.GreenPointsCalculator;
 
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final String TAG = "RideFragment";
+    public static final String TAG = RideFragment.class.getSimpleName();
 
     // System variables
     private LayoutInflater inflater;
@@ -72,7 +73,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Intent positionServiceIntent;
     private Intent rideServiceIntent;
     private GoogleApiClient googleApiClient;
-    private IDataHandler dataHandler = ParseDataHandler.getInstance();
+    private final IDataHandler dataHandler = ParseDataHandler.getInstance();
 
     // Buttons
     private ActionProcessButton getOnBusButton;
@@ -250,7 +251,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         getOffBusButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View arg0) {
-                System.out.println("STOP RIDE");
+                Log.d(TAG, "STOP RIDE");
                 stopRideMode();
             }
         });
@@ -333,7 +334,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         // Stop logging the ride data
         stopLoggingRide();
 
-        // Show successdialog for the user
+        // Show success dialog for the user
         showSuccessDialog();
     }
     private void showSuccessDialog() {
@@ -440,14 +441,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             locationRequest = LocationRequest.create()
                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                     .setInterval(10 * 1000)
-                    .setFastestInterval(1 * 1000)
+                    .setFastestInterval(1000)
                     .setNumUpdates(1);
         }
 
         /**
          * Checks first if the device has location services enabled.
          * Then starts waiting for a location.
-         * When the location is recieved its used to find a nearby bus via
+         * When the location is received its used to find a nearby bus via
          * the BusDataHelper class.
          * If all goes well it returns a bus object, if not it returns null.
          * @param params Not used since this is a void method.
@@ -456,7 +457,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
          */
         @Override
         protected IBus doInBackground(Void... params) {
-            System.out.println("FIND BUS TASK EXECUTED");
+            Log.d(TAG, "GET ON BUS TASK EXECUTED");
             if (helper.isGPSEnabled(getContext())) {
                 // Request GPS updates
                 Looper.prepare();
@@ -471,9 +472,9 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                             return bus;
                         }
                     } catch (AccessErrorException e) {
-                        System.out.println("NO INTERNET CONNECTION");
+                        Log.d(TAG, "NO INTERNET CONNECTION");
                     } catch (NoDataException e) {
-                        System.out.println("ELECTRICITY SERVER DOWN");
+                        Log.d(TAG, "ELECTRICITY SERVER DOWN");
                     }
                 }
             }
@@ -484,7 +485,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         protected void onPostExecute(IBus bus) {
             super.onPostExecute(bus);
             if (bus == null) {
-                System.out.println("NO NEARBY BUS FOUND");
+                Log.d(TAG, "NO NEARBY BUS FOUND");
                 getOnBusButton.setProgress(-1);
                 getOnBusButton.setText(R.string.error_no_bus_found);
                 Handler handler = new Handler();
