@@ -3,30 +3,27 @@ package hihats.electricity.database;
 import android.util.Log;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
-import hihats.electricity.model.BusStop;
-import hihats.electricity.model.Deal;
-import hihats.electricity.model.Ride;
 
 /**
  * Created by filip on 29/10/15.
  */
-public class DataHandler implements IDataHandler {
+public class ParseDataHandler implements IDataHandler {
 
-    public static final String TAG = "DataHandler";
-    private static final IDataHandler INSTANCE = new DataHandler();
+    public static final String TAG = ParseDataHandler.class.getSimpleName();
 
-    private DataHandler() {};
+    private static IDataHandler instance;
+
+    private ParseDataHandler() {}
 
     public static IDataHandler getInstance() {
-        return DataHandler.INSTANCE;
+        if (ParseDataHandler.instance == null) {
+            ParseDataHandler.instance = new ParseDataHandler();
+        }
+        return ParseDataHandler.instance;
     }
 
     @Override

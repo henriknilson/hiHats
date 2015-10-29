@@ -49,9 +49,8 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
-import hihats.electricity.database.DataHandler;
+import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.database.IDataHandler;
-import hihats.electricity.model.BusStop;
 import hihats.electricity.model.Ride;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
@@ -77,7 +76,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Intent positionServiceIntent;
     private Intent rideServiceIntent;
     private GoogleApiClient googleApiClient;
-    private final IDataHandler dataHandler = DataHandler.getInstance();
+    private final IDataHandler dataHandler = ParseDataHandler.getInstance();
 
     // Buttons
     private ActionProcessButton getOnBusButton;
