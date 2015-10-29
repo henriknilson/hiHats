@@ -28,7 +28,7 @@ public class BusDataHelper {
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-    private final float BUS_DISTANCE_METERS = 5000.0f;
+    private final float BUS_DISTANCE_METERS = 800.0f;
 
     private final ElectriCityUrlRetriever urlRetriever = new ElectriCityUrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
