@@ -13,8 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import hihats.electricity.R;
+import hihats.electricity.database.DataHandler;
 import hihats.electricity.database.IDataHandler;
-import hihats.electricity.database.ParseDataHandler;
+import hihats.electricity.model.Deal;
 import hihats.electricity.model.IDeal;
 
 public class DealsFragment extends Fragment {
@@ -24,7 +25,7 @@ public class DealsFragment extends Fragment {
     private ListView dealsListView;
     private SimpleAdapter dealsAdapter;
 
-    private final IDataHandler dataHandler = ParseDataHandler.getInstance();
+    private final IDataHandler dataHandler = DataHandler.getInstance();
 
     /**
      * The data container for the ListView
@@ -107,4 +108,5 @@ public class DealsFragment extends Fragment {
         return view;
 
     }
+
 }

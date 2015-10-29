@@ -47,13 +47,14 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
+import hihats.electricity.database.DataHandler;
 import hihats.electricity.database.IDataHandler;
-import hihats.electricity.database.ParseDataHandler;
+import hihats.electricity.model.Ride;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
-import hihats.electricity.model.Ride;
+import hihats.electricity.model.IRide;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
@@ -73,7 +74,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Intent positionServiceIntent;
     private Intent rideServiceIntent;
     private GoogleApiClient googleApiClient;
-    private final IDataHandler dataHandler = ParseDataHandler.getInstance();
+    private final IDataHandler dataHandler = DataHandler.getInstance();
 
     // Buttons
     private ActionProcessButton getOnBusButton;
@@ -375,14 +376,17 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         activeBusTotalDistance = 0;
         activeBusTotalTime = 0;
         ridePoints = GreenPointsCalculator.getInstance().getPoints(activeRidePoints);
-        Ride ride = new Ride(
-                rideDate,
-                rideBusStopFrom,
-                rideBusStopToo,
-                ridePoints,
-                rideDistance,
-                CurrentUser.getInstance().getUserName());
-        //ParseDataHandler.uploadRide(ride);
+
+        IRide ride = new Ride();
+
+        ride.setDate(rideDate);
+        ride.setFrom(rideBusStopFrom);
+        ride.setTo(rideBusStopToo);
+        ride.setPoints(ridePoints);
+        ride.setDistance(rideDistance);
+        ride.setUser(CurrentUser.getInstance().getUserName());
+
+        dataHandler.save(ride);
     }
 
     /*
