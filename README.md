@@ -1,7 +1,7 @@
 BusCounts
 =========
 
-An prototype built for android, to keep track of busrides and give points to the user.
+A prototype built for android, to keep track of busrides and give points to the user.
 
 ## Getting Started
 
