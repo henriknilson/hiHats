@@ -12,7 +12,7 @@
         android:id="@+id/splash_title"
         android:layout_marginTop="35dp"
         android:text="Ride completed!"
-        android:textSize="32dp"
+        android:textSize="32sp"
         android:textColor="#FFFFFF"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/success_points" />
@@ -37,7 +37,8 @@
         android:id="@+id/success_points"
         android:layout_marginTop="36dp"
         android:text="43 Green Points"
-        android:textSize="40dp"
+        android:textSize="40sp"
+        android:textColor="@color/accent"
         android:layout_below="@+id/splash_title"
         android:layout_centerHorizontal="true" />
 
@@ -82,6 +83,7 @@
         android:id="@+id/success_stops"
         android:text="Lindholmen to Johanneberg"
         android:textSize="18sp"
+        android:textColor="@color/accent"
         android:layout_marginTop="15dp"
         android:layout_below="@+id/textView2"
         android:layout_alignStart="@+id/textView2" />
@@ -92,6 +94,7 @@
         android:id="@+id/success_time"
         android:text="5,3 km 10 min and 23 sek"
         android:textSize="18sp"
+        android:textColor="@color/accent"
         android:layout_below="@+id/success_stops"
         android:layout_alignStart="@+id/success_stops" />
 
@@ -113,6 +116,7 @@
         android:id="@+id/textView8"
         android:text="For making the world a better place!"
         android:textSize="18sp"
+        android:textColor="@color/accent"
         android:layout_marginTop="14dp"
         android:layout_below="@+id/textView7"
         android:layout_alignStart="@+id/textView7" />

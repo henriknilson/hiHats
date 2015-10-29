@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Base.Theme.GreenEco" parent="Theme.AppCompat.NoActionBar">
+    <style name="Base.Theme.GreenEco" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/primaryDark</item>
@@ -17,6 +17,10 @@
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+
+    <style name="Toolbar_Popup" parent="Base.Theme.GreenEco">
+        <item name="android:textColorPrimary">@color/background</item>
     </style>
 
 </resources>
