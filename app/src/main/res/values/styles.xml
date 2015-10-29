@@ -16,6 +16,7 @@
     <style name="FullscreenDialog" parent="Base.Theme.GreenEco" >
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowIsFloating">false</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
     </style>
 
 </resources>

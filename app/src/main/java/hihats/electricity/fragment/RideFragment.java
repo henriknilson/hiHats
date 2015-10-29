@@ -240,8 +240,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View arg0) {
                 System.out.println("STOP RIDE");
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                new SuccessFragment().show(transaction, "");
                 stopRideMode();
             }
         });
@@ -322,6 +320,20 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Stop logging the ride data
         stopLoggingRide();
+
+        // Show successdialog for the user
+        showSuccessDialog();
+    }
+    private void showSuccessDialog() {
+        SuccessFragment success = new SuccessFragment();
+        Bundle bundle = new Bundle(10);
+        bundle.putInt("Points", ridePoints);
+        bundle.putString("StopFrom", rideBusStopFrom);
+        bundle.putString("StopToo", rideBusStopToo);
+        bundle.putLong("Time", activeBus.getDatedPosition().getDate().getTime() - rideDate.getTime());
+        success.setArguments(bundle);
+        //TODO Co2 stuff
+        success.show(getActivity().getSupportFragmentManager(), "");
     }
 
     /*
