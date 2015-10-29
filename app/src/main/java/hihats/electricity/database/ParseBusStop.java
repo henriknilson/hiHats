@@ -1,8 +1,10 @@
-package hihats.electricity.model;
+package hihats.electricity.database;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+
+import hihats.electricity.model.IBusStop;
 
 /**
  * Created by axel on 2015-09-24.

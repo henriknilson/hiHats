@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.parse.*;
 
-import hihats.electricity.model.ParseBusStop;
-import hihats.electricity.model.ParseDeal;
-import hihats.electricity.model.ParseRide;
+import hihats.electricity.database.ParseBusStop;
+import hihats.electricity.database.ParseDeal;
+import hihats.electricity.database.ParseRide;
 
 public class LaunchActivity extends Activity {
 

@@ -28,8 +28,8 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
+import hihats.electricity.database.ParseRide;
 import hihats.electricity.model.CurrentUser;
-import hihats.electricity.model.ParseRide;
 
 public class ProfileFragment extends Fragment {
 

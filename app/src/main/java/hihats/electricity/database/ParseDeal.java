@@ -1,8 +1,10 @@
-package hihats.electricity.model;
+package hihats.electricity.database;
 
 import com.parse.*;
 
 import java.util.Date;
+
+import hihats.electricity.model.IDeal;
 
 /**
  * Created by axel on 2015-09-24.
