@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 return super.onOptionsItemSelected(item);
 
         }
-        return true;
     }
 
     @Override
