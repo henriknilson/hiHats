@@ -28,6 +28,9 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
+import hihats.electricity.database.IDataHandler;
+import hihats.electricity.database.ParseDataHandler;
+import hihats.electricity.model.IRide;
 import hihats.electricity.model.Ride;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.Ride;
@@ -37,12 +40,20 @@ public class ProfileFragment extends Fragment {
     private static final String TAG = ProfileFragment.class.getSimpleName();
 
     TextView usernametxt;
+    TextView pointstxt;
+    TextView nbrRidestxt;
+    TextView distancetxt;
+
     SimpleAdapter rideAdapter;
     List<HashMap<String, String>> rides;
     ListView rideListView;
+    private int distance = 0;
+    private int points = 0;
     private LineChartView mChartOne;
     private final String[] mLabelsOne = {"", getChartMonth(7), getChartMonth(6), getChartMonth(5), getChartMonth(4), getChartMonth(3), getChartMonth(2), getChartMonth(1), getChartMonth(0),""};
-    private final float[][] mValuesOne = new float[1][10]; //{{3.5f, 4.7f, 4.3f, 0f, 0f, 0f, 7f, 8.3f, 7.0f, 0f, 0f, 0f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f}};
+    private final float[][] mValuesOne = new float[1][10];
+    private final IDataHandler dataHandler = ParseDataHandler.getInstance();
+    ArrayList<IRide> iRides;
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
@@ -57,7 +68,6 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         rides = new ArrayList<>();
         fetchRides();
-        calculateChartValues();
     }
 
     @Override
@@ -89,7 +99,6 @@ public class ProfileFragment extends Fragment {
 
         // Init first chart
         mChartOne = (LineChartView) layout.findViewById(R.id.linechart1);
-        produceOne(mChartOne);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 TableLayout.LayoutParams.WRAP_CONTENT,
@@ -102,29 +111,52 @@ public class ProfileFragment extends Fragment {
         buttonGroupView.setLayoutParams(params);
 
         usernametxt = (TextView) layout.findViewById(R.id.username);
-        usernametxt.setText(ParseUser.getCurrentUser().getUsername());
+        usernametxt.setText(CurrentUser.getInstance().getUserName());
+
+        pointstxt = (TextView) layout.findViewById(R.id.points);
+
+        nbrRidestxt = (TextView) layout.findViewById(R.id.nbrRides);
+
+        distancetxt = (TextView) layout.findViewById(R.id.distance);
 
         return layout;
     }
 
     public void fetchRides() {
-        Log.i(TAG, "fetchRides()");
-        ArrayList<Ride> rideArrayList = CurrentUser.getInstance().getRides();
 
-            for (Ride r : rideArrayList) {
-                HashMap<String, String> ride = new HashMap<>();
-                // Create Ride HashMaps from the parse objects
-                ride.put("busStopFrom", r.getFrom());
-                ride.put("busStopToo", r.getTo());
-                ride.put("points", Integer.toString(r.getPoints()));
-                ride.put("distance", Double.toString(
-                                r.getDistance()));
+        dataHandler.getRides(new IDataHandler.Callback<IRide>() {
+            @Override
+            public void callback(List<IRide> data) {
+                iRides = new ArrayList<>();
+                for (IRide ride : data) {
 
-                rides.add(ride);
+                    if (ride.getUser().equals(ParseUser.getCurrentUser().getUsername())) {
+                        iRides.add(ride);
+                        distance += ride.getDistance();
+                        points += ride.getPoints();
+                    }
+                }
+                for (IRide r : data) {
+                    HashMap<String, String> ride = new HashMap<>();
+                    // Create Ride HashMaps from the parse objects
+                    ride.put("busStopFrom", r.getFrom());
+                    ride.put("busStopToo", r.getTo());
+                    ride.put("points", Integer.toString(r.getPoints()));
+                    ride.put("distance", Double.toString(
+                            r.getDistance()));
 
-                // Notify the ListViews SimpleAdapter adapter to update UI
-                rideAdapter.notifyDataSetChanged();
+                    rides.add(ride);
+
+                    // Notify the ListViews SimpleAdapter adapter to update UI
+                    rideAdapter.notifyDataSetChanged();
+                }
+                pointstxt.setText(points + "");
+                nbrRidestxt.setText(rides.size() + "");
+                distancetxt.setText(distance + "");
+                calculateChartValues();
             }
+        });
+
     }
 
     public void produceOne(LineChartView chart) {
@@ -193,30 +225,27 @@ public class ProfileFragment extends Fragment {
      * Sets the values in the chart depending on users rides
      */
     public void calculateChartValues() {
-        ArrayList<Ride> rides = CurrentUser.getInstance().getRides();
         float[] chartValues = new float[8];
         Calendar cal = Calendar.getInstance();
 
-        for (Ride r : rides) {
+        for (IRide r : iRides) {
             int rideMonth = r.getDate().getMonth();
-            if (r.getDate().getYear() == cal.get(Calendar.MONTH)) {
-                if (getMonthString(rideMonth) == getChartMonth(7)) {
-                    chartValues[0] = chartValues[0] + 10f;//(float) (r.getDistance());
-                } else if (getMonthString(rideMonth) == getChartMonth(6)) {
-                    chartValues[1] = chartValues[1] + 10f;//(float) (r.getDistance());
-                } else if (getMonthString(rideMonth) == getChartMonth(5)) {
-                    chartValues[2] = chartValues[2] + 10f;//(float) (r.getDistance());
-                } else if (getMonthString(rideMonth) == getChartMonth(4)) {
-                    chartValues[3] = chartValues[3] + 10f;//(float) (r.getDistance());
-                } else if (getMonthString(rideMonth) == getChartMonth(3)) {
-                    chartValues[4] = chartValues[4] + 10f;//(float) (r.getDistance());
-                } else if (getMonthString(rideMonth) == getChartMonth(2)) {
-                    chartValues[5] = chartValues[5] + 10f;//(float) (r.getDistance());
-                } else if (getMonthString(rideMonth) == getChartMonth(1)) {
-                    chartValues[6] = chartValues[6] + 10f;//(float) (r.getDistance());
-                } else if (getMonthString(rideMonth) == getChartMonth(0)) {
-                    chartValues[7] = chartValues[7] + 10f;//(float) (r.getDistance());
-                }
+            if (getMonthString(rideMonth).equals(getChartMonth(7))) {
+                chartValues[0] = chartValues[0] + (float) (r.getDistance()/5);
+            } else if (getMonthString(rideMonth).equals(getChartMonth(6))) {
+                chartValues[1] = chartValues[1] + (float) (r.getDistance()/5);
+            } else if (getMonthString(rideMonth).equals(getChartMonth(5))) {
+                chartValues[2] = chartValues[2] + (float) (r.getDistance()/5);
+            } else if (getMonthString(rideMonth).equals(getChartMonth(4))) {
+                chartValues[3] = chartValues[3] + (float) (r.getDistance()/5);
+            } else if (getMonthString(rideMonth).equals(getChartMonth(3))) {
+                chartValues[4] = chartValues[4] + (float) (r.getDistance()/5);
+            } else if (getMonthString(rideMonth).equals(getChartMonth(2))) {
+                chartValues[5] = chartValues[5] + (float) (r.getDistance()/5);
+            } else if (getMonthString(rideMonth).equals(getChartMonth(1))) {
+                chartValues[6] = chartValues[6] + (float) (r.getDistance()/5);
+            } else if (getMonthString(rideMonth).equals(getChartMonth(0))) {
+                chartValues[7] = chartValues[7] + (float) (r.getDistance()/5);
             }
         }
         setChartValues(chartValues);
@@ -226,5 +255,6 @@ public class ProfileFragment extends Fragment {
         for (int i = 1; i < 9; i++) {
             mValuesOne[0][i] = chartValues[(i-1)];
         }
+        produceOne(mChartOne);
     }
 }
