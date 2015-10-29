@@ -108,43 +108,23 @@ public class ProfileFragment extends Fragment {
     }
 
     public void fetchRides() {
-
         Log.i(TAG, "fetchRides()");
+        ArrayList<Ride> rideArrayList = CurrentUser.getInstance().getRides();
 
-        ParseQuery<Ride> query = ParseQuery.getQuery(Ride.class);
-        query.findInBackground(new FindCallback<Ride>() {
-            public void done(List<Ride> parseRides, ParseException e) {
-                if (e == null) {
+            for (Ride r : rideArrayList) {
+                HashMap<String, String> ride = new HashMap<>();
+                // Create Ride HashMaps from the parse objects
+                ride.put("busStopFrom", r.getFrom());
+                ride.put("busStopToo", r.getTo());
+                ride.put("points", Integer.toString(r.getPoints()));
+                ride.put("distance", Double.toString(
+                                r.getDistance()));
 
-                    Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
+                rides.add(ride);
 
-                    for (Ride parseObject : parseRides) {
-                        HashMap<String, String> ride = new HashMap<>();
-
-                        if (CurrentUser.getInstance().getUserName() == parseObject.getUser()) {
-
-                            // Create Ride HashMaps from the parse objects
-                            ride.put("busStopFrom", parseObject.getFrom());
-                            ride.put("busStopToo", parseObject.getTo());
-                            ride.put("points", Integer.toString(parseObject.getPoints()));
-                            ride.put("distance", Double.toString(
-                                            parseObject.getDistance()
-                                    )
-                            );
-
-                            rides.add(ride);
-
-
-                            // Notify the ListViews SimpleAdapter adapter to update UI
-                            rideAdapter.notifyDataSetChanged();
-                        }
-                    }
-
-                } else {
-                    Log.d("score", "Error: " + e.getMessage());
-                }
+                // Notify the ListViews SimpleAdapter adapter to update UI
+                rideAdapter.notifyDataSetChanged();
             }
-        });
     }
 
     public void produceOne(LineChartView chart) {
@@ -220,25 +200,22 @@ public class ProfileFragment extends Fragment {
         for (Ride r : rides) {
             int rideMonth = r.getDate().getMonth();
             if (r.getDate().getYear() == cal.get(Calendar.MONTH)) {
-                System.out.print("Samma år iaf");
                 if (getMonthString(rideMonth) == getChartMonth(7)) {
-                    System.out.print("Samma som månad-7");
-                    chartValues[0] = chartValues[0] + (float) (r.getDistance());
+                    chartValues[0] = chartValues[0] + 10f;//(float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(6)) {
-                    chartValues[1] = chartValues[1] + (float) (r.getDistance());
+                    chartValues[1] = chartValues[1] + 10f;//(float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(5)) {
-                    chartValues[2] = chartValues[2] + (float) (r.getDistance());
+                    chartValues[2] = chartValues[2] + 10f;//(float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(4)) {
-                    chartValues[3] = chartValues[3] + (float) (r.getDistance());
+                    chartValues[3] = chartValues[3] + 10f;//(float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(3)) {
-                    chartValues[4] = chartValues[4] + (float) (r.getDistance());
+                    chartValues[4] = chartValues[4] + 10f;//(float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(2)) {
-                    chartValues[5] = chartValues[5] + (float) (r.getDistance());
+                    chartValues[5] = chartValues[5] + 10f;//(float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(1)) {
-                    chartValues[6] = chartValues[6] + (float) (r.getDistance());
+                    chartValues[6] = chartValues[6] + 10f;//(float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(0)) {
-                    System.out.print("Samma som månad-0, oct");
-                    chartValues[7] = chartValues[7] + (float) (r.getDistance());
+                    chartValues[7] = chartValues[7] + 10f;//(float) (r.getDistance());
                 }
             }
         }
