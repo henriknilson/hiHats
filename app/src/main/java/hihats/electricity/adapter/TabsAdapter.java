@@ -15,12 +15,10 @@ import hihats.electricity.fragment.RideFragment;
  */
 public class TabsAdapter extends FragmentPagerAdapter {
 
-    private String tabTitles[] = new String[] { "Ride", "Profile", "Deals" };
-    private Context context;
+    private final String[] tabTitles = new String[] { "Ride", "Profile", "Deals" };
 
-    public TabsAdapter(FragmentManager fm, Context context) {
+    public TabsAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
     }
 
     @Override
