@@ -23,5 +23,7 @@
     <string name="statusbar_next_stop">Next stop</string>
     <string name="statusbar_points">Points</string>
     <string name="error_no_bus_found">No bus within 50m found</string>
+    <string name="success_green_points">Green Points</string>
+    <string name="to">" to "</string>
 
 </resources>

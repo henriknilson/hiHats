@@ -11,6 +11,6 @@ public interface IRide {
     String getFrom();
     String getTo();
     int getPoints();
-    double getDistance();
+    int getDistance();
     String getUser();
 }

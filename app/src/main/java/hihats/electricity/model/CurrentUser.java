@@ -6,6 +6,8 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import hihats.electricity.database.ParseRide;
+
 /**
  * Created by Pertta on 15-10-07.
  * This class represents the user
@@ -78,7 +80,6 @@ public class CurrentUser {
             }
 
         });
-
     }
 
 

@@ -37,7 +37,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
@@ -53,10 +52,12 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
+import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
-import hihats.electricity.model.ParseBusStop;
+import hihats.electricity.database.ParseBusStop;
 import hihats.electricity.model.DatedPosition;
 import hihats.electricity.model.IBus;
+import hihats.electricity.model.Ride;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.NoDataException;
 import hihats.electricity.service.RideDataService;
@@ -90,8 +91,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private GoogleMap googleMap;
     private final LatLng startMapOverview = new LatLng(57.69999167, 11.96330168);
-    private Polyline line;
-    private ArrayList<IBusStop> parseBusStops;
+    private ArrayList<IBusStop> busStops;
     private Boolean mapReady = false;
     private Boolean busStopsReady = false;
 
@@ -189,20 +189,17 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapUi.setZoomGesturesEnabled(false);
     }
     private void setupBusStops() {
-        /*
         // Place the bus stops on the map
-        for (ParseBusStop i : parseBusStops){
+        for (IBusStop i : busStops){
             googleMap.addMarker(new MarkerOptions()
                             .position(i.getLatLng())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop_small))
                             .title(i.getName())
             );
         }
-        */
 
         // Draw a line along the bus path
         PolylineOptions options = new PolylineOptions().width(15).color(getResources().getColor(R.color.primary)).geodesic(true);
-        line = googleMap.addPolyline(options);
         AssetManager am = getContext().getAssets();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(am.open("stops.txt")))) {
             String line;
@@ -213,7 +210,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        line = googleMap.addPolyline(options);
+        googleMap.addPolyline(options);
     }
 
     /*
@@ -243,8 +240,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View arg0) {
                 System.out.println("STOP RIDE");
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                new SuccessFragment().show(transaction, "");
                 stopRideMode();
             }
         });
@@ -297,7 +292,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         }
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
     }
-
     private void updateStatusBar() {
         statusBarNextStopLabel.setText(activeBusNextStop);
         statusBarPointsLabel.setText(String.format("%,d", rideDistance));
@@ -326,6 +320,20 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
         // Stop logging the ride data
         stopLoggingRide();
+
+        // Show successdialog for the user
+        showSuccessDialog();
+    }
+    private void showSuccessDialog() {
+        SuccessFragment success = new SuccessFragment();
+        Bundle bundle = new Bundle(10);
+        bundle.putInt("Points", ridePoints);
+        bundle.putString("StopFrom", rideBusStopFrom);
+        bundle.putString("StopToo", rideBusStopToo);
+        bundle.putLong("Time", activeBus.getDatedPosition().getDate().getTime() - rideDate.getTime());
+        success.setArguments(bundle);
+        //TODO Co2 stuff
+        success.show(getActivity().getSupportFragmentManager(), "");
     }
 
     /*
@@ -348,6 +356,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     }
     private void stopLoggingRide() {
         activeBusTotalDistance = 0;
+        Ride ride = new Ride(
+                rideDate,
+                rideBusStopFrom,
+                rideBusStopToo,
+                ridePoints,
+                rideDistance,
+                CurrentUser.getInstance().getUserName());
+        //ParseDatabase.uploadRide(ride);
     }
 
     /*
@@ -356,7 +372,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     private String getClosestBusStop() {
         float[] distance = new float[1];
-        for (IBusStop stop : parseBusStops) {
+        for (IBusStop stop : busStops) {
             Location.distanceBetween(activeBusPosition.latitude, activeBusPosition.longitude, stop.getLatLng().latitude, stop.getLatLng().longitude, distance);
             if (distance[0] < 50.0f) {
                 return stop.getName();
@@ -502,6 +518,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapReady = true;
         setupMap();
     }
+
     private void fetchParseBusStops() {
         ParseQuery<ParseBusStop> stopsParseQuery = ParseQuery.getQuery(ParseBusStop.class);
         stopsParseQuery.findInBackground(new FindCallback<ParseBusStop>() {
@@ -515,8 +532,8 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                             return stop1.compareTo(stop2);
                         }
                     });
-                    parseBusStops = new ArrayList<>();
-                    parseBusStops.addAll(stopsFromParse);
+                    busStops = new ArrayList<>();
+                    busStops.addAll(stopsFromParse);
                     busStopsReady = true;
                     setupBusStops();
                 } else {

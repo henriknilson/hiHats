@@ -1,6 +1,8 @@
 package hihats.electricity.fragment;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import hihats.electricity.R;
 
@@ -18,6 +24,7 @@ import hihats.electricity.R;
 public class SuccessFragment extends DialogFragment {
 
     private Button dismissButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +54,19 @@ public class SuccessFragment extends DialogFragment {
                 dismiss();
             }
         });
+
+        // Set all the labels to the value from the ride
+        TextView points = (TextView)view.findViewById(R.id.success_points);
+        points.setText(getArguments().getInt("Points") + " " + getString(R.string.success_green_points));
+        TextView stops = (TextView)view.findViewById(R.id.success_stops);
+        stops.setText(getArguments().getString("StopFrom") + " " + getString(R.string.to) + " " + getArguments().getString("StopToo"));
+        long millis = getArguments().getLong("Time");
+        TextView time = (TextView)view.findViewById(R.id.success_time);
+        time.setText(String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(millis),
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+        ));
         return view;
     }
 }

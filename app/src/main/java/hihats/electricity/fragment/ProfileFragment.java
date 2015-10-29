@@ -28,8 +28,8 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
+import hihats.electricity.database.ParseRide;
 import hihats.electricity.model.CurrentUser;
-import hihats.electricity.model.ParseRide;
 
 public class ProfileFragment extends Fragment {
 
@@ -56,7 +56,6 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         rides = new ArrayList<>();
         fetchRides();
-        calculateChartValues();
     }
 
     @Override
@@ -116,24 +115,28 @@ public class ProfileFragment extends Fragment {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
+                    calculateChartValues(parseRides);
 
                     for (ParseRide parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
 
-                        // Create Ride HashMaps from the parse objects
-                        ride.put("busStopFrom", parseObject.getFrom());
-                        ride.put("busStopToo", parseObject.getTo());
-                        ride.put("points", Integer.toString(parseObject.getPoints()));
-                        ride.put("distance", Double.toString(
-                                        parseObject.getDistance()
-                                )
-                        );
+                        if (CurrentUser.getInstance().getUserName() == parseObject.getUser()) {
 
-                        rides.add(ride);
+                            // Create Ride HashMaps from the parse objects
+                            ride.put("busStopFrom", parseObject.getFrom());
+                            ride.put("busStopToo", parseObject.getTo());
+                            ride.put("points", Integer.toString(parseObject.getPoints()));
+                            ride.put("distance", Double.toString(
+                                            parseObject.getDistance()
+                                    )
+                            );
+
+                            rides.add(ride);
 
 
-                        // Notify the ListViews SimpleAdapter adapter to update UI
-                        rideAdapter.notifyDataSetChanged();
+                            // Notify the ListViews SimpleAdapter adapter to update UI
+                            rideAdapter.notifyDataSetChanged();
+                        }
                     }
 
                 } else {
@@ -171,7 +174,8 @@ public class ProfileFragment extends Fragment {
      * @return
      */
     public String getChartMonth(int i) {
-        int currentMonth = Calendar.MONTH - i;
+        Calendar cal = Calendar.getInstance();
+        int currentMonth = (cal.get(Calendar.MONTH) - i);
 
         if (currentMonth < 0) {
             currentMonth = currentMonth + 12;
@@ -207,28 +211,32 @@ public class ProfileFragment extends Fragment {
     /**
      * Sets the values in the chart depending on users rides
      */
-    public void calculateChartValues() {
-        ArrayList<ParseRide> rides = CurrentUser.getInstance().getRides();
+    public void calculateChartValues(List<ParseRide> list) {
+        //ArrayList<ParseRide> rides = CurrentUser.getInstance().getRides();
         float[] chartValues = new float[8];
+        Calendar cal = Calendar.getInstance();
 
-        for (ParseRide r : rides) {
+        for (ParseRide r : list) {
             int rideMonth = r.getDate().getMonth();
-            if (r.getDate().getYear() == Calendar.YEAR) {
+            if (r.getDate().getYear() == cal.get(Calendar.MONTH)) {
+                System.out.print("Samma år iaf");
                 if (getMonthString(rideMonth) == getChartMonth(7)) {
-                    chartValues[0] = chartValues[0] + (float) (r.getDistance() / 10);
+                    System.out.print("Samma som månad-7");
+                    chartValues[0] = chartValues[0] + (float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(6)) {
-                    chartValues[1] = chartValues[1] + (float) (r.getDistance() / 10);
+                    chartValues[1] = chartValues[1] + (float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(5)) {
-                    chartValues[2] = chartValues[2] + (float) (r.getDistance() / 10);
+                    chartValues[2] = chartValues[2] + (float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(4)) {
-                    chartValues[3] = chartValues[3] + (float) (r.getDistance() / 10);
+                    chartValues[3] = chartValues[3] + (float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(3)) {
-                    chartValues[4] = chartValues[4] + (float) (r.getDistance() / 10);
+                    chartValues[4] = chartValues[4] + (float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(2)) {
                     chartValues[5] = chartValues[5] + (float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(1)) {
                     chartValues[6] = chartValues[6] + (float) (r.getDistance());
                 } else if (getMonthString(rideMonth) == getChartMonth(0)) {
+                    System.out.print("Samma som månad-0, oct");
                     chartValues[7] = chartValues[7] + (float) (r.getDistance());
                 }
             }
@@ -237,6 +245,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void setChartValues(float[] chartValues) {
+        System.out.print("Sätter värden");
         for (int i = 1; i < 9; i++) {
             mValuesOne[0][i] = chartValues[(i-1)];
         }
