@@ -13,4 +13,12 @@ public interface IRide {
     int getPoints();
     int getDistance();
     String getUser();
+
+    void setDate(Date date);
+    void setFrom(String from);
+    void setTo(String to);
+    void setPoints(int points);
+    void setDistance(int distance);
+    void setUser(String user);
+
 }
