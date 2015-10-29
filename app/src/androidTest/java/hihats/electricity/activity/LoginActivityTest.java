@@ -9,7 +9,6 @@ import com.parse.ParseACL;
 import com.parse.ParseUser;
 
 import hihats.electricity.R;
-import hihats.electricity.util.ParseRideHelper;
 
 /**
  * Created by henriknilson on 02/10/15.

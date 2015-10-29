@@ -1,7 +1,8 @@
 package hihats.electricity.net;
 
 /**
- * Created by fredrikkindstrom on 24/09/15.
+ * This exception is thrown when the connection was successful but no
+ * data could be obtained from the remote server request.
  */
 public class NoDataException extends Exception {
 

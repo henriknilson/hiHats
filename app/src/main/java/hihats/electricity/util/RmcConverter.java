@@ -5,7 +5,8 @@ import java.util.Date;
 import hihats.electricity.model.DatedPosition;
 
 /**
- * Created by fredrikkindstrom on 01/10/15.
+ * Util class used to convert GPRMC formatted gps strings
+ * into readable data for an Android application.
  */
 public class RmcConverter {
 
