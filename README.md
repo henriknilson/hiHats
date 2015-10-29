@@ -24,6 +24,7 @@ checkout the two videos explaining the concept and the prototype
 
 ## Team
 
+- Fredrik Kindström
 - Axel Aringskog
 - Pär Löfqvist
 - Filip Hallqvist

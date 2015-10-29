@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.widget.Button;
 import hihats.electricity.R;
 import hihats.electricity.adapter.TabsAdapter;
@@ -44,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         // Create the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.app_name);
+        toolbar.setTitle("BusCounts");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
 
         // Give the TabLayout the ViewPager
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -66,6 +67,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         //        finish();
         //    }
         // });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
