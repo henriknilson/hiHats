@@ -18,6 +18,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import com.db.chart.view.LineChartView;
 
 import hihats.electricity.R;
 import hihats.electricity.database.ParseRide;
+import hihats.electricity.model.CurrentUser;
 
 public class ProfileFragment extends Fragment {
 
@@ -38,15 +40,16 @@ public class ProfileFragment extends Fragment {
     List<HashMap<String, String>> rides;
     ListView rideListView;
     private LineChartView mChartOne;
-    private final String[] mLabelsOne= {"", "", "Januari", "",  "", "Mars", "", "", "Maj", "", "", "Oktober", "",  "", "December", "", ""};
-    private final float[][] mValuesOne = {{7f, 8.3f, 7.0f, 7.3f, 5f, 3.3f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f, 7.0f, 6.6f, 7.1f, 8.5f}};
+    private final String[] mLabelsOne = {"", getChartMonth(7), getChartMonth(6), getChartMonth(5), getChartMonth(4), getChartMonth(3), getChartMonth(2), getChartMonth(1), getChartMonth(0),""};
+    private final float[][] mValuesOne = new float[1][10]; //{{3.5f, 4.7f, 4.3f, 0f, 0f, 0f, 7f, 8.3f, 7.0f, 0f, 0f, 0f, 3.5f, 4.1f, 2.2f, 3.5f, 5.6f, 5.8f, 6.2f}};
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         return fragment;
     }
 
-    public ProfileFragment() {}
+    public ProfileFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +94,7 @@ public class ProfileFragment extends Fragment {
                 TableLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
-        LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View buttonGroupView = layoutInflater.inflate(R.layout.buttongroup_dashboard, container, false);
         buttonGroupView.setLayoutParams(params);
@@ -112,23 +115,28 @@ public class ProfileFragment extends Fragment {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
+                    calculateChartValues(parseRides);
 
                     for (ParseRide parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
 
-                        // Create Ride HashMaps from the parse objects
-                        ride.put("busStopFrom", parseObject.getFrom());
-                        ride.put("busStopToo", parseObject.getTo());
-                        ride.put("points", Integer.toString(parseObject.getPoints()));
-                        ride.put("distance", Double.toString(
-                                        parseObject.getDistance()
-                                )
-                        );
+                        if (CurrentUser.getInstance().getUserName() == parseObject.getUser()) {
 
-                        rides.add(ride);
+                            // Create Ride HashMaps from the parse objects
+                            ride.put("busStopFrom", parseObject.getFrom());
+                            ride.put("busStopToo", parseObject.getTo());
+                            ride.put("points", Integer.toString(parseObject.getPoints()));
+                            ride.put("distance", Double.toString(
+                                            parseObject.getDistance()
+                                    )
+                            );
 
-                        // Notify the ListViews SimpleAdapter adapter to update UI
-                        rideAdapter.notifyDataSetChanged();
+                            rides.add(ride);
+
+
+                            // Notify the ListViews SimpleAdapter adapter to update UI
+                            rideAdapter.notifyDataSetChanged();
+                        }
                     }
 
                 } else {
@@ -138,7 +146,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public void produceOne(LineChartView chart){
+    public void produceOne(LineChartView chart) {
 
         LineSet dataset = new LineSet(mLabelsOne, mValuesOne[0]);
         dataset.setColor(this.getResources().getColor(R.color.primary))
@@ -156,5 +164,90 @@ public class ProfileFragment extends Fragment {
                 .setXAxis(false)
                 .setYAxis(false);
         chart.show();
+    }
+
+    /**
+     * This method makes it possible to get for example
+     * the month before the last month
+     * with sending an int of 2 with the call
+     * @param i
+     * @return
+     */
+    public String getChartMonth(int i) {
+        Calendar cal = Calendar.getInstance();
+        int currentMonth = (cal.get(Calendar.MONTH) - i);
+
+        if (currentMonth < 0) {
+            currentMonth = currentMonth + 12;
+        }
+
+        return getMonthString(currentMonth);
+    }
+
+    /**
+     * Month to String
+     * @param currentMonth
+     * @return
+     */
+    public String getMonthString(int currentMonth) {
+
+        switch (currentMonth) {
+            case 0:  return "Jan";
+            case 1:  return "Feb";
+            case 2:  return "Mar";
+            case 3:  return "Apr";
+            case 4:  return "May";
+            case 5:  return "Jun";
+            case 6:  return "Jul";
+            case 7:  return "Aug";
+            case 8:  return "Sep";
+            case 9: return "Oct";
+            case 10: return "Nov";
+            case 11: return "Dec";
+            default: return "Invalid month";
+        }
+    }
+
+    /**
+     * Sets the values in the chart depending on users rides
+     */
+    public void calculateChartValues(List<ParseRide> list) {
+        //ArrayList<ParseRide> rides = CurrentUser.getInstance().getRides();
+        float[] chartValues = new float[8];
+        Calendar cal = Calendar.getInstance();
+
+        for (ParseRide r : list) {
+            int rideMonth = r.getDate().getMonth();
+            if (r.getDate().getYear() == cal.get(Calendar.MONTH)) {
+                System.out.print("Samma år iaf");
+                if (getMonthString(rideMonth) == getChartMonth(7)) {
+                    System.out.print("Samma som månad-7");
+                    chartValues[0] = chartValues[0] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(6)) {
+                    chartValues[1] = chartValues[1] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(5)) {
+                    chartValues[2] = chartValues[2] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(4)) {
+                    chartValues[3] = chartValues[3] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(3)) {
+                    chartValues[4] = chartValues[4] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(2)) {
+                    chartValues[5] = chartValues[5] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(1)) {
+                    chartValues[6] = chartValues[6] + (float) (r.getDistance());
+                } else if (getMonthString(rideMonth) == getChartMonth(0)) {
+                    System.out.print("Samma som månad-0, oct");
+                    chartValues[7] = chartValues[7] + (float) (r.getDistance());
+                }
+            }
+        }
+        setChartValues(chartValues);
+    }
+
+    public void setChartValues(float[] chartValues) {
+        System.out.print("Sätter värden");
+        for (int i = 1; i < 9; i++) {
+            mValuesOne[0][i] = chartValues[(i-1)];
+        }
     }
 }
