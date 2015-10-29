@@ -8,7 +8,7 @@ import com.parse.ParseObject;
  * Created by axel on 2015-09-24.
  */
 @ParseClassName("BusStop")
-public class BusStop extends ParseObject implements IBusStop, Comparable {
+public class BusStop extends ParseObject implements IBusStop, Comparable<IBusStop> {
 
     public BusStop() {}
 
@@ -54,8 +54,8 @@ public class BusStop extends ParseObject implements IBusStop, Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        return getOrder() - ((BusStop)o).getOrder();
+    public int compareTo(IBusStop iBusStop) {
+        return getOrder() - iBusStop.getOrder();
     }
 
 }

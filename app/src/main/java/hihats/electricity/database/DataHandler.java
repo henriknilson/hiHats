@@ -3,6 +3,7 @@ package hihats.electricity.database;
 import android.util.Log;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -19,26 +20,28 @@ import hihats.electricity.model.Ride;
  */
 public class DataHandler implements IDataHandler {
 
+    public static final String TAG = "DataHandler";
     private static final IDataHandler INSTANCE = new DataHandler();
+
+    private DataHandler() {};
 
     public static IDataHandler getInstance() {
         return DataHandler.INSTANCE;
     }
 
-    private DataHandler() {};
-
-    public static final String TAG = "DataHandler";
-
+    @Override
     public void getRides(IDataHandler.Callback callback) {
-        new ParseTask(callback).fetchRides();
+        new ParseFetcher(callback).fetch("Ride");
     }
 
+    @Override
     public void getBusStops(IDataHandler.Callback callback) {
-        new ParseTask(callback).fetchBusStops();
+        new ParseFetcher(callback).fetch("BusStop");
     }
 
+    @Override
     public void getDeals(IDataHandler.Callback callback) {
-        new ParseTask(callback).fetchDeals();
+        new ParseFetcher(callback).fetch("Deal");
     }
 
     @Override
@@ -52,87 +55,26 @@ public class DataHandler implements IDataHandler {
         }
     }
 
-    private class ParseTask {
+    private class ParseFetcher {
 
         final IDataHandler.Callback callback;
 
-        public ParseTask(IDataHandler.Callback callback) {
+        public ParseFetcher(IDataHandler.Callback callback) {
             this.callback = callback;
         }
 
-        protected void fetchBusStops() {
-
-            ParseQuery<BusStop> stopsParseQuery = ParseQuery.getQuery(BusStop.class);
-            stopsParseQuery.findInBackground(new FindCallback<BusStop>() {
-
+        protected void fetch(final String parseObject) {
+            ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(parseObject);
+            parseQuery.findInBackground(new FindCallback<ParseObject>() {
                 @Override
-                public void done(List<BusStop> parseData, com.parse.ParseException e) {
+                public void done(List<ParseObject> parseData, com.parse.ParseException e) {
                     if (e == null) {
-
-                        // Sort
-                        Collections.sort(parseData, new Comparator<BusStop>() {
-                            @Override
-                            public int compare(BusStop stop1, BusStop stop2) {
-                                return stop1.compareTo(stop2);
-                            }
-                        });
-
-                        // Callback
                         callback.callback(parseData);
-
                     } else {
-
-                        Log.d(TAG, "fetchBusStops() Error: " + e.getMessage());
-
+                        Log.d(TAG, "fetch(\"" + parseObject + "\") Error: " + e.getMessage());
                     }
-
                 }
             });
-
-
-        }
-        protected void fetchRides() {
-
-            ParseQuery<Ride> query = ParseQuery.getQuery(Ride.class);
-            query.findInBackground(new FindCallback<Ride>() {
-
-                @Override
-                public void done(List<Ride> parseData, com.parse.ParseException e) {
-                    if (e == null) {
-
-                        // Callback
-                        callback.callback(parseData);
-
-                    } else {
-                        Log.d(TAG, "fetchRides() Error: " + e.getMessage());
-                    }
-
-                }
-            });
-
-
-        }
-        protected void fetchDeals() {
-
-            ParseQuery<Deal> stopsParseQuery = ParseQuery.getQuery(Deal.class);
-            stopsParseQuery.findInBackground(new FindCallback<Deal>() {
-
-                @Override
-                public void done(List<Deal> parseData, com.parse.ParseException e) {
-                    if (e == null) {
-
-                        callback.callback(parseData);
-
-                    } else {
-
-                        Log.d(TAG, "fetchRides() Error: " + e.getMessage());
-
-                    }
-
-                }
-            });
-
-
         }
 
     }
