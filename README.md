@@ -1,7 +1,7 @@
 BusCounts
 =========
 
-An protorype built for andriod, to keep track of busrides and give points to the user.
+An prototype built for android, to keep track of busrides and give points to the user.
 
 ## Getting Started
 
@@ -16,7 +16,8 @@ An protorype built for andriod, to keep track of busrides and give points to the
 
 See User manual in docs folder
 or
-checkout the two vidoes explaning the conept and the prtotype
+checkout the two videos explaining the concept and the prototype
+
 [Koncpet Video](https://www.youtube.com/watch?v=fm9I-2A2CJM)
 
 [Prototype Video](https://www.youtube.com/watch?v=-hmMvpPmy8o)
