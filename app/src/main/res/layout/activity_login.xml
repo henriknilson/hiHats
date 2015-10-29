@@ -3,7 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@drawable/background">
     <ImageView
         android:id="@+id/logotype"
@@ -15,7 +14,12 @@
         android:src="@drawable/logotype" />
 
     <LinearLayout
+        android:background="@drawable/shade"
         android:layout_width="fill_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="128dp"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content">
