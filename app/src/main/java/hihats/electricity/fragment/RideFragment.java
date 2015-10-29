@@ -42,6 +42,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +51,7 @@ import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
 import hihats.electricity.database.DataHandler;
 import hihats.electricity.database.IDataHandler;
+import hihats.electricity.model.BusStop;
 import hihats.electricity.model.Ride;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
@@ -157,6 +160,14 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         dataHandler.getBusStops(new IDataHandler.Callback() {
             @Override
             public void callback(List data) {
+
+                Collections.sort(data, new Comparator<IBusStop>() {
+                    @Override
+                    public int compare(IBusStop stop1, IBusStop stop2) {
+                        return stop1.compareTo(stop2);
+                    }
+                });
+
                 busStops = new ArrayList<>();
                 busStops.addAll(data);
                 busStopsReady = true;
