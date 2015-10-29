@@ -46,7 +46,8 @@ import java.util.List;
 
 import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
-import hihats.electricity.database.ParseDatabase;
+import hihats.electricity.database.IDataHandler;
+import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
 import hihats.electricity.model.DatedPosition;
@@ -71,6 +72,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private Intent positionServiceIntent;
     private Intent rideServiceIntent;
     private GoogleApiClient googleApiClient;
+    private IDataHandler dataHandler = ParseDataHandler.getInstance();
 
     // Buttons
     private ActionProcessButton getOnBusButton;
@@ -150,7 +152,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        ParseDatabase.getInstance().getBusStops(new ParseDatabase.Callback() {
+        dataHandler.getBusStops(new IDataHandler.Callback() {
             @Override
             public void callback(List data) {
                 busStops = new ArrayList<>();
@@ -379,7 +381,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
                 ridePoints,
                 rideDistance,
                 CurrentUser.getInstance().getUserName());
-        //ParseDatabase.uploadRide(ride);
+        //ParseDataHandler.uploadRide(ride);
     }
 
     /*
