@@ -30,6 +30,7 @@ import com.db.chart.view.LineChartView;
 import hihats.electricity.R;
 import hihats.electricity.database.ParseRide;
 import hihats.electricity.model.CurrentUser;
+import hihats.electricity.model.Ride;
 
 public class ProfileFragment extends Fragment {
 
@@ -56,6 +57,7 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         rides = new ArrayList<>();
         fetchRides();
+        calculateChartValues();
     }
 
     @Override
@@ -115,7 +117,6 @@ public class ProfileFragment extends Fragment {
                 if (e == null) {
 
                     Log.d(TAG, "Retrieved " + parseRides.size() + " rides");
-                    calculateChartValues(parseRides);
 
                     for (ParseRide parseObject : parseRides) {
                         HashMap<String, String> ride = new HashMap<>();
@@ -211,12 +212,12 @@ public class ProfileFragment extends Fragment {
     /**
      * Sets the values in the chart depending on users rides
      */
-    public void calculateChartValues(List<ParseRide> list) {
-        //ArrayList<ParseRide> rides = CurrentUser.getInstance().getRides();
+    public void calculateChartValues() {
+        ArrayList<Ride> rides = CurrentUser.getInstance().getRides();
         float[] chartValues = new float[8];
         Calendar cal = Calendar.getInstance();
 
-        for (ParseRide r : list) {
+        for (Ride r : rides) {
             int rideMonth = r.getDate().getMonth();
             if (r.getDate().getYear() == cal.get(Calendar.MONTH)) {
                 System.out.print("Samma år iaf");
