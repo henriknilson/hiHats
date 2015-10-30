@@ -1,4 +1,4 @@
-package hihats.electricity.adapter;
+package hihats.electricity.activity;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

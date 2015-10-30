@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.util.Log;
 import android.view.MenuItem;
 import hihats.electricity.R;
-import hihats.electricity.adapter.TabsAdapter;
 
 /**
  * This is the main activity where all the content in the app is
