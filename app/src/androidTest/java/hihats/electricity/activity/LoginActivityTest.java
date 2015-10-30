@@ -6,17 +6,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.parse.Parse;
 import com.parse.ParseACL;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import hihats.electricity.R;
-import hihats.electricity.model.Ride;
-import hihats.electricity.util.ParseRideHelper;
 
 /**
  * Created by henriknilson on 02/10/15.

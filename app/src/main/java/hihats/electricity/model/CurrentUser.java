@@ -1,30 +1,36 @@
 package hihats.electricity.model;
 
-import java.util.ArrayList;
+import com.parse.FindCallback;
+import com.parse.ParseQuery;
 
-import hihats.electricity.util.ParseRideHelper;
+import java.util.ArrayList;
+import java.util.List;
+
+import hihats.electricity.database.IDataHandler;
+import hihats.electricity.database.ParseDataHandler;
 
 /**
  * Created by Pertta on 15-10-07.
  * This class represents the user
  */
-public class User {
+public class CurrentUser {
 
-    private static User user = null;
+    private static CurrentUser instance;
 
     String userName;
     String userId;
     int points;
-    ArrayList<Ride> rides = new ArrayList<>();
+    ArrayList<IRide> rides;
 
-    protected User() {
+
+    protected CurrentUser() {
     }
 
-    public static User getInstance() {
-        if(user == null) {
-            user = new User();
+    public static CurrentUser getInstance() {
+        if (instance == null) {
+            instance = new CurrentUser();
         }
-        return user;
+        return instance;
     }
 
 
@@ -40,7 +46,7 @@ public class User {
         return points;
     }
 
-    public ArrayList getRides() {
+    public ArrayList<IRide> getRides() {
         return rides;
     }
 
@@ -61,23 +67,20 @@ public class User {
     }
 
     public void setRides() {
-        this.rides = ParseRideHelper.getInstance().getRides(this.userName);
 
     }
-
-
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (!(o instanceof CurrentUser)) return false;
 
-        User user = (User) o;
+        CurrentUser currentUser = (CurrentUser) o;
 
-        if (points != user.points) return false;
-        if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
-        return !(rides != null ? !rides.equals(user.rides) : user.rides != null);
+        if (points != currentUser.points) return false;
+        if (userName != null ? !userName.equals(currentUser.userName) : currentUser.userName != null) return false;
+        return !(rides != null ? !rides.equals(currentUser.rides) : currentUser.rides != null);
 
     }
 

@@ -15,19 +15,20 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import hihats.electricity.R;
-import hihats.electricity.model.User;
+import hihats.electricity.model.CurrentUser;
 
 /**
- * Created by henriknilson on 18/09/15.
+ * This is the only usable view outside of the main activity.
+ * Here the user can login or signup to the parse database.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    Button loginbutton;
-    Button signup;
-    String usernametxt;
-    String passwordtxt;
-    EditText password;
-    EditText username;
+    private Button loginbutton;
+    private Button signup;
+    private String usernametxt;
+    private String passwordtxt;
+    private EditText password;
+    private EditText username;
 
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +65,10 @@ public class LoginActivity extends AppCompatActivity {
                                             "Successfully Logged in",
                                             Toast.LENGTH_LONG).show();
                                     //Create local user
-                                    User.getInstance().setUserName(user.getUsername());
-                                    User.getInstance().setUserId(user.getObjectId());
-                                    User.getInstance().setPoints(user.getInt("points"));
-                                    User.getInstance().setRides();
+                                    CurrentUser.getInstance().setUserName(user.getUsername());
+                                    CurrentUser.getInstance().setUserId(user.getObjectId());
+                                    CurrentUser.getInstance().setPoints(user.getInt("points"));
+                                    CurrentUser.getInstance().setRides();
                                     finish();
                                 } else {
                                     Toast.makeText(

@@ -3,49 +3,37 @@ package hihats.electricity.util;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import hihats.electricity.model.Bus;
+import hihats.electricity.model.BusFactory;
 import hihats.electricity.model.DatedPosition;
+import hihats.electricity.model.IBus;
 import hihats.electricity.net.AccessErrorException;
 import hihats.electricity.net.HttpHandler;
 import hihats.electricity.net.NoDataException;
-import hihats.electricity.net.UrlRetriever;
+import hihats.electricity.net.ElectriCityUrlRetriever;
 
 /**
- * This class converts the data obtained by the net class
- * HttpHandler to useful formats to use further up in the application tree.
+ * This class converts the data obtained by the net class package
+ * to useful formats to use further up in the application tree.
  * This is the class that gets called from outside the net/util package.
  */
 public class BusDataHelper {
+
+    public static final String TAG = BusDataHelper.class.getSimpleName();
 
     private final String GPS_RMC = "Ericsson$RMC_Value";
     private final String TOTAL_VEHICLE_DISTANCE = "Ericsson$Total_Vehicle_Distance_Value";
     private final String AT_STOP = "Ericsson$At_Stop_Value";
     private final String NEXT_STOP = "Ericsson$Bus_Stop_Name_Value";
-    private final float BUS_DISTANCE_METERS = 8000.0f;
-    private final String ICOMERA = "https://ombord.info/api/xml/system/";
+    private final float BUS_DISTANCE_METERS = 50.0f;
 
-    private final UrlRetriever urlRetriever = new UrlRetriever();
+    private final ElectriCityUrlRetriever urlRetriever = new ElectriCityUrlRetriever();
     private final HttpHandler httpHandler = new HttpHandler();
 
     /*
@@ -59,9 +47,9 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public boolean isBusAtStop(Bus bus) throws AccessErrorException, NoDataException {
+    public boolean isBusAtStop(IBus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, AT_STOP, 30000);
-        String response = httpHandler.getResponse(url, true);
+        String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         switch (data.getValue()) {
@@ -72,17 +60,6 @@ public class BusDataHelper {
             default:
                 throw new NoDataException();
         }
-    }
-
-    /**
-     * Returns if the device is connected to a wifi network or not.
-     * @param context The context of the application, get this from MainActivity.
-     * @return True if the device is connected to wifi, false if not
-     */
-    public boolean isConnectedToWifi(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        return wifiNetwork != null && wifiNetwork.isConnected();
     }
 
     /**
@@ -100,28 +77,6 @@ public class BusDataHelper {
      */
 
     /**
-     * Returns a Bus object that matches a System Id obtained from the bus onboard network API.
-     * This method can only be successful when the device is connected to the bus onboard wifi.
-     * @return A bus matching the SystemId if its valid, null if not.
-     * @throws AccessErrorException When the http request failed and the data can not be obtained.
-     * @throws NoDataException When the http request was successful but no data was found.
-     */
-    public Bus getBusFromSystemId() throws AccessErrorException, NoDataException {
-        String response = httpHandler.getResponse(ICOMERA, false);
-        String result = parseFromXML(response);
-        System.out.println(response);
-        if (result != null) {
-            try {
-                return new Bus(result);
-            } catch (IllegalArgumentException e) {
-                throw new NoDataException();
-            }
-        } else {
-            throw new AccessErrorException();
-        }
-    }
-
-    /**
      * Returns a Bus object that is closest to the given location.
      * Calls the API to get all the active buses and then compare distances
      * to obtain the bus that is closest to the given location.
@@ -131,9 +86,9 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public Bus getBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
-        ArrayList<Bus> allBuses = getLastDataForAllBuses();
-        for (Bus bus : allBuses) {
+    public IBus getBusNearestLocation(Location location) throws AccessErrorException, NoDataException {
+        ArrayList<IBus> allBuses = getLastDataForAllBuses();
+        for (IBus bus : allBuses) {
             if (bus.getDatedPosition() != null && location != null) {
                 float[] distanceBetweenBuses = new float[1];
                 Location.distanceBetween(
@@ -142,9 +97,9 @@ public class BusDataHelper {
                         location.getLatitude(),
                         location.getLongitude(),
                         distanceBetweenBuses);
-                System.out.println("Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
+                Log.d(TAG, "Distance between 'DEVICE' and '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters");
                 if (distanceBetweenBuses[0] < BUS_DISTANCE_METERS) {
-                    System.out.println("FOUND BUS '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters away");
+                    Log.d(TAG, "FOUND BUS '" + bus.getRegNr() + "' is " + distanceBetweenBuses[0] + " meters away");
                     return bus;
                 }
             }
@@ -158,17 +113,17 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public ArrayList<Bus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
+    public ArrayList<IBus> getLastDataForAllBuses() throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(null, null, GPS_RMC, 8000);
-        String response = httpHandler.getResponse(url, true);
+        String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
-        ArrayList<Bus> buses = new ArrayList<>();
+        ArrayList<IBus> buses = new ArrayList<>();
         for (ApiDataObject o : rawData) {
             String id = o.getGatewayId();
             // Ignore stupid test bus for now
             if (!id.equals("Vin_Num_001")) {
                 DatedPosition loc;
-                float bearing = 0f;
+                float bearing;
                 try {
                     loc = RmcConverter.rmcToPosition(o.getValue(), o.getTimestamp());
                 } catch (IllegalArgumentException e) {
@@ -179,7 +134,7 @@ public class BusDataHelper {
                 } catch (IllegalArgumentException e) {
                     bearing = 0f;
                 }
-                Bus bus = new Bus("Ericsson$" + id);
+                IBus bus = BusFactory.getInstance().getBus("Ericsson$" + id);
                 bus.setDatedPosition(loc);
                 bus.setBearing(bearing);
                 buses.add(bus);
@@ -195,9 +150,9 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public DatedPosition getLastPositionForBus(Bus bus) throws AccessErrorException, NoDataException {
+    public DatedPosition getLastPositionForBus(IBus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
-        String response = httpHandler.getResponse(url, true);
+        String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         return RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
@@ -210,9 +165,9 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public String getNextStopForBus(Bus bus) throws AccessErrorException, NoDataException {
+    public String getNextStopForBus(IBus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, NEXT_STOP, 15000);
-        String response = httpHandler.getResponse(url, true);
+        String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         return data.getValue();
@@ -225,9 +180,9 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public int getTotalDistanceForBus(Bus bus) throws AccessErrorException, NoDataException {
+    public int getTotalDistanceForBus(IBus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, TOTAL_VEHICLE_DISTANCE, 10000);
-        String response = httpHandler.getResponse(url, true);
+        String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         int data = Integer.parseInt(rawData.get(0).getValue());
         return data * 5;
@@ -243,9 +198,9 @@ public class BusDataHelper {
      * @throws AccessErrorException When the http request failed and the data can not be obtained.
      * @throws NoDataException When the http request was successful but no data was found.
      */
-    public void updateDataForBus(Bus bus) throws AccessErrorException, NoDataException {
+    public void updateDataForBus(IBus bus) throws AccessErrorException, NoDataException {
         String url = urlRetriever.getUrl(bus.getDgw(), null, GPS_RMC, 5000);
-        String response = httpHandler.getResponse(url, true);
+        String response = httpHandler.getResponse(url);
         ArrayList<ApiDataObject> rawData = parseFromJSON(response);
         ApiDataObject data = rawData.get(0);
         DatedPosition loc = RmcConverter.rmcToPosition(data.getValue(), data.getTimestamp());
@@ -260,34 +215,6 @@ public class BusDataHelper {
     Help methods
      */
 
-    private String parseFromXML(String xml) throws NoDataException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-        Document document = null;
-        final String GROUP = "system";
-        final String VALUE = "system_id";
-        String result = null;
-        try {
-            builder = factory.newDocumentBuilder();
-            document = builder.parse(new InputSource(new StringReader(xml)));
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new NoDataException();
-        }
-        if (document != null) {
-            document.getDocumentElement().normalize();
-            NodeList nList = document.getElementsByTagName(GROUP);
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-                Node nNode = nList.item(temp);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    result = eElement.getElementsByTagName(VALUE).item(0).getTextContent();
-                }
-            }
-            return result;
-        } else {
-            return null;
-        }
-    }
     private ArrayList<ApiDataObject> parseFromJSON(String s) throws NoDataException {
         Gson gson = new Gson();
         ApiDataObject[] fromStream = gson.fromJson(s, ApiDataObject[].class);
