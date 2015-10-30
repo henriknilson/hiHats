@@ -30,6 +30,8 @@ public class HttpHandler {
         try {
             HttpURLConnection connection;
             connection = establishConnection(url);
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(10000);
             if (connectionWasSuccessful(connection)) {
                 return getResponseFromStream(connection);
             } else {
