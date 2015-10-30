@@ -5,7 +5,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
 /**
- * Created by axel on 2015-09-24.
+ *
  */
 @ParseClassName("BusStop")
 public class BusStop extends ParseObject implements IBusStop, Comparable<IBusStop> {

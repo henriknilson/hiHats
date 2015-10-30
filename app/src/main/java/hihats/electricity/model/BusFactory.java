@@ -1,7 +1,8 @@
 package hihats.electricity.model;
 
 /**
- * Created by fredrikkindstrom on 26/10/15.
+ * This class creates buses. It does so by receiving a bus ID
+ * and depending on which ID it is, creates a bus with matching values.
  */
 public class BusFactory {
 

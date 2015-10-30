@@ -1,7 +1,7 @@
 package hihats.electricity.model;
 
 /**
- * Created by fredrikkindstrom on 01/10/15.
+ * This class is a local representation of a bus.
  */
 
 public class Bus implements IBus{
