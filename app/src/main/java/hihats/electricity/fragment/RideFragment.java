@@ -322,7 +322,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private void updateStatusBar() {
         statusBarNextStopLabel.setText(activeBusNextStop);
         statusBarPointsLabel.setText(String.format("%,d",
-                GreenPointsCalculator.getInstance().getPoints(activeRidePoints)));
+                GreenPointsCalculator.getInstance().roundOffPoints(activeRidePoints)));
     }
     private void stopRideMode() {
         ((ViewGroup) view).removeView(statusBarView);
@@ -389,7 +389,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     private void stopLoggingRide() {
         activeBusTotalDistance = 0;
         activeBusTotalTime = 0;
-        ridePoints = GreenPointsCalculator.getInstance().getPoints(activeRidePoints);
+        ridePoints = GreenPointsCalculator.getInstance().roundOffPoints(activeRidePoints);
 
         IRide ride = new ParseRide();
 

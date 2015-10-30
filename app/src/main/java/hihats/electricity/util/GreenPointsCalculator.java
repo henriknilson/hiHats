@@ -1,7 +1,8 @@
 package hihats.electricity.util;
 
 /**
- * Created by fredrikkindstrom on 29/10/15.
+ * This class is called upon when GreenPoints need to be calculated.
+ * By having a separate class you can always go in and calibrate how the points are calculated.
  */
 public class GreenPointsCalculator {
 
@@ -16,13 +17,26 @@ public class GreenPointsCalculator {
         return instance;
     }
 
+    /**
+     * Call this when you want to compute points in real time
+     * based on traveled distance and passed time.
+     * @param distance The distance traveled to compute points for.
+     * @param time The time passed to compute points for.
+     * @return Computed points.
+     */
     public double getLivePoints(int distance, long time) {
         double pointsFromDistance = distance * 0.01;
         double pointsFromTime = time * (0.001 * 0.01);
         return pointsFromDistance + pointsFromTime;
     }
 
-    public int getPoints(double livePoints) {
+    /**
+     * Called to round up the double added live
+     * points to a finished points integer.
+     * @param livePoints The summed up live points.
+     * @return Rounded off points.
+     */
+    public int roundOffPoints(double livePoints) {
         return  (int) Math.round(livePoints);
     }
 }
