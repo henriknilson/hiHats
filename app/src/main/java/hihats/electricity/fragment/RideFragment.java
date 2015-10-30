@@ -188,10 +188,6 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         mapView.onResume();
 
     }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     /*
     Setup methods for map

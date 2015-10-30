@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.parse.*;
 
 import hihats.electricity.model.BusStop;
+import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.Deal;
 import hihats.electricity.model.Ride;
 
@@ -44,6 +45,7 @@ public class StartupActivity extends Activity {
             // If user is logged in, get username
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (currentUser != null) {
+                CurrentUser.getInstance().setUserName(currentUser.getUsername());
                 Intent intent = new Intent(StartupActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

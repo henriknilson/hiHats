@@ -1,14 +1,5 @@
 package hihats.electricity.model;
 
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import hihats.electricity.database.IDataHandler;
-import hihats.electricity.database.ParseDataHandler;
-
 /**
  * Created by Pertta on 15-10-07.
  * This class represents the user
@@ -17,14 +8,12 @@ public class CurrentUser {
 
     private static CurrentUser instance;
 
-    String userName;
-    String userId;
-    int points;
-    ArrayList<IRide> rides;
+    private String userName;
+    private String userId;
+    private int points;
 
 
-    protected CurrentUser() {
-    }
+    private CurrentUser() {}
 
     public static CurrentUser getInstance() {
         if (instance == null) {
@@ -44,10 +33,6 @@ public class CurrentUser {
 
     public int getPoints() {
         return points;
-    }
-
-    public ArrayList<IRide> getRides() {
-        return rides;
     }
 
     /*
@@ -70,17 +55,17 @@ public class CurrentUser {
 
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CurrentUser)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        CurrentUser currentUser = (CurrentUser) o;
+        CurrentUser that = (CurrentUser) o;
 
-        if (points != currentUser.points) return false;
-        if (userName != null ? !userName.equals(currentUser.userName) : currentUser.userName != null) return false;
-        return !(rides != null ? !rides.equals(currentUser.rides) : currentUser.rides != null);
+        if (points != that.points) return false;
+        if (userName != null ? !userName.equals(that.userName) : that.userName != null)
+            return false;
+        return !(userId != null ? !userId.equals(that.userId) : that.userId != null);
 
     }
 
@@ -88,7 +73,6 @@ public class CurrentUser {
     public int hashCode() {
         int result = userName != null ? userName.hashCode() : 0;
         result = 31 * result + points;
-        result = 31 * result + (rides != null ? rides.hashCode() : 0);
         return result;
     }
 }

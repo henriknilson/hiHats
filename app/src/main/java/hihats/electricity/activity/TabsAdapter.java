@@ -1,6 +1,5 @@
 package hihats.electricity.activity;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,7 +12,7 @@ import hihats.electricity.fragment.RideFragment;
  * This is the tab adapter that keeps the status and order of the
  * three fragment tabs that make up the entire main application.
  */
-public class TabsAdapter extends FragmentPagerAdapter {
+class TabsAdapter extends FragmentPagerAdapter {
 
     private final String[] tabTitles = new String[] { "Ride", "Profile", "Deals" };
 

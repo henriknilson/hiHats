@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -31,36 +27,30 @@ import hihats.electricity.R;
 import hihats.electricity.database.IDataHandler;
 import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.model.IRide;
-import hihats.electricity.model.Ride;
 import hihats.electricity.model.CurrentUser;
-import hihats.electricity.model.Ride;
 
 public class ProfileFragment extends Fragment {
 
-    private static final String TAG = ProfileFragment.class.getSimpleName();
+    public static final String TAG = ProfileFragment.class.getSimpleName();
 
-    TextView usernametxt;
-    TextView pointstxt;
-    TextView nbrRidestxt;
-    TextView distancetxt;
+    private TextView usernametxt;
+    private TextView pointstxt;
+    private TextView nbrRidestxt;
+    private TextView distancetxt;
 
-    SimpleAdapter rideAdapter;
-    List<HashMap<String, String>> rides;
-    ListView rideListView;
+    private SimpleAdapter rideAdapter;
+    private List<HashMap<String, String>> rides;
+    private ListView rideListView;
     private int distance = 0;
     private int points = 0;
     private LineChartView mChartOne;
     private final String[] mLabelsOne = {"", getChartMonth(7), getChartMonth(6), getChartMonth(5), getChartMonth(4), getChartMonth(3), getChartMonth(2), getChartMonth(1), getChartMonth(0),""};
     private final float[][] mValuesOne = new float[1][10];
     private final IDataHandler dataHandler = ParseDataHandler.getInstance();
-    ArrayList<IRide> iRides;
+    private ArrayList<IRide> iRides;
 
     public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
-    }
-
-    public ProfileFragment() {
+        return new ProfileFragment();
     }
 
     @Override
@@ -122,33 +112,32 @@ public class ProfileFragment extends Fragment {
         return layout;
     }
 
-    public void fetchRides() {
+    private void fetchRides() {
 
         dataHandler.getRides(new IDataHandler.Callback<IRide>() {
             @Override
             public void callback(List<IRide> data) {
                 iRides = new ArrayList<>();
-                for (IRide ride : data) {
-
-                    if (ride.getUser().equals(ParseUser.getCurrentUser().getUsername())) {
-                        iRides.add(ride);
-                        distance += ride.getDistance();
-                        points += ride.getPoints();
-                    }
-                }
                 for (IRide r : data) {
-                    HashMap<String, String> ride = new HashMap<>();
-                    // Create Ride HashMaps from the parse objects
-                    ride.put("busStopFrom", r.getFrom());
-                    ride.put("busStopToo", r.getTo());
-                    ride.put("points", Integer.toString(r.getPoints()));
-                    ride.put("distance", Double.toString(
-                            r.getDistance()));
 
-                    rides.add(ride);
+                    if (r.getUser().equals(CurrentUser.getInstance().getUserName())) {
+                        iRides.add(r);
+                        distance += r.getDistance();
+                        points += r.getPoints();
 
-                    // Notify the ListViews SimpleAdapter adapter to update UI
-                    rideAdapter.notifyDataSetChanged();
+                        HashMap<String, String> ride = new HashMap<>();
+                        // Create Ride HashMaps from the parse objects
+                        ride.put("busStopFrom", r.getFrom());
+                        ride.put("busStopToo", r.getTo());
+                        ride.put("points", Integer.toString(r.getPoints()));
+                        ride.put("distance", Double.toString(
+                                r.getDistance()));
+
+                        rides.add(ride);
+
+                        // Notify the ListViews SimpleAdapter adapter to update UI
+                        rideAdapter.notifyDataSetChanged();
+                    }
                 }
                 pointstxt.setText(points + "");
                 nbrRidestxt.setText(rides.size() + "");
@@ -159,7 +148,7 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public void produceOne(LineChartView chart) {
+    private void produceOne(LineChartView chart) {
 
         LineSet dataset = new LineSet(mLabelsOne, mValuesOne[0]);
         dataset.setColor(this.getResources().getColor(R.color.primary))
@@ -186,7 +175,7 @@ public class ProfileFragment extends Fragment {
      * @param i
      * @return
      */
-    public String getChartMonth(int i) {
+    private String getChartMonth(int i) {
         Calendar cal = Calendar.getInstance();
         int currentMonth = (cal.get(Calendar.MONTH) - i);
 
@@ -202,7 +191,7 @@ public class ProfileFragment extends Fragment {
      * @param currentMonth
      * @return
      */
-    public String getMonthString(int currentMonth) {
+    private String getMonthString(int currentMonth) {
 
         switch (currentMonth) {
             case 0:  return "Jan";
@@ -224,9 +213,8 @@ public class ProfileFragment extends Fragment {
     /**
      * Sets the values in the chart depending on users rides
      */
-    public void calculateChartValues() {
+    private void calculateChartValues() {
         float[] chartValues = new float[8];
-        Calendar cal = Calendar.getInstance();
 
         for (IRide r : iRides) {
             int rideMonth = r.getDate().getMonth();
@@ -251,10 +239,8 @@ public class ProfileFragment extends Fragment {
         setChartValues(chartValues);
     }
 
-    public void setChartValues(float[] chartValues) {
-        for (int i = 1; i < 9; i++) {
-            mValuesOne[0][i] = chartValues[(i-1)];
-        }
+    private void setChartValues(float[] chartValues) {
+        System.arraycopy(chartValues, 0, mValuesOne[0], 1, 8);
         produceOne(mChartOne);
     }
 }

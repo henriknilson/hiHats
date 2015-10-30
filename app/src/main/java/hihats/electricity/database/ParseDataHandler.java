@@ -60,7 +60,7 @@ public class ParseDataHandler implements IDataHandler {
             this.callback = callback;
         }
 
-        protected void fetch(final String parseObject) {
+        void fetch(final String parseObject) {
             ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(parseObject);
             parseQuery.findInBackground(new FindCallback<ParseObject>() {
                 @Override
