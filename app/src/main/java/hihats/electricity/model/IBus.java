@@ -1,7 +1,7 @@
 package hihats.electricity.model;
 
 /**
- * This interface represents how a Bus should act and what it should be capable of.
+ * This interface represents how a Bus should act and what it should be capable of doing.
  */
 
 public interface IBus {

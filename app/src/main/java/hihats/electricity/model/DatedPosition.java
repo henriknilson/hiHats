@@ -5,6 +5,7 @@ import java.util.Date;
 /**
  * This class represents a position. It is used to store positions retrieved from the api.
  */
+
 public class DatedPosition {
 
     private double latitude;

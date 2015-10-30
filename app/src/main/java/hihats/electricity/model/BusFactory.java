@@ -4,6 +4,7 @@ package hihats.electricity.model;
  * This class creates buses. It does so by receiving a bus ID
  * and depending on which ID it is, creates a bus with matching values.
  */
+
 public class BusFactory {
 
     private static BusFactory instance;

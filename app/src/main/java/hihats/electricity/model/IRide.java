@@ -5,6 +5,7 @@ import java.util.Date;
 /**
  * This interface represents how a Ride should act and what it should be capable of doing.
  */
+
 public interface IRide {
 
     Date getDate();

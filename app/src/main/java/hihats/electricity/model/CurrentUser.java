@@ -3,6 +3,7 @@ package hihats.electricity.model;
 /**
  * This class represents a local version of the user.
  */
+
 public class CurrentUser {
 
     private static CurrentUser instance;
