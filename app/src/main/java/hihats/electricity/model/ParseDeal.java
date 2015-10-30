@@ -7,8 +7,10 @@ import java.util.Date;
 import hihats.electricity.model.IDeal;
 
 /**
- * Created by axel on 2015-09-24.
+ * This class is a representation of a Deal in the application, designed to work
+ * with the parse database.
  */
+
 @ParseClassName("Deal")
 public class ParseDeal extends ParseObject implements IDeal {
 

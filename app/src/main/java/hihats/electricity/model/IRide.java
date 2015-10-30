@@ -3,7 +3,7 @@ package hihats.electricity.model;
 import java.util.Date;
 
 /**
- * Created by fredrikkindstrom on 28/10/15.
+ * This interface represents how a Ride should act and what it should be capable of doing.
  */
 public interface IRide {
 

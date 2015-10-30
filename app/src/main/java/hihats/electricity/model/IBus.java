@@ -1,8 +1,9 @@
 package hihats.electricity.model;
 
 /**
- *
+ * This interface represents how a Bus should act and what it should be capable of.
  */
+
 public interface IBus {
 
     String getDgw();

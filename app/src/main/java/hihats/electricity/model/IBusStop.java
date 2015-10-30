@@ -3,8 +3,9 @@ package hihats.electricity.model;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Created by fredrikkindstrom on 28/10/15.
+ * This interface represents how a BusStop should act and what it should be capable of.
  */
+
 public interface IBusStop extends Comparable<IBusStop> {
 
     /**

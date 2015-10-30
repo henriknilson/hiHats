@@ -1,7 +1,7 @@
 package hihats.electricity.model;
 
 /**
- * Created by fredrikkindstrom on 28/10/15.
+ * This class contains enums used to decide if a bus is electric or hybrid.
  */
 public enum BusType {
     ELECTRIC, HYBRID

@@ -3,7 +3,7 @@ package hihats.electricity.model;
 import java.util.Date;
 
 /**
- * Created by fredrikkindstrom on 01/10/15.
+ * This class represents a position. It is used to store positions retrieved from the api.
  */
 public class DatedPosition {
 

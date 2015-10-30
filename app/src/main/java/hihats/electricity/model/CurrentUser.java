@@ -1,8 +1,7 @@
 package hihats.electricity.model;
 
 /**
- * Created by Pertta on 15-10-07.
- * This class represents the user
+ * This class represents a local version of the user.
  */
 public class CurrentUser {
 

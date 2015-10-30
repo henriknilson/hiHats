@@ -8,8 +8,10 @@ import java.util.Date;
 import hihats.electricity.model.IRide;
 
 /**
- * Created by axel on 2015-10-07.
+ * This class is a representation of a Ride in the application, designed to work
+ * with the parse database.
  */
+
 @ParseClassName("Ride")
 public class ParseRide extends ParseObject implements IRide {
 

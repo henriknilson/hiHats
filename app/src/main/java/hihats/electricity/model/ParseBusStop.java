@@ -5,8 +5,10 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
 /**
- *
+ * This class is a representation of a BusStop in the application, designed to work
+ * with the parse database.
  */
+
 @ParseClassName("BusStop")
 public class ParseBusStop extends ParseObject implements IBusStop, Comparable<IBusStop> {
 
