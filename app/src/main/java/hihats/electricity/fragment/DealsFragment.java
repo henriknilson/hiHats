@@ -17,6 +17,11 @@ import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.database.IDataHandler;
 import hihats.electricity.model.IDeal;
 
+/**
+ * This fragment displays the third tab, the deals.
+ * It retrieves deals from parse and puts them in a List View.
+ */
+
 public class DealsFragment extends Fragment {
 
     private static final String TAG = DealsFragment.class.getSimpleName();

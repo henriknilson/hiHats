@@ -15,7 +15,8 @@ import java.util.concurrent.TimeUnit;
 import hihats.electricity.R;
 
 /**
- * Created by fredrikkindstrom on 20/10/15.
+ * This fragment is shown after you complete a ride and displays statistics over the ride you
+ * just finished.
  */
 public class SuccessFragment extends DialogFragment {
 

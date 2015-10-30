@@ -29,6 +29,13 @@ import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.model.IRide;
 import hihats.electricity.model.CurrentUser;
 
+/**
+ * This fragment displays the second tab, profile.
+ * It retrieves rides from parse and uses them to show
+ * information such as previous rides and number of green points.
+ * It also includes a chart covering your ride statistics.
+ */
+
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = ProfileFragment.class.getSimpleName();

@@ -64,6 +64,7 @@ import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
 import hihats.electricity.util.GreenPointsCalculator;
 
+
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     public static final String TAG = RideFragment.class.getSimpleName();
