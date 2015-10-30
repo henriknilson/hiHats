@@ -11,9 +11,9 @@ import hihats.electricity.model.IRide;
  * Created by axel on 2015-10-07.
  */
 @ParseClassName("Ride")
-public class Ride extends ParseObject implements IRide {
+public class ParseRide extends ParseObject implements IRide {
 
-    public Ride() {
+    public ParseRide() {
 
     }
 

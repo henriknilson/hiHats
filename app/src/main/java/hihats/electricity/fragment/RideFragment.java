@@ -51,7 +51,7 @@ import hihats.electricity.R;
 import hihats.electricity.activity.MainActivity;
 import hihats.electricity.database.ParseDataHandler;
 import hihats.electricity.database.IDataHandler;
-import hihats.electricity.model.Ride;
+import hihats.electricity.model.ParseRide;
 import hihats.electricity.model.CurrentUser;
 import hihats.electricity.model.IBusStop;
 import hihats.electricity.model.DatedPosition;
@@ -383,7 +383,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
         activeBusTotalTime = 0;
         ridePoints = GreenPointsCalculator.getInstance().getPoints(activeRidePoints);
 
-        IRide ride = new Ride();
+        IRide ride = new ParseRide();
 
         ride.setDate(rideDate);
         ride.setFrom(rideBusStopFrom);
