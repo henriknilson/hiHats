@@ -64,6 +64,12 @@ import hihats.electricity.util.BusDataHelper;
 import hihats.electricity.service.BusPositionService;
 import hihats.electricity.util.GreenPointsCalculator;
 
+/**
+ * This fragment represents the content seen under the "Ride" tab in the application.
+ * This contains the method and logic for finding a bus via location and also logging and saving rides.
+ * All computation concerning the bus riding system is found here.
+ * This class uses several help classes from other packages to perform these computations.
+ */
 public class RideFragment extends Fragment implements OnMapReadyCallback {
 
     public static final String TAG = RideFragment.class.getSimpleName();
@@ -236,6 +242,7 @@ public class RideFragment extends Fragment implements OnMapReadyCallback {
     /*
     Main action methods for UI
      */
+    
     private void engageRideMode() {
         ((ViewGroup) view).removeView(getOnBusButton);
 
