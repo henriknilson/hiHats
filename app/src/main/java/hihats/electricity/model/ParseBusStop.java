@@ -8,9 +8,9 @@ import com.parse.ParseObject;
  * Created by axel on 2015-09-24.
  */
 @ParseClassName("BusStop")
-public class BusStop extends ParseObject implements IBusStop, Comparable<IBusStop> {
+public class ParseBusStop extends ParseObject implements IBusStop, Comparable<IBusStop> {
 
-    public BusStop() {}
+    public ParseBusStop() {}
 
     public LatLng getLatLng() {
         return new LatLng(getDouble("latitude"), getDouble("longitude"));
