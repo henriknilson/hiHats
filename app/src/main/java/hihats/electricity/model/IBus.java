@@ -1,7 +1,7 @@
 package hihats.electricity.model;
 
 /**
- * 
+ *
  */
 public interface IBus {
 

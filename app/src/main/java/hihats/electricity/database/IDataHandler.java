@@ -2,7 +2,8 @@ package hihats.electricity.database;
 import java.util.List;
 
 /**
- * Created by filip on 29/10/15.
+ * This interface represents how a DataHandler should act and what it should be capable of.
+ * A DataHandler handles all interaction with a remote database in the application,.
  */
 public interface IDataHandler {
     interface Callback<T extends Object> {
@@ -11,19 +12,19 @@ public interface IDataHandler {
 
     /**
      * Gets all rides from the database and runs the defined callback with the data.
-     * @param callback
+     * @param callback What should happen when the data is obtained.
      */
     void getRides(Callback callback);
 
     /**
      * Gets all bus stops from the database and runs the defined callback with the data.
-     * @param callback
+     * @param callback What should happen when the data is obtained.
      */
     void getBusStops(Callback callback);
 
     /**
      * Gets all deals from the database and runs the defined callback with the data.
-     * @param callback
+     * @param callback What should happen when the data is obtained.
      */
     void getDeals(Callback callback);
 

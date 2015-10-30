@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.parse.*;
 
-import hihats.electricity.model.BusStop;
+import hihats.electricity.model.ParseBusStop;
 import hihats.electricity.model.CurrentUser;
-import hihats.electricity.model.Deal;
-import hihats.electricity.model.Ride;
+import hihats.electricity.model.ParseDeal;
+import hihats.electricity.model.ParseRide;
 
 /**
  * This is the first activity that gets created when the app is launched.
@@ -22,9 +22,9 @@ public class StartupActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Parse.enableLocalDatastore(this);
-        ParseObject.registerSubclass(BusStop.class);
-        ParseObject.registerSubclass(Ride.class);
-        ParseObject.registerSubclass(Deal.class);
+        ParseObject.registerSubclass(ParseBusStop.class);
+        ParseObject.registerSubclass(ParseRide.class);
+        ParseObject.registerSubclass(ParseDeal.class);
         Parse.initialize(this, "w5w8u7YeyDApblFiC9XPn509REPNdFIv1SleClrR", "IxqGzyFnJUENwSpNl4vRajZaW9gPPgPdK3cArFse");
 
         ParseUser.enableAutomaticUser();

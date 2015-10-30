@@ -9,7 +9,7 @@ import com.parse.ParseQuery;
 import java.util.List;
 
 /**
- * Created by filip on 29/10/15.
+ * A representation of a DataHandler using the Parse.com database.
  */
 public class ParseDataHandler implements IDataHandler {
 
