@@ -15,6 +15,11 @@ A prototype built for android, to keep track of busrides and give points to the 
 ### How to
 
 See User manual in docs folder
+
+Log in with testuser
+username: henrik
+password: kalle
+
 or
 checkout the two videos explaining the concept and the prototype
 
